@@ -97,6 +97,8 @@ namespace Peasmod
                 MorphingMode.button.PositionOffset = new Vector2(0f + (Peasmod.impostorbuttons.Count / 3 * 1.5f), 1.5f * (Peasmod.impostorbuttons.Count - (Peasmod.impostorbuttons.Count / 3 * 3)));
                 Peasmod.impostorbuttons.Add(MorphingMode.button);
             }
+            if(TestingStuff.testing)
+                TestingStuff.button = new CooldownButton(TestingStuff.OnClick, 1f, "Peasmod.Resources.DragBody.png", 200f, Vector2.zero, CooldownButton.Category.OnlyCrewmate, HudManager.Instance);
             gameStarted = true;
             HudManagerPatch.dots.Clear();
             SheriffMode.CurrentTarget = null;

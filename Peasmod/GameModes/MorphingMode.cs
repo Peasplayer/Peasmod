@@ -7,6 +7,7 @@ using Reactor;
 using Reactor.Extensions;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Peasmod
 {
@@ -54,7 +55,9 @@ namespace Peasmod
             if (labelprefab == null)
             {
                 labelprefab = Utils.CreateSprite("Peasmod.Resources.Unbenannt.png");
-                labelprefab.AddComponent<BoxCollider2D>();
+                var collider = labelprefab.AddComponent<BoxCollider2D>();
+                collider.isTrigger = true;
+                collider.size = labelprefab.GetComponent<SpriteRenderer>().size;
                 labelprefab.transform.position += new Vector3(10000f, 10000f);
             }
             foreach (var player in PlayerControl.AllPlayerControls)
@@ -62,7 +65,6 @@ namespace Peasmod
                 var label = UnityEngine.Object.Instantiate(labelprefab, HudManager.Instance.transform);
                 label.name = "PlayerLabel|" + player.PlayerId;
                 var collider = label.GetComponent<BoxCollider2D>();
-                collider.size = label.GetComponent<SpriteRenderer>().size;
                 collider.transform.localPosition = new Vector3(collider.transform.localPosition.x, collider.transform.localPosition.y, PlayerControl.LocalPlayer.transform.localPosition.z - 1f);
                 var pos = button.killButtonManager.transform.localPosition + new Vector3(labels.Count / 4 * 1f - 0.2f, (-0.3f * (labels.Count - (labels.Count / 4 * 4))) + 0.45f, 1f);
                 label.transform.localPosition = pos;
@@ -72,7 +74,6 @@ namespace Peasmod
                 if(data == null)
                     data = new PlayerData(player);
                 text.Text = data.Name;
-                //text.OutlineColor = Utils.ColorIdToColor(data.Color);
                 text.Color = Color.black;
                 text.transform.localPosition += new Vector3(-0.6f, 0.2f);
                 text.scale -= 0.2f;

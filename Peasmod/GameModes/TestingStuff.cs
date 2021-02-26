@@ -1,11 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 
 namespace Peasmod
 {
     class TestingStuff
     {
+        public static bool testing = false;
+
+        public static CooldownButton button;
+
+        public static void OnClick()
+        {
+            var item = Utils.CreateSprite("Peasmod.Resources.Unbenannt.png");
+            var box = item.AddComponent<BoxCollider2D>();
+            box.isTrigger = true;
+            item.transform.localPosition = PlayerControl.LocalPlayer.transform.localPosition;
+        }
+
         //public static SurvCamera camPref;
         //test.transform.localPosition = new Vector3(-2.5f, -2.5f);
         /*var playerControl = PlayerControl.Instantiate(AmongUsClient.Instance.PlayerPrefab);
