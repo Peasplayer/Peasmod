@@ -22,6 +22,7 @@ namespace Peasmod.Patches
     {
 
         private static float Timer = 0f;
+        private static float Timer2 = 0f;
         private static float MaxTimer = 0.125f;
         private static Vector3 lastPosition;
         public static Dictionary<GameObject, float> dots = new Dictionary<GameObject, float>();
@@ -139,6 +140,65 @@ namespace Peasmod.Patches
             }
             #endregion GameSettingsText
             if (!PlayerControl.LocalPlayer) return;
+            #region HotPotatoMode
+            if (Peasmod.Settings.hotpotato.GetValue())
+            {
+                foreach (var player in PlayerControl.AllPlayerControls)
+                {
+                    if (player.Data.IsImpostor)
+                    {
+                        player.nameText.Color = HotPotatoMode.color;
+                    } 
+                    else
+                    {
+                        player.nameText.Color = Palette.White;
+                    }
+                    if (player.Data.IsDead)
+                    {
+                        player.Visible = false;
+                    }
+                }
+                HudManager.Instance.KillButton.SetCoolDown(0f, 1f);
+                if (HotPotatoMode.timer != null)
+                {
+                    if (!PlayerControl.LocalPlayer.Data.IsImpostor)
+                        HotPotatoMode.timer.GetComponent<TextRenderer>().Text = string.Empty;
+                    else
+                    {
+                        if (Timer2 < 0f)
+                        {
+                            HotPotatoMode.Timer -= 0.1f;
+                            HotPotatoMode.timer.GetComponent<TextRenderer>().Text = "Time left till you die: " + StringColor.Red + $"{Math.Round(HotPotatoMode.Timer, 2)}";
+                            Timer2 = 0.1f;
+                        }
+                        else
+                            Timer2 -= Time.deltaTime;
+                        if (HotPotatoMode.Timer <= 0f)
+                        {
+                            List<PlayerControl> players = new List<PlayerControl>();
+                            foreach(var _player in PlayerControl.AllPlayerControls)
+                            {
+                                if (!_player.Data.IsDead && !_player.Data.IsImpostor)
+                                    players.Add(_player);
+                            }
+                            var player = players[Peasmod.random.Next(0, players.Count)];
+                            PlayerControl.LocalPlayer.RpcMurderPlayer(player);
+                            PlayerControl.LocalPlayer.Die(DeathReason.Kill);
+                            PlayerControl.LocalPlayer.Data.IsImpostor = false;
+                            PlayerControl.LocalPlayer.Collider.enabled = false;
+                            HudManager.Instance.ShadowQuad.gameObject.SetActive(false);
+                            var potato = Utils.CreateSprite("Peasmod.Resources.Potato.png");
+                            var scale = new Vector3(potato.transform.localScale.x + 2f, potato.transform.localScale.y + 2f);
+                            potato.transform.localScale = scale;
+                            potato.transform.position = PlayerControl.LocalPlayer.GetTruePosition();
+                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(player.NetId, (byte)CustomRpc.PotatoDies, Hazel.SendOption.None, -1);
+                            writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                            AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        }
+                    }
+                }
+            }
+            #endregion HotPotatoMode
             #region JesterMode
             if (PlayerControl.LocalPlayer.IsRole(Role.Jester))
                 PlayerControl.LocalPlayer.nameText.Color = JesterMode.JesterColor;

@@ -16,7 +16,7 @@ namespace Peasmod.GameModes
 
         public static CooldownButton button;
 
-        public static Color SheriffColor { get; } = new Color(255f / 255f, 114f / 255f, 0f / 255f);
+        public static Color SheriffColor = new Color(255f / 255f, 114f / 255f, 0f / 255f);
 
         public static void OnClicked()
         {

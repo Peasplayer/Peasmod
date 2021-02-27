@@ -30,6 +30,7 @@
 		<None Remove="Resources\Hide.png" />
 		<None Remove="Resources\TimeFreezing.png" />
 		<None Remove="Resources\Kill.png" />
+		<None Remove="Resources\Potato.png" />
 	</ItemGroup>
 
     <ItemGroup>
@@ -45,6 +46,7 @@
 		<EmbeddedResource Include="Resources\Hats\PeasMask.png" />
 		<EmbeddedResource Include="Resources\Morphing.png" />
 		<EmbeddedResource Include="Resources\Kill.png" />
+		<EmbeddedResource Include="Resources\Potato.png" />
         <PackageReference Include="Reactor.OxygenFilter.MSBuild" Version="0.2.5" />
     </ItemGroup>
 

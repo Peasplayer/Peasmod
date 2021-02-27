@@ -25,7 +25,8 @@ namespace Peasmod
         FreezeTime = 52,
         UnfreezeTime = 53,
         CreateDot = 54,
-        SheriffDies = 55
+        SheriffDies = 55,
+        PotatoDies = 56
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -149,6 +150,18 @@ namespace Peasmod
                     player = Utils.GetPlayer(reader.ReadByte());
                     Role role = (Role)reader.ReadByte();
                     player.SetRole(role);
+                    break;
+                case (byte)CustomRpc.PotatoDies:
+                    player = Utils.GetPlayer(reader.ReadByte());
+                    player.MurderPlayer(player);
+                    player.Visible = false;
+                    player.Data.IsImpostor = false;
+                    player.Data.IsDead = true;
+                    player.Collider.enabled = false;
+                    var potato = Utils.CreateSprite("Peasmod.Resources.Potato.png");
+                    var scale = new Vector3(potato.transform.localScale.x+2f, potato.transform.localScale.y+2f);
+                    potato.transform.localScale = scale;
+                    potato.transform.position = player.GetTruePosition();
                     break;
             }
         }

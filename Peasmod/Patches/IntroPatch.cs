@@ -11,6 +11,16 @@ namespace Peasmod.Patches
     {
         public static void Prefix(IntroCutscene.CoBegin__d __instance)
         {
+            #region HotPotatoMode
+            if(Peasmod.Settings.hotpotato.GetValue())
+            {
+                var yourTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+                foreach (var player in PlayerControl.AllPlayerControls)
+                    if (player.Data.IsImpostor)
+                        yourTeam.Add(player);
+                __instance.yourTeam = yourTeam;
+            }
+            #endregion HotPotatoMode
             #region JesterMode
             if (PlayerControl.LocalPlayer.IsRole(Role.Jester))
             {
@@ -22,6 +32,16 @@ namespace Peasmod.Patches
         }
         public static void Postfix(IntroCutscene.CoBegin__d __instance)
         {
+            #region HotPotatoMode
+            if (Peasmod.Settings.hotpotato.GetValue())
+            {
+                var inst = __instance.__this;
+                inst.Title.Text = "HotPotato";
+                inst.Title.Color = HotPotatoMode.color;
+                inst.ImpostorText.Text = "Watch out for the Potato";
+                inst.BackgroundBar.material.color = HotPotatoMode.color;
+            }
+            #endregion HotPotatoMode
             #region JesterMode
             if (PlayerControl.LocalPlayer.IsRole(Role.Jester))
             {

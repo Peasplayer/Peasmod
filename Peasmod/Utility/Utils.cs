@@ -83,14 +83,14 @@ namespace Peasmod.Utility
             return null;
         }
 
-        public static TextRenderer CreateText(float x, float y, string text)
+        public static GameObject CreateText(Vector3 pos, string text)
         {
             GameObject go = new GameObject();
             go.transform.SetParent(HudManager.Instance.gameObject.transform);
-            go.transform.localPosition = new Vector3(x, y);
-            TextRenderer _text = UnityEngine.Object.Instantiate(HudManager.Instance.TaskText, go.transform);
+            go.transform.localPosition = pos;
+            TextRenderer _text = go.AddTextRenderer();
             _text.Text = text;
-            return _text;
+            return go;
         }
 
         public static GameObject CreateSprite(string image)

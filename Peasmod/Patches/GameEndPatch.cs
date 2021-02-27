@@ -191,4 +191,33 @@ namespace Peasmod.Patches
             }
         }
     }
+
+    [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CheckEndCriteria))]
+    [HarmonyPriority(Priority.First)]
+    public static class CheckEndCriteriaPatch
+    {
+        public static bool Prefix()
+        {
+            if(Peasmod.Settings.hotpotato.GetValue())
+            {
+                var impostors = 0;
+                var crewmates = 0;
+                foreach (var player in PlayerControl.AllPlayerControls)
+                {
+                    if(!player.Data.IsDead)
+                    {
+                        if (player.Data.IsImpostor)
+                            impostors++;
+                        else
+                            crewmates++;
+                    }
+                }
+                if (impostors > crewmates)
+                    return true;
+                else
+                    return false;
+            }
+            return true;
+        }
+    }
 }

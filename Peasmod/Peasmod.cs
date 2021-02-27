@@ -64,13 +64,14 @@ namespace Peasmod
             //public static CustomNumberOption engineeramount = CustomOption.AddNumber("engineers", "Engineers", true, 0, 0, 2, 1);
             public static CustomStringOption section3 = CustomOption.AddString("section", "Section", new string[] { "Modes" });
             public static CustomToggleOption hotpotato = CustomOption.AddToggle("hotpotato", "HotPotato", true, false);
+            public static CustomNumberOption hotpotatotimer = CustomOption.AddNumber("hotpotatotimer", "HotPotato-Timer", true, 10, 2, 60, 2);
 
             [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Update))]
             class GameOptionsMenuUpdate
             {
                 static void Postfix(ref GameOptionsMenu __instance)
                 {
-                    __instance.GetComponentInParent<Scroller>().YBounds.max = 18.5f;
+                    __instance.GetComponentInParent<Scroller>().YBounds.max = 19.5f;
                 }
             }
         }
