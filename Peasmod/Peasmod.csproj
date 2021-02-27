@@ -23,12 +23,13 @@
 		<None Remove="Resources\Dot.png" />
 		<None Remove="Resources\Hats\PeasMask.png" />
 		<None Remove="Resources\Label.png" />
+		<None Remove="Resources\Morphing.png" />
 		<None Remove="Resources\Revive.png" />
 		<None Remove="Resources\DragBody.png" />
 		<None Remove="Resources\DropBody.png" />
 		<None Remove="Resources\Hide.png" />
 		<None Remove="Resources\TimeFreezing.png" />
-
+		<None Remove="Resources\Kill.png" />
 	</ItemGroup>
 
     <ItemGroup>
@@ -42,7 +43,8 @@
 		<EmbeddedResource Include="Resources\Dot.png" />
 		<EmbeddedResource Include="Resources\Label.png" />
 		<EmbeddedResource Include="Resources\Hats\PeasMask.png" />
-		
+		<EmbeddedResource Include="Resources\Morphing.png" />
+		<EmbeddedResource Include="Resources\Kill.png" />
         <PackageReference Include="Reactor.OxygenFilter.MSBuild" Version="0.2.5" />
     </ItemGroup>
 

@@ -96,11 +96,11 @@ namespace Peasmod.Patches
                 SheriffMode.CurrentTarget = null;
                 if(SheriffMode.button != null)
                     SheriffMode.button.killButtonManager.CurrentTarget = null;
-                SheriffMode.button = new CooldownButton(SheriffMode.OnClicked, Peasmod.Settings.sheriffcooldown.GetValue(), "Peasmod.Resources.Revive.png", 200f, Vector2.zero, CooldownButton.Category.OnlySheriff, HudManager.Instance);
+                SheriffMode.button = new CooldownButton(SheriffMode.OnClicked, Peasmod.Settings.sheriffcooldown.GetValue(), "Peasmod.Resources.Kill.png", 200f, Vector2.zero, CooldownButton.Category.OnlySheriff, HudManager.Instance);
             }
             if (Peasmod.Settings.morphing.GetValue())
             {
-                MorphingMode.button = new CooldownButton(MorphingMode.OnClick, Peasmod.Settings.morphingcooldown.GetValue(), "Peasmod.Resources.DragBody.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance);
+                MorphingMode.button = new CooldownButton(MorphingMode.OnClick, Peasmod.Settings.morphingcooldown.GetValue(), "Peasmod.Resources.Morphing.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance);
                 MorphingMode.button.PositionOffset = new Vector2(0f + (Peasmod.impostorbuttons.Count / 3 * 1.5f), 1.5f * (Peasmod.impostorbuttons.Count - (Peasmod.impostorbuttons.Count / 3 * 3)));
                 Peasmod.impostorbuttons.Add(MorphingMode.button);
             }

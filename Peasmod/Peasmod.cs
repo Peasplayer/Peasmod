@@ -25,7 +25,7 @@ namespace Peasmod
         public const string Id = "tk.peasplayer.peasmod";
         public const string PluginName = "Peasmod";
         public const string PluginAuthor = "Peasplayer";
-        public const string PluginVersion = "1.7.0";
+        public const string PluginVersion = "1.7.1";
 
         public Harmony Harmony { get; } = new Harmony(Id);
         public static System.Random random = new System.Random();
@@ -62,6 +62,8 @@ namespace Peasmod
             public static CustomNumberOption sheriffamount = CustomOption.AddNumber("sheriffs", "Sheriffs", true, 0, 0, 9, 1);
             public static CustomNumberOption sheriffcooldown = CustomOption.AddNumber("sheriffcooldown", "Shoot-Cooldown", true, 10, 2, 60, 2);
             //public static CustomNumberOption engineeramount = CustomOption.AddNumber("engineers", "Engineers", true, 0, 0, 2, 1);
+            public static CustomStringOption section3 = CustomOption.AddString("section", "Section", new string[] { "Modes" });
+            public static CustomToggleOption hotpotato = CustomOption.AddToggle("hotpotato", "HotPotato", true, false);
 
             [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Update))]
             class GameOptionsMenuUpdate
