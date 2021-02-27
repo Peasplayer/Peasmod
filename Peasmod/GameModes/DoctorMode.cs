@@ -4,13 +4,13 @@ using System.Text;
 using UnityEngine;
 using Hazel;
 using Reactor.Extensions;
+using Peasmod.Utility;
 
-namespace Peasmod
+namespace Peasmod.GameModes
 {
     class DoctorMode
     {
-        public static PlayerControl Doctor1;
-        public static PlayerControl Doctor2;
+        public static List<PlayerControl> Doctors = new List<PlayerControl>();
 
         public static CooldownButton button;
 

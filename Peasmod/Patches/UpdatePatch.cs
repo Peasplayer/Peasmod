@@ -4,6 +4,7 @@ using System.Text;
 using HarmonyLib;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Timers;
 using Hazel;
 using Reactor.Extensions;
@@ -11,8 +12,10 @@ using Reactor;
 using System.Reflection;
 using System.IO;
 using Reactor.Unstrip;
+using Peasmod.Utility;
+using Peasmod.GameModes;
 
-namespace Peasmod
+namespace Peasmod.Patches
 {
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     public static class HudManagerPatch
@@ -137,44 +140,24 @@ namespace Peasmod
             #endregion GameSettingsText
             if (!PlayerControl.LocalPlayer) return;
             #region JesterMode
-            if (JesterMode.Jester1 != null)
-                if (PlayerControl.LocalPlayer.PlayerId == JesterMode.Jester1.PlayerId)
-                    PlayerControl.LocalPlayer.nameText.Color = JesterMode.JesterColor;
-            if (JesterMode.Jester2 != null)
-                if (PlayerControl.LocalPlayer.PlayerId == JesterMode.Jester2.PlayerId)
-                    PlayerControl.LocalPlayer.nameText.Color = JesterMode.JesterColor;
+            if (PlayerControl.LocalPlayer.IsRole(Role.Jester))
+                PlayerControl.LocalPlayer.nameText.Color = JesterMode.JesterColor;
             #endregion JesterMode
             #region DoctorMode
-            if (DoctorMode.Doctor1 != null)
-                if (PlayerControl.LocalPlayer.PlayerId == DoctorMode.Doctor1.PlayerId)
-                    PlayerControl.LocalPlayer.nameText.Color = DoctorMode.DoctorColor;
-            if (DoctorMode.Doctor2 != null)
-                if (PlayerControl.LocalPlayer.PlayerId == DoctorMode.Doctor2.PlayerId)
-                    PlayerControl.LocalPlayer.nameText.Color = DoctorMode.DoctorColor;
+            if (PlayerControl.LocalPlayer.IsRole(Role.Doctor))
+                PlayerControl.LocalPlayer.nameText.Color = DoctorMode.DoctorColor;
             #endregion JesterMode
             #region MayorMode
-            if (MayorMode.Mayor1 != null)
-                if (PlayerControl.LocalPlayer.PlayerId == MayorMode.Mayor1.PlayerId)
-                    PlayerControl.LocalPlayer.nameText.Color = MayorMode.MayorColor;
-            if (MayorMode.Mayor2 != null)
-                if (PlayerControl.LocalPlayer.PlayerId == MayorMode.Mayor2.PlayerId)
-                    PlayerControl.LocalPlayer.nameText.Color = MayorMode.MayorColor;
+            if (PlayerControl.LocalPlayer.IsRole(Role.Mayor))
+                PlayerControl.LocalPlayer.nameText.Color = MayorMode.MayorColor;
             #endregion MayorMode
             #region InspectorMode
-            if (InspectorMode.Inspector1 != null)
-                if (PlayerControl.LocalPlayer.PlayerId == InspectorMode.Inspector1.PlayerId)
-                    PlayerControl.LocalPlayer.nameText.Color = InspectorMode.InspectorColor;
-            if (InspectorMode.Inspector2 != null)
-                if (PlayerControl.LocalPlayer.PlayerId == InspectorMode.Inspector2.PlayerId)
-                    PlayerControl.LocalPlayer.nameText.Color = InspectorMode.InspectorColor;
+            if (PlayerControl.LocalPlayer.IsRole(Role.Inspector))
+                PlayerControl.LocalPlayer.nameText.Color = InspectorMode.InspectorColor;
             #endregion InspectorMode
             #region SheriffMode
-            if (SheriffMode.Sheriff1 != null)
-                if (PlayerControl.LocalPlayer.PlayerId == SheriffMode.Sheriff1.PlayerId)
-                    PlayerControl.LocalPlayer.nameText.Color = SheriffMode.SheriffColor;
-            if (SheriffMode.Sheriff2 != null)
-                if (PlayerControl.LocalPlayer.PlayerId == SheriffMode.Sheriff2.PlayerId)
-                    PlayerControl.LocalPlayer.nameText.Color = SheriffMode.SheriffColor;
+            if (PlayerControl.LocalPlayer.IsRole(Role.Sheriff))
+                PlayerControl.LocalPlayer.nameText.Color = SheriffMode.SheriffColor;
             #endregion SheriffMode
             #region VentBuilding
             CooldownButton.HudUpdate();
@@ -265,24 +248,43 @@ namespace Peasmod
             #region SheriffMode
             if (SheriffMode.button != null)
             {
-                if (SheriffMode.button.killButtonManager.renderer != null && (PlayerControl.LocalPlayer == SheriffMode.Sheriff1 || PlayerControl.LocalPlayer == SheriffMode.Sheriff2) && !PlayerControl.LocalPlayer.Data.IsDead)
+                if (SheriffMode.button.killButtonManager.renderer != null && PlayerControl.LocalPlayer.IsRole(Role.Sheriff))
                 {
-                    PlayerControl target = Utils.GetClosestPlayer(PlayerControl.LocalPlayer);
-                    if (Utils.GetDistBetweenPlayers(PlayerControl.LocalPlayer, target) > GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance])
-                        target = null;
-                    if (target == null)
+                    if (PlayerControl.LocalPlayer.Data.IsDead)
                     {
-                        SheriffMode.button.killButtonManager.renderer.color = Palette.DisabledColor;
-                        SheriffMode.button.killButtonManager.SetTarget(target);
-                        SheriffMode.CurrentTarget = target;
                         SheriffMode.button.enabled = false;
                     }
                     else
                     {
-                        SheriffMode.button.killButtonManager.renderer.color = Palette.EnabledColor;
-                        SheriffMode.button.killButtonManager.SetTarget(target);
-                        SheriffMode.CurrentTarget = target;
-                        SheriffMode.button.enabled = true;
+                        PlayerControl target = Utils.GetClosestPlayer(PlayerControl.LocalPlayer);
+                        if (Utils.GetDistBetweenPlayers(PlayerControl.LocalPlayer, target) > GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance])
+                            target = null;
+                        if (target == null)
+                        {
+                            SheriffMode.button.killButtonManager.renderer.color = Palette.DisabledColor;
+                            if (SheriffMode.CurrentTarget != null)
+                            {
+                                SpriteRenderer renderer = SheriffMode.CurrentTarget.myRend;
+                                renderer.material.SetFloat("_Outline", 0f);
+                            }
+                            SheriffMode.CurrentTarget = target;
+                            SheriffMode.button.enabled = false;
+                        }
+                        else
+                        {
+                            SpriteRenderer renderer = target.myRend;
+                            renderer.material.SetFloat("_Outline", 1f);
+                            renderer.material.SetColor("_OutlineColor", Color.red);
+                            if (SheriffMode.CurrentTarget != null)
+                            {
+                                renderer = SheriffMode.CurrentTarget.myRend;
+                                renderer.material.SetFloat("_Outline", 1f);
+                                renderer.material.SetColor("_OutlineColor", Color.red);
+                            }
+                            SheriffMode.button.killButtonManager.renderer.color = Palette.EnabledColor;
+                            SheriffMode.CurrentTarget = target;
+                            SheriffMode.button.enabled = true;
+                        }
                     }
                 }
             }
@@ -378,7 +380,9 @@ namespace Peasmod
             {
                 TimeFreezing.timeIsFroozen = false;
                 foreach(var player in PlayerControl.AllPlayerControls)
+                {
                     player.Visible = true;
+                }
             }
         }
     }
@@ -401,74 +405,29 @@ namespace Peasmod
         public static void Postfix(MeetingHud __instance)
         {
             #region JesterMode
-            if (JesterMode.Jester1 != null)
-                if (PlayerControl.LocalPlayer.PlayerId == JesterMode.Jester1.PlayerId)
-                    foreach (var pstate in __instance.playerStates)
-                        if (pstate.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId &&
-                        PlayerControl.LocalPlayer.PlayerId == JesterMode.Jester1.PlayerId)
-                            pstate.NameText.Color = JesterMode.JesterColor;
-            if (JesterMode.Jester2 != null)
-                if (PlayerControl.LocalPlayer.PlayerId == JesterMode.Jester2.PlayerId)
-                    foreach (var pstate in __instance.playerStates)
-                        if (pstate.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId &&
-                        PlayerControl.LocalPlayer.PlayerId == JesterMode.Jester2.PlayerId)
-                            pstate.NameText.Color = JesterMode.JesterColor;
+            foreach (var pstate in __instance.playerStates)
+                if (pstate.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId && PlayerControl.LocalPlayer.IsRole(Role.Jester))
+                    pstate.NameText.Color = JesterMode.JesterColor;
             #endregion JesterMode
             #region DoctorMode
-            if (DoctorMode.Doctor1 != null)
-                if (PlayerControl.LocalPlayer.PlayerId == DoctorMode.Doctor1.PlayerId)
-                    foreach (var pstate in __instance.playerStates)
-                        if (pstate.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId &&
-                        PlayerControl.LocalPlayer.PlayerId == DoctorMode.Doctor1.PlayerId)
-                            pstate.NameText.Color = DoctorMode.DoctorColor;
-            if (DoctorMode.Doctor2 != null)
-                if (PlayerControl.LocalPlayer.PlayerId == DoctorMode.Doctor2.PlayerId)
-                    foreach (var pstate in __instance.playerStates)
-                        if (pstate.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId &&
-                        PlayerControl.LocalPlayer.PlayerId == DoctorMode.Doctor2.PlayerId)
-                            pstate.NameText.Color = DoctorMode.DoctorColor;
+            foreach (var pstate in __instance.playerStates)
+                if (pstate.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId && PlayerControl.LocalPlayer.IsRole(Role.Doctor))
+                    pstate.NameText.Color = DoctorMode.DoctorColor;
             #endregion DoctorMode
             #region MayorMode
-            if (MayorMode.Mayor1 != null)
-                if (PlayerControl.LocalPlayer.PlayerId == MayorMode.Mayor1.PlayerId)
-                    foreach (var pstate in __instance.playerStates)
-                        if (pstate.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId &&
-                        PlayerControl.LocalPlayer.PlayerId == MayorMode.Mayor1.PlayerId)
-                            pstate.NameText.Color = MayorMode.MayorColor;
-            if (MayorMode.Mayor2 != null)
-                if (PlayerControl.LocalPlayer.PlayerId == MayorMode.Mayor2.PlayerId)
-                    foreach (var pstate in __instance.playerStates)
-                        if (pstate.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId &&
-                        PlayerControl.LocalPlayer.PlayerId == MayorMode.Mayor2.PlayerId)
-                            pstate.NameText.Color = MayorMode.MayorColor;
+            foreach (var pstate in __instance.playerStates)
+                if (pstate.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId && PlayerControl.LocalPlayer.IsRole(Role.Mayor))
+                    pstate.NameText.Color = MayorMode.MayorColor;
             #endregion MayorMode
             #region InspectorMode
-            if (InspectorMode.Inspector1 != null)
-                if (PlayerControl.LocalPlayer.PlayerId == InspectorMode.Inspector1.PlayerId)
-                    foreach (var pstate in __instance.playerStates)
-                        if (pstate.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId &&
-                        PlayerControl.LocalPlayer.PlayerId == InspectorMode.Inspector1.PlayerId)
-                            pstate.NameText.Color = InspectorMode.InspectorColor;
-            if (InspectorMode.Inspector2 != null)
-                if (PlayerControl.LocalPlayer.PlayerId == InspectorMode.Inspector2.PlayerId)
-                    foreach (var pstate in __instance.playerStates)
-                        if (pstate.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId &&
-                        PlayerControl.LocalPlayer.PlayerId == InspectorMode.Inspector2.PlayerId)
-                            pstate.NameText.Color = InspectorMode.InspectorColor;
+            foreach (var pstate in __instance.playerStates)
+                if (pstate.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId && PlayerControl.LocalPlayer.IsRole(Role.Inspector))
+                    pstate.NameText.Color = InspectorMode.InspectorColor;
             #endregion InspectorMode
             #region SheriffMode
-            if (SheriffMode.Sheriff1 != null)
-                if (PlayerControl.LocalPlayer.PlayerId == SheriffMode.Sheriff1.PlayerId)
-                    foreach (var pstate in __instance.playerStates)
-                        if (pstate.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId &&
-                        PlayerControl.LocalPlayer.PlayerId == SheriffMode.Sheriff1.PlayerId)
-                            pstate.NameText.Color = SheriffMode.SheriffColor;
-            if (SheriffMode.Sheriff2 != null)
-                if (PlayerControl.LocalPlayer.PlayerId == SheriffMode.Sheriff2.PlayerId)
-                    foreach (var pstate in __instance.playerStates)
-                        if (pstate.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId &&
-                        PlayerControl.LocalPlayer.PlayerId == SheriffMode.Sheriff2.PlayerId)
-                            pstate.NameText.Color = SheriffMode.SheriffColor;
+            foreach (var pstate in __instance.playerStates)
+                if (pstate.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId && PlayerControl.LocalPlayer.IsRole(Role.Sheriff))
+                    pstate.NameText.Color = SheriffMode.SheriffColor;
             #endregion SheriffMode
         }
     }

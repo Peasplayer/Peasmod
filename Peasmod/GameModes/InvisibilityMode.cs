@@ -8,8 +8,9 @@ using Reactor.Extensions;
 using Reactor;
 using System.Linq;
 using UnhollowerBaseLib;
+using Peasmod.Utility;
 
-namespace Peasmod
+namespace Peasmod.GameModes
 {
     class InvisibilityMode
     {

@@ -7,8 +7,10 @@ using Reactor.Extensions;
 using System.Reflection;
 using System.IO;
 using Reactor.Unstrip;
+using Peasmod.GameModes;
+using Peasmod.Utility;
 
-namespace Peasmod
+namespace Peasmod.Patches
 {
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Start))]
     public static class ShipstatusOnEnablePatch
@@ -40,7 +42,7 @@ namespace Peasmod
             BodyDragging.bodys.Clear();
             #endregion BodyDragging
             #region EngineerMode
-            if(Peasmod.Settings.engineeramount.GetValue() != 0)
+            /*if(Peasmod.Settings.engineeramount.GetValue() != 0)
             {
                 var cams = GameObject.FindObjectsOfType<SurvCamera>();
                 bool first = true;
@@ -56,7 +58,7 @@ namespace Peasmod
                     GameObject.Destroy(cam.gameObject);
                 }
                 __instance.AllCameras = new SurvCamera[0];
-            }
+            }*/
             #endregion EngineerMode
         }
 
@@ -68,7 +70,7 @@ namespace Peasmod
             {
                 VentBuilding.button = new CooldownButton(VentBuilding.OnClicked, Peasmod.Settings.ventbuildingcooldown.GetValue(), "Peasmod.Resources.BuildVent.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance);
                 Peasmod.impostorbuttons.Add(VentBuilding.button);
-            }  
+            }
             if (Peasmod.Settings.bodydragging.GetValue())
             {
                 BodyDragging.button = new CooldownButton(BodyDragging.OnClicked, 0.5f, "Peasmod.Resources.DragBody.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance);
@@ -88,21 +90,24 @@ namespace Peasmod
                 Peasmod.impostorbuttons.Add(TimeFreezing.button);
             }
             if (Peasmod.Settings.doctoramount.GetValue() >= 1)
-                DoctorMode.button = new CooldownButton(DoctorMode.OnClicked, Peasmod.Settings.doctorcooldown.GetValue(), "Peasmod.Resources.Revive.png", 200f, Vector2.zero, CooldownButton.Category.Doctor, HudManager.Instance);
+                DoctorMode.button = new CooldownButton(DoctorMode.OnClicked, Peasmod.Settings.doctorcooldown.GetValue(), "Peasmod.Resources.Revive.png", 200f, Vector2.zero, CooldownButton.Category.OnlyDoctor, HudManager.Instance);
             if (Peasmod.Settings.sheriffamount.GetValue() >= 1)
-                SheriffMode.button = new CooldownButton(SheriffMode.OnClicked, Peasmod.Settings.sheriffcooldown.GetValue(), "Peasmod.Resources.Revive.png", 200f, Vector2.zero, CooldownButton.Category.Sheriff, HudManager.Instance);
+            {
+                SheriffMode.CurrentTarget = null;
+                if(SheriffMode.button != null)
+                    SheriffMode.button.killButtonManager.CurrentTarget = null;
+                SheriffMode.button = new CooldownButton(SheriffMode.OnClicked, Peasmod.Settings.sheriffcooldown.GetValue(), "Peasmod.Resources.Revive.png", 200f, Vector2.zero, CooldownButton.Category.OnlySheriff, HudManager.Instance);
+            }
             if (Peasmod.Settings.morphing.GetValue())
             {
                 MorphingMode.button = new CooldownButton(MorphingMode.OnClick, Peasmod.Settings.morphingcooldown.GetValue(), "Peasmod.Resources.DragBody.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance);
                 MorphingMode.button.PositionOffset = new Vector2(0f + (Peasmod.impostorbuttons.Count / 3 * 1.5f), 1.5f * (Peasmod.impostorbuttons.Count - (Peasmod.impostorbuttons.Count / 3 * 3)));
                 Peasmod.impostorbuttons.Add(MorphingMode.button);
             }
-            if(TestingStuff.testing)
+            if (TestingStuff.testing)
                 TestingStuff.button = new CooldownButton(TestingStuff.OnClick, 1f, "Peasmod.Resources.DragBody.png", 200f, Vector2.zero, CooldownButton.Category.OnlyCrewmate, HudManager.Instance);
             gameStarted = true;
             HudManagerPatch.dots.Clear();
-            SheriffMode.CurrentTarget = null;
-            SheriffMode.button.killButtonManager.CurrentTarget = null;
         }
     }
 

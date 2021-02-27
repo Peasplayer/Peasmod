@@ -4,12 +4,16 @@ using BepInEx.IL2CPP;
 using HarmonyLib;
 using Hazel;
 using Reactor;
+using Reactor.Extensions;
 using System.Collections.Generic;
 using System;
 using System.Net;
 using Essentials.CustomOptions;
 using UnityEngine;
 using UnhollowerBaseLib;
+using BepInEx.Logging;
+using System.Linq;
+using Peasmod.Utility;
 
 namespace Peasmod
 {
@@ -21,7 +25,7 @@ namespace Peasmod
         public const string Id = "tk.peasplayer.peasmod";
         public const string PluginName = "Peasmod";
         public const string PluginAuthor = "Peasplayer";
-        public const string PluginVersion = "1.6.2";
+        public const string PluginVersion = "1.7.0";
 
         public Harmony Harmony { get; } = new Harmony(Id);
         public static System.Random random = new System.Random();
@@ -33,8 +37,7 @@ namespace Peasmod
 
         public static class Settings
         {
-            private static string[] _params = { "Peasmod" };
-            public static CustomStringOption section = CustomOption.AddString("section", "Section", _params);
+            public static CustomStringOption section1 = CustomOption.AddString("section", "Section", new string[] { "Peasmod" });
             public static CustomToggleOption venting = CustomOption.AddToggle("venting", "Venting", true, true);
             public static CustomToggleOption reportbodys = CustomOption.AddToggle("reportbodys", "Body-Reporting", true, true);
             public static CustomToggleOption sabotaging = CustomOption.AddToggle("sabotaging", "Sabotaging", true, true);
@@ -50,22 +53,53 @@ namespace Peasmod
             public static CustomNumberOption freezetimeduration = CustomOption.AddNumber("freezetimeduration", "Time-Freezing-Duration", true, 10, 2, 30, 1);
             public static CustomToggleOption morphing = CustomOption.AddToggle("morphing", "Morphing", true, false);
             public static CustomNumberOption morphingcooldown = CustomOption.AddNumber("morphingcooldown", "Morphing-Cooldown", true, 20, 2, 60, 2);
-            public static CustomNumberOption jesteramount = CustomOption.AddNumber("jesters", "Jesters", true, 0, 0, 2, 1);
-            public static CustomNumberOption doctoramount = CustomOption.AddNumber("doctors", "Doctors", true, 0, 0, 2, 1);
+            public static CustomStringOption section2 = CustomOption.AddString("section", "Section", new string[] { "Roles" });
+            public static CustomNumberOption jesteramount = CustomOption.AddNumber("jesters", "Jesters", true, 0, 0, 9, 1);
+            public static CustomNumberOption doctoramount = CustomOption.AddNumber("doctors", "Doctors", true, 0, 0, 9, 1);
             public static CustomNumberOption doctorcooldown = CustomOption.AddNumber("doctorcooldown", "Revive-Cooldown", true, 10, 2, 60, 2);
-            public static CustomNumberOption mayoramount = CustomOption.AddNumber("mayors", "Mayors", true, 0, 0, 2, 1);
-            public static CustomNumberOption inspectoramount = CustomOption.AddNumber("inspectors", "Inspectors", true, 0, 0, 2, 1);
-            public static CustomNumberOption sheriffamount = CustomOption.AddNumber("sheriffs", "Sheriffs", true, 0, 0, 2, 1);
+            public static CustomNumberOption mayoramount = CustomOption.AddNumber("mayors", "Mayors", true, 0, 0, 9, 1);
+            public static CustomNumberOption inspectoramount = CustomOption.AddNumber("inspectors", "Inspectors", true, 0, 0, 9, 1);
+            public static CustomNumberOption sheriffamount = CustomOption.AddNumber("sheriffs", "Sheriffs", true, 0, 0, 9, 1);
             public static CustomNumberOption sheriffcooldown = CustomOption.AddNumber("sheriffcooldown", "Shoot-Cooldown", true, 10, 2, 60, 2);
-            public static CustomNumberOption engineeramount = CustomOption.AddNumber("engineers", "Engineers", true, 0, 0, 2, 1);
-            private static string[] _params1 = {"Something", "Nothing"};
-            public static CustomStringOption empty1 = CustomOption.AddString("empty1", "Nothing", _params1);
-            public static CustomStringOption empty2 = CustomOption.AddString("empty2", "Nothing", _params1);
-            public static CustomStringOption empty3 = CustomOption.AddString("empty3", "Nothing", _params1);
+            //public static CustomNumberOption engineeramount = CustomOption.AddNumber("engineers", "Engineers", true, 0, 0, 2, 1);
+
+            [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Update))]
+            class GameOptionsMenuUpdate
+            {
+                static void Postfix(ref GameOptionsMenu __instance)
+                {
+                    __instance.GetComponentInParent<Scroller>().YBounds.max = 18.5f;
+                }
+            }
         }
 
         public override void Load()
         {
+            var ServerName = Config.Bind("Server", "Name", "Peaspowered");
+            var ServerIp = Config.Bind("Server", "Ipv4 or Hostname", "au.peasplayer.tk");
+            var ServerPort = Config.Bind("Server", "Port", (ushort)25995);
+            var defaultRegions = ServerManager.DefaultRegions.ToList();
+            var ip = ServerIp.Value;
+            if (Uri.CheckHostName(ServerIp.Value).ToString() == "Dns")
+            {
+                try
+                {
+                    foreach (IPAddress address in Dns.GetHostAddresses(ServerIp.Value))
+                        if (address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                        {
+                            ip = address.ToString();
+                            break;
+                        }
+                }
+                catch {}
+            }
+            var port = ServerPort.Value;
+            defaultRegions.Insert(0, new RegionInfo(
+                ServerName.Value, ip, new[] {
+                    new ServerInfo($"{ServerName.Value}-Master-1", ip, port)
+                })
+            );
+            ServerManager.DefaultRegions = defaultRegions.ToArray();
             Harmony.PatchAll();
         }
 
@@ -91,8 +125,9 @@ namespace Peasmod
          * Zombie: Kann Leute infizieren, muss alle infizieren
          * Captain: Kann jederzeit Meeting callen
          * Traitor: Wenn er alle seine Tasks macht wird er Impostor
-         * (idk)Reviver: Kann einen rausgevoteten Spieler reviven.
-         * Assian: Impostor geben ihm einmal einen Kill-Auftrag
+         * Summoner: Kann einen rausgevoteten Spieler reviven.
+         * Assassin: Impostor geben ihm einmal einen Kill-Auftrag
+         * Snitch: Wenn er alle Tasks gemacht hat sieht er die Impostor, ab 2 übrigen Tasks sehen die Impostor ihn
          * 
          */
 

@@ -3,6 +3,8 @@ using Hazel;
 using System.Collections.Generic;
 using System;
 using UnhollowerBaseLib;
+using Peasmod.Utility;
+using Peasmod.GameModes;
 
 namespace Peasmod.Patches
 {
@@ -16,103 +18,70 @@ namespace Peasmod.Patches
             #region JesterMode
             JesterMode.Winner = null;
             JesterMode.JesterWon = false;
-            JesterMode.Jester1 = null;
-            JesterMode.Jester2 = null;
-            if (Peasmod.Settings.jesteramount.GetValue() >= 1 && Peasmod.crewmates.Count >= 1)
+            JesterMode.Jesters.Clear();
+            for (int i = 1; i <= Peasmod.Settings.jesteramount.GetValue() && Peasmod.crewmates.Count >= 1; i++)
             {
-                JesterMode.Jester1 = Peasmod.crewmates[Peasmod.random.Next(0, Peasmod.crewmates.Count)];
-                Peasmod.crewmates.Remove(JesterMode.Jester1);
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(__instance.NetId, (byte)CustomRpc.SetJester1, Hazel.SendOption.None, -1);
-                writer.Write(JesterMode.Jester1.PlayerId);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-            }
-            if (Peasmod.Settings.jesteramount.GetValue() == 2 && Peasmod.crewmates.Count >= 1)
-            {
-                JesterMode.Jester2 = Peasmod.crewmates[Peasmod.random.Next(0, Peasmod.crewmates.Count)];
-                Peasmod.crewmates.Remove(JesterMode.Jester2);
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(__instance.NetId, (byte)CustomRpc.SetJester2, Hazel.SendOption.None, -1);
-                writer.Write(JesterMode.Jester2.PlayerId);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                var jester = Peasmod.crewmates[Peasmod.random.Next(0, Peasmod.crewmates.Count)];
+                jester.RpcSetRole(Role.Jester);
+                //JesterMode.Jesters.Add(jester);
+                Peasmod.crewmates.Remove(jester);
+                /*MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(__instance.NetId, (byte)CustomRpc.AddMayor, Hazel.SendOption.None, -1);
+                writer.Write(jester.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);*/
             }
             #endregion JesterMode
             #region DoctorMode
-            DoctorMode.Doctor1 = null;
-            DoctorMode.Doctor2 = null;
-            if (Peasmod.Settings.doctoramount.GetValue() >= 1 && Peasmod.crewmates.Count >= 1)
+            DoctorMode.Doctors.Clear();
+            Utils.Log("1");
+            for (int i = 1; i <= Peasmod.Settings.doctoramount.GetValue() && Peasmod.crewmates.Count >= 1; i++)
             {
-                DoctorMode.Doctor1 = Peasmod.crewmates[Peasmod.random.Next(0, Peasmod.crewmates.Count)];
-                Peasmod.crewmates.Remove(DoctorMode.Doctor1);
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(__instance.NetId, (byte)CustomRpc.SetDoctor1, Hazel.SendOption.None, -1);
-                writer.Write(DoctorMode.Doctor1.PlayerId);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-            }
-            if (Peasmod.Settings.doctoramount.GetValue() == 2 && Peasmod.crewmates.Count >= 1)
-            {
-                DoctorMode.Doctor2 = Peasmod.crewmates[Peasmod.random.Next(0, Peasmod.crewmates.Count)];
-                Peasmod.crewmates.Remove(DoctorMode.Doctor2);
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(__instance.NetId, (byte)CustomRpc.SetDoctor2, Hazel.SendOption.None, -1);
-                writer.Write(DoctorMode.Doctor2.PlayerId);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                var doctor = Peasmod.crewmates[Peasmod.random.Next(0, Peasmod.crewmates.Count)];
+                Utils.Log("2: " + doctor.nameText.Text);
+                doctor.RpcSetRole(Role.Doctor);
+                //DoctorMode.Doctors.Add(doctor);
+                Peasmod.crewmates.Remove(doctor);
+                /*MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(__instance.NetId, (byte)CustomRpc.AddMayor, Hazel.SendOption.None, -1);
+                writer.Write(doctor.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);*/
             }
             #endregion DoctorMode
             #region MayorMode
-            MayorMode.Mayor1 = null;
-            MayorMode.Mayor2 = null;
-            if (Peasmod.Settings.mayoramount.GetValue() >= 1 && Peasmod.crewmates.Count >= 1)
+            MayorMode.Mayors.Clear();
+            for (int i = 1; i <= Peasmod.Settings.mayoramount.GetValue() && Peasmod.crewmates.Count >= 1; i++)
             {
-                MayorMode.Mayor1 = Peasmod.crewmates[Peasmod.random.Next(0, Peasmod.crewmates.Count)];
-                Peasmod.crewmates.Remove(MayorMode.Mayor1);
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(__instance.NetId, (byte)CustomRpc.SetMayor1, Hazel.SendOption.None, -1);
-                writer.Write(MayorMode.Mayor1.PlayerId);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-            }
-            if (Peasmod.Settings.mayoramount.GetValue() == 2 && Peasmod.crewmates.Count >= 1)
-            {
-                MayorMode.Mayor2 = Peasmod.crewmates[Peasmod.random.Next(0, Peasmod.crewmates.Count)];
-                Peasmod.crewmates.Remove(MayorMode.Mayor2);
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(__instance.NetId, (byte)CustomRpc.SetMayor2, Hazel.SendOption.None, -1);
-                writer.Write(MayorMode.Mayor2.PlayerId);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                var mayor = Peasmod.crewmates[Peasmod.random.Next(0, Peasmod.crewmates.Count)];
+                mayor.RpcSetRole(Role.Mayor);
+                //MayorMode.Mayors.Add(mayor);
+                Peasmod.crewmates.Remove(mayor);
+                /*MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(__instance.NetId, (byte)CustomRpc.AddMayor, Hazel.SendOption.None, -1);
+                writer.Write(mayor.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);*/
             }
             #endregion MayorMode
             #region InspectorMode
-            InspectorMode.Inspector1 = null;
-            InspectorMode.Inspector2 = null;
-            if (Peasmod.Settings.inspectoramount.GetValue() >= 1 && Peasmod.crewmates.Count >= 1)
+            InspectorMode.Inspectors.Clear();
+            for (int i = 1; i <= Peasmod.Settings.inspectoramount.GetValue() && Peasmod.crewmates.Count >= 1; i++)
             {
-                InspectorMode.Inspector1 = Peasmod.crewmates[Peasmod.random.Next(0, Peasmod.crewmates.Count)];
-                Peasmod.crewmates.Remove(InspectorMode.Inspector1);
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(__instance.NetId, (byte)CustomRpc.SetInspector1, Hazel.SendOption.None, -1);
-                writer.Write(InspectorMode.Inspector1.PlayerId);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-            }
-            if (Peasmod.Settings.inspectoramount.GetValue() == 2 && Peasmod.crewmates.Count >= 1)
-            {
-                InspectorMode.Inspector2 = Peasmod.crewmates[Peasmod.random.Next(0, Peasmod.crewmates.Count)];
-                Peasmod.crewmates.Remove(InspectorMode.Inspector2);
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(__instance.NetId, (byte)CustomRpc.SetInspector2, Hazel.SendOption.None, -1);
-                writer.Write(InspectorMode.Inspector2.PlayerId);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                var inspector = Peasmod.crewmates[Peasmod.random.Next(0, Peasmod.crewmates.Count)];
+                inspector.RpcSetRole(Role.Inspector);
+                //InspectorMode.Inspectors.Add(inspector);
+                Peasmod.crewmates.Remove(inspector);
+                /*MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(__instance.NetId, (byte)CustomRpc.AddMayor, Hazel.SendOption.None, -1);
+                writer.Write(inspector.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);*/
             }
             #endregion InspectorMode
             #region SheriffMode
-            SheriffMode.Sheriff1 = null;
-            SheriffMode.Sheriff2 = null;
-            if (Peasmod.Settings.sheriffamount.GetValue() >= 1 && Peasmod.crewmates.Count >= 1)
+            SheriffMode.Sheriffs.Clear();
+            for (int i = 1; i <= Peasmod.Settings.sheriffamount.GetValue() && Peasmod.crewmates.Count >= 1; i++)
             {
-                SheriffMode.Sheriff1 = Peasmod.crewmates[Peasmod.random.Next(0, Peasmod.crewmates.Count)];
-                Peasmod.crewmates.Remove(SheriffMode.Sheriff1);
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(__instance.NetId, (byte)CustomRpc.SetSheriff1, Hazel.SendOption.None, -1);
-                writer.Write(SheriffMode.Sheriff1.PlayerId);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-            }
-            if (Peasmod.Settings.sheriffamount.GetValue() == 2 && Peasmod.crewmates.Count >= 1)
-            {
-                SheriffMode.Sheriff2 = Peasmod.crewmates[Peasmod.random.Next(0, Peasmod.crewmates.Count)];
-                Peasmod.crewmates.Remove(SheriffMode.Sheriff2);
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(__instance.NetId, (byte)CustomRpc.SetSheriff2, Hazel.SendOption.None, -1);
-                writer.Write(SheriffMode.Sheriff2.PlayerId);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                var sheriff = Peasmod.crewmates[Peasmod.random.Next(0, Peasmod.crewmates.Count)];
+                sheriff.RpcSetRole(Role.Sheriff);
+                //SheriffMode.Sheriffs.Add(sheriff);
+                Peasmod.crewmates.Remove(sheriff);
+                /*MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(__instance.NetId, (byte)CustomRpc.AddMayor, Hazel.SendOption.None, -1);
+                writer.Write(sheriff.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);*/
             }
             #endregion SheriffMode
         }

@@ -7,8 +7,9 @@ using UnityEngine;
 using Hazel;
 using Reactor.Extensions;
 using Reactor;
+using Peasmod.Utility;
 
-namespace Peasmod
+namespace Peasmod.GameModes
 {
     class BodyDragging
     { 

@@ -10,7 +10,7 @@ using System.Reflection;
 using System.IO;
 using Reactor.Unstrip;
 
-namespace Peasmod
+namespace Peasmod.Utility
 {
     public class StringColor
     {
@@ -104,8 +104,6 @@ namespace Peasmod
             var _object = new GameObject();
             var _objectRenderer = _object.AddComponent<SpriteRenderer>();
             _objectRenderer.sprite = _objectSprite;
-            //_object.transform.localPosition = new Vector3(x, y, z);
-            //_object.transform.position = new Vector3(x, y, z);
             return _object;
         }
 

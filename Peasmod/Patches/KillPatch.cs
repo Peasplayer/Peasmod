@@ -5,6 +5,8 @@ using HarmonyLib;
 using Hazel;
 using Reactor.Extensions;
 using UnityEngine;
+using Peasmod.Utility;
+using Peasmod.GameModes;
 
 namespace Peasmod.Patches
 {
@@ -13,13 +15,13 @@ namespace Peasmod.Patches
     {
         public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
         {
-            if (__instance == SheriffMode.Sheriff1 || __instance == SheriffMode.Sheriff2)
+            if (__instance.IsRole(Role.Sheriff))
                 __instance.Data.IsImpostor = true;
         }
 
         public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
         {
-            if (__instance == SheriffMode.Sheriff1 || __instance == SheriffMode.Sheriff2)
+            if (__instance.IsRole(Role.Sheriff))
                 __instance.Data.IsImpostor = false;
         }
     }

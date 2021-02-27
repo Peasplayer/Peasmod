@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using Peasmod.Utility;
 
-namespace Peasmod
+namespace Peasmod.GameModes
 {
     class TestingStuff
     {
@@ -13,7 +14,7 @@ namespace Peasmod
 
         public static void OnClick()
         {
-            var item = Utils.CreateSprite("Peasmod.Resources.Unbenannt.png");
+            var item = Utils.CreateSprite("Peasmod.Resources.Label.png");
             var box = item.AddComponent<BoxCollider2D>();
             box.isTrigger = true;
             item.transform.localPosition = PlayerControl.LocalPlayer.transform.localPosition;

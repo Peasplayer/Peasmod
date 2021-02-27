@@ -5,33 +5,27 @@ using HarmonyLib;
 using Hazel;
 using Reactor.Extensions;
 using UnityEngine;
+using Peasmod.Utility;
+using Peasmod.Patches;
+using Peasmod.GameModes;
 
 namespace Peasmod
 {
     enum CustomRpc
     {
-        CreateVent = 43,
-        SetJester1 = 44,
-        SetJester2 = 45,
-        JesterWin = 46,
-        DragBody = 47,
-        DropBody = 48,
-        MoveBody = 49,
-        SetDoctor1 = 50,
-        SetDoctor2 = 51,
-        Revive = 52,
-        SetMayor1 = 53,
-        SetMayor2 = 54,
-        Invisible = 55,
-        Visible = 56,
-        FreezeTime = 57,
-        UnfreezeTime = 58,
-        SetInspector1 = 59,
-        SetInspector2 = 60,
-        CreateDot = 61,
-        SetSheriff1 = 62,
-        SetSheriff2 = 63,
-        SheriffDies = 64
+        SetRole = 43,
+        CreateVent = 44,
+        JesterWin = 45,
+        DragBody = 46,
+        DropBody = 47,
+        MoveBody = 48,
+        Revive = 49,
+        Invisible = 50,
+        Visible = 51,
+        FreezeTime = 52,
+        UnfreezeTime = 53,
+        CreateDot = 54,
+        SheriffDies = 55
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -49,18 +43,6 @@ namespace Peasmod
                     var centerVent = reader.ReadPackedInt32();
                     var rightVent = reader.ReadPackedInt32();
                     VentBuilding.CreateVent(PlayerControl.LocalPlayer, id, position, zAxis, leftVent, centerVent, rightVent);
-                    break;
-                case (byte)CustomRpc.SetJester1:
-                    byte Jester1Id = reader.ReadByte();
-                    foreach (PlayerControl _player in PlayerControl.AllPlayerControls)
-                        if (_player.PlayerId == Jester1Id)
-                            JesterMode.Jester1 = _player;
-                    break;
-                case (byte)CustomRpc.SetJester2:
-                    byte Jester2Id = reader.ReadByte();
-                    foreach (PlayerControl _player in PlayerControl.AllPlayerControls)
-                        if (_player.PlayerId == Jester2Id)
-                            JesterMode.Jester2 = _player;
                     break;
                 case (byte)CustomRpc.JesterWin:
                     byte JesterId = reader.ReadByte();
@@ -97,18 +79,6 @@ namespace Peasmod
                     BodyDragging.bodys.Remove(BodyDragging.bodys[BodyDragging.draggers.IndexOf(player.PlayerId)]);
                     BodyDragging.draggers.Remove(player.PlayerId);
                     break;
-                case (byte)CustomRpc.SetDoctor1:
-                    byte Doctor1Id = reader.ReadByte();
-                    foreach (PlayerControl _player in PlayerControl.AllPlayerControls)
-                        if (_player.PlayerId == Doctor1Id)
-                            DoctorMode.Doctor1 = _player;
-                    break;
-                case (byte)CustomRpc.SetDoctor2:
-                    byte Doctor2Id = reader.ReadByte();
-                    foreach (PlayerControl _player in PlayerControl.AllPlayerControls)
-                        if (_player.PlayerId == Doctor2Id)
-                            DoctorMode.Doctor2 = _player;
-                    break;
                 case (byte)CustomRpc.Revive:
                     body = Utils.GetDeadBody(reader.ReadByte());
                     Utils.GetPlayer(body.ParentId).Revive();
@@ -120,18 +90,6 @@ namespace Peasmod
                         PlayerControl.LocalPlayer.myTasks.RemoveAt(0);
                     }
                     body.gameObject.Destroy();
-                    break;
-                case (byte)CustomRpc.SetMayor1:
-                    byte Mayor1Id = reader.ReadByte();
-                    foreach (PlayerControl _player in PlayerControl.AllPlayerControls)
-                        if (_player.PlayerId == Mayor1Id)
-                            MayorMode.Mayor1 = _player;
-                    break;
-                case (byte)CustomRpc.SetMayor2:
-                    byte Mayor2Id = reader.ReadByte();
-                    foreach (PlayerControl _player in PlayerControl.AllPlayerControls)
-                        if (_player.PlayerId == Mayor2Id)
-                            MayorMode.Mayor2 = _player;
                     break;
                 case (byte)CustomRpc.Invisible:
                     var invisible = Utils.GetPlayer(reader.ReadByte());
@@ -164,23 +122,11 @@ namespace Peasmod
                     TimeFreezing.timeIsFroozen = false;
                     PlayerControl.LocalPlayer.moveable = true;
                     break;
-                case (byte)CustomRpc.SetInspector1:
-                    byte Detective1Id = reader.ReadByte();
-                    foreach (PlayerControl _player in PlayerControl.AllPlayerControls)
-                        if (_player.PlayerId == Detective1Id)
-                            InspectorMode.Inspector1 = _player;
-                    break;
-                case (byte)CustomRpc.SetInspector2:
-                    byte Detective2Id = reader.ReadByte();
-                    foreach (PlayerControl _player in PlayerControl.AllPlayerControls)
-                        if (_player.PlayerId == Detective2Id)
-                            InspectorMode.Inspector2 = _player;
-                    break;
                 case (byte)CustomRpc.CreateDot:
                     player = Utils.GetPlayer(reader.ReadByte());
                     if(player.PlayerId != PlayerControl.LocalPlayer.PlayerId && !PlayerControl.LocalPlayer.Data.IsDead)
                     {
-                        if (PlayerControl.LocalPlayer == InspectorMode.Inspector1 || PlayerControl.LocalPlayer == InspectorMode.Inspector2)
+                        if (PlayerControl.LocalPlayer.IsRole(Role.Inspector))
                         {
                             var dot = Utils.CreateSprite("Peasmod.Resources.Dot.png");
                             dot.transform.localPosition = new Vector3(player.GetTruePosition().x, player.GetTruePosition().y, player.transform.position.z);
@@ -188,18 +134,6 @@ namespace Peasmod
                             HudManagerPatch.dots.Add(dot, Time.time);
                         }
                     }
-                    break;
-                case (byte)CustomRpc.SetSheriff1:
-                    byte Sheriff1Id = reader.ReadByte();
-                    foreach (PlayerControl _player in PlayerControl.AllPlayerControls)
-                        if (_player.PlayerId == Sheriff1Id)
-                            SheriffMode.Sheriff1 = _player;
-                    break;
-                case (byte)CustomRpc.SetSheriff2:
-                    byte Sheriff2Id = reader.ReadByte();
-                    foreach (PlayerControl _player in PlayerControl.AllPlayerControls)
-                        if (_player.PlayerId == Sheriff2Id)
-                            SheriffMode.Sheriff2 = _player;
                     break;
                 case (byte)CustomRpc.SheriffDies:
                     var Sheriff = Utils.GetPlayer(reader.ReadByte());
@@ -210,6 +144,11 @@ namespace Peasmod
                     Sheriff.Die(DeathReason.Kill);
                     Sheriff.transform.position = deadBody.transform.position;
                     Sheriff.Collider.enabled = false;
+                    break;
+                case (byte)CustomRpc.SetRole:
+                    player = Utils.GetPlayer(reader.ReadByte());
+                    Role role = (Role)reader.ReadByte();
+                    player.SetRole(role);
                     break;
             }
         }

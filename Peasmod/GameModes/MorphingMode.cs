@@ -8,8 +8,9 @@ using Reactor.Extensions;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using Peasmod.Utility;
 
-namespace Peasmod
+namespace Peasmod.GameModes
 {
     class MorphingMode
     {
@@ -54,7 +55,7 @@ namespace Peasmod
                 new PlayerData(PlayerControl.LocalPlayer);
             if (labelprefab == null)
             {
-                labelprefab = Utils.CreateSprite("Peasmod.Resources.Unbenannt.png");
+                labelprefab = Utils.CreateSprite("Peasmod.Resources.Label.png");
                 var collider = labelprefab.AddComponent<BoxCollider2D>();
                 collider.isTrigger = true;
                 collider.size = labelprefab.GetComponent<SpriteRenderer>().size;

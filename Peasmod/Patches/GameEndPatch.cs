@@ -5,6 +5,8 @@ using HarmonyLib;
 using Hazel;
 using UnityEngine;
 using UnhollowerBaseLib;
+using Peasmod.GameModes;
+using Peasmod.Utility;
 
 namespace Peasmod.Patches
 {
@@ -18,28 +20,23 @@ namespace Peasmod.Patches
                 if (HKOIECMDOKL == StringNames.ExileTextPN || HKOIECMDOKL == StringNames.ExileTextSN)
                 {
                     #region JesterMode
-                    if (JesterMode.Jester1 != null && ExileController.Instance.exiled.Object.PlayerId == JesterMode.Jester1.PlayerId
-                        || JesterMode.Jester2 != null && ExileController.Instance.exiled.Object.PlayerId == JesterMode.Jester2.PlayerId)
+                    if (ExileController.Instance.exiled.Object.IsRole(Role.Jester))
                         __result = ExileController.Instance.exiled.PlayerName + " was The Jester.";
                     #endregion JesterMode
                     #region DoctorMode
-                    if (DoctorMode.Doctor1 != null && ExileController.Instance.exiled.Object.PlayerId == DoctorMode.Doctor1.PlayerId
-                        || DoctorMode.Doctor2 != null && ExileController.Instance.exiled.Object.PlayerId == DoctorMode.Doctor2.PlayerId)
+                    if (ExileController.Instance.exiled.Object.IsRole(Role.Doctor))
                         __result = ExileController.Instance.exiled.PlayerName + " was The Doctor.";
                     #endregion DoctorMode
                     #region MayorMode
-                    if (MayorMode.Mayor1 != null && ExileController.Instance.exiled.Object.PlayerId == MayorMode.Mayor1.PlayerId
-                        || MayorMode.Mayor2 != null && ExileController.Instance.exiled.Object.PlayerId == MayorMode.Mayor2.PlayerId)
+                    if (ExileController.Instance.exiled.Object.IsRole(Role.Mayor))
                         __result = ExileController.Instance.exiled.PlayerName + " was The Mayor.";
                     #endregion MayorMode
                     #region InspectorMode
-                    if (InspectorMode.Inspector1 != null && ExileController.Instance.exiled.Object.PlayerId == InspectorMode.Inspector1.PlayerId
-                        || InspectorMode.Inspector2 != null && ExileController.Instance.exiled.Object.PlayerId == InspectorMode.Inspector2.PlayerId)
+                    if (ExileController.Instance.exiled.Object.IsRole(Role.Inspector))
                         __result = ExileController.Instance.exiled.PlayerName + " was The Inspector.";
                     #endregion InspectorMode
                     #region SheriffMode
-                    if (SheriffMode.Sheriff1 != null && ExileController.Instance.exiled.Object.PlayerId == SheriffMode.Sheriff1.PlayerId
-                        || SheriffMode.Sheriff2 != null && ExileController.Instance.exiled.Object.PlayerId == SheriffMode.Sheriff2.PlayerId)
+                    if (ExileController.Instance.exiled.Object.IsRole(Role.Sheriff))
                         __result = ExileController.Instance.exiled.PlayerName + " was The Sheriff.";
                     #endregion SheriffMode
                     if (__result == null)
@@ -51,7 +48,7 @@ namespace Peasmod.Patches
                 if (HKOIECMDOKL == StringNames.ImpostorsRemainP || HKOIECMDOKL == StringNames.ImpostorsRemainS)
                 {
                     #region JesterMode
-                    if (JesterMode.Jester1 != null && ExileController.Instance.exiled.Object.PlayerId == JesterMode.Jester1.PlayerId)
+                    if (ExileController.Instance.exiled.Object.IsRole(Role.Jester))
                         __result = "";
                     #endregion JesterMode
                 }
@@ -69,62 +66,30 @@ namespace Peasmod.Patches
                 MorphingMode.OnLabelClick(player, player, false);
             #endregion MorphingMode
             #region JesterMode
-            if (JesterMode.Jester1 != null)
+            if (__instance.IsRole(Role.Jester))
             {
-                if (AmongUsClient.Instance.AmHost && __instance.PlayerId == JesterMode.Jester1.PlayerId)
+                ShipStatus.Instance.enabled = false;
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.JesterWin, Hazel.SendOption.None, -1);
+                writer.Write(__instance.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                JesterMode.Winner = __instance;
+                JesterMode.JesterWon = true;
+                JesterMode.Winner.Data.IsImpostor = true;
+                JesterMode.Winner.infectedSet = true;
+                foreach (PlayerControl player in PlayerControl.AllPlayerControls)
                 {
-
-                    ShipStatus.Instance.enabled = false;
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.JesterWin, Hazel.SendOption.None, -1);
-                    writer.Write(JesterMode.Jester1.PlayerId);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    JesterMode.Winner = JesterMode.Jester1;
-                    JesterMode.JesterWon = true;
-                    JesterMode.Winner.Data.IsImpostor = true;
-                    JesterMode.Winner.infectedSet = true;
-                    foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+                    if (player.PlayerId != JesterMode.Winner.PlayerId)
                     {
-                        if (player.PlayerId != JesterMode.Winner.PlayerId)
-                        {
-                            player.RemoveInfected();
-                            player.Data.IsImpostor = false;
-                        }
+                        player.RemoveInfected();
+                        player.Data.IsImpostor = false;
                     }
-                    HandleWinRpc();
-#if ITCH
-                        ShipStatus.Method_34(GameOverReason.ImpostorByVote, false);
-#elif STEAM
-                    ShipStatus.RpcEndGame(GameOverReason.ImpostorByVote, false);
-#endif
                 }
-            }
-            if (JesterMode.Jester2 != null)
-            {
-                if (AmongUsClient.Instance.AmHost && __instance.PlayerId == JesterMode.Jester2.PlayerId)
-                {
-                    ShipStatus.Instance.enabled = false;
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.JesterWin, Hazel.SendOption.None, -1);
-                    writer.Write(JesterMode.Jester2.PlayerId);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    JesterMode.Winner = JesterMode.Jester2;
-                    JesterMode.JesterWon = true;
-                    JesterMode.Winner.Data.IsImpostor = true;
-                    JesterMode.Winner.infectedSet = true;
-                    foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-                    {
-                        if (player.PlayerId != JesterMode.Winner.PlayerId)
-                        {
-                            player.RemoveInfected();
-                            player.Data.IsImpostor = false;
-                        }
-                    }
-                    HandleWinRpc();
-#if ITCH
-                        ShipStatus.Method_34(GameOverReason.ImpostorByVote, false);
-#elif STEAM
+                HandleWinRpc();
+                #if ITCH
+                    ShipStatus.Method_34(GameOverReason.ImpostorByVote, false);
+                #elif STEAM
                     ShipStatus.RpcEndGame(GameOverReason.ImpostorByVote, false);
-#endif
-                }
+                #endif
             }
             #endregion JesterMode
         }
@@ -162,6 +127,7 @@ namespace Peasmod.Patches
                 player.Visible = true;
                 player.moveable = true;
             }
+            PlayerControlExtensions.ResetRoles();
             #region JesterMode
             if (JesterMode.JesterWon)
             {

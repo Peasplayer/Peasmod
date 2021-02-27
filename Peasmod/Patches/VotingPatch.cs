@@ -4,6 +4,7 @@ using System.Text;
 using HarmonyLib;
 using Reactor.Extensions;
 using UnhollowerBaseLib;
+using Peasmod.Utility;
 
 namespace Peasmod.Patches
 {
@@ -21,11 +22,7 @@ namespace Peasmod.Patches
                     int index2 = (int)playerState.votedFor + 1;
                     if (index2 >= 0 && index2 < numArray.Length)
                         ++numArray[index2];
-                    if (MayorMode.Mayor1 != null)
-                        if (playerState.TargetPlayerId == MayorMode.Mayor1.PlayerId)
-                            ++numArray[index2];
-                    if (MayorMode.Mayor2 != null)
-                        if (playerState.TargetPlayerId == MayorMode.Mayor2.PlayerId)
+                    if (Utils.GetPlayer((byte)playerState.TargetPlayerId).IsRole(Role.Mayor))
                             ++numArray[index2];
                 }
             }

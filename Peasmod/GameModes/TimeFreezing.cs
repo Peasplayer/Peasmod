@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using Hazel;
+using Peasmod.Utility;
 
-namespace Peasmod
+namespace Peasmod.GameModes
 {
     class TimeFreezing
     {

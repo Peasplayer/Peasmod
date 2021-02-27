@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <Version>1.6.2</Version>
+        <Version>1.7.0</Version>
         <Mappings>NuclearPowered/Mappings:0.1.2</Mappings>
 
         <Description>Peasnod</Description>
@@ -21,12 +21,13 @@
     <ItemGroup>
 		<None Remove="Resources\BuildVent.png" />
 		<None Remove="Resources\Dot.png" />
+		<None Remove="Resources\Hats\PeasMask.png" />
+		<None Remove="Resources\Label.png" />
 		<None Remove="Resources\Revive.png" />
 		<None Remove="Resources\DragBody.png" />
 		<None Remove="Resources\DropBody.png" />
 		<None Remove="Resources\Hide.png" />
 		<None Remove="Resources\TimeFreezing.png" />
-		<None Remove="Resources\Unbenannt.png" />
 
 	</ItemGroup>
 
@@ -39,7 +40,8 @@
 		<EmbeddedResource Include="Resources\Hide.png" />
 		<EmbeddedResource Include="Resources\TimeFreezing.png" />
 		<EmbeddedResource Include="Resources\Dot.png" />
-		<EmbeddedResource Include="Resources\Unbenannt.png" />
+		<EmbeddedResource Include="Resources\Label.png" />
+		<EmbeddedResource Include="Resources\Hats\PeasMask.png" />
 		
         <PackageReference Include="Reactor.OxygenFilter.MSBuild" Version="0.2.5" />
     </ItemGroup>

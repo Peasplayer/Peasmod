@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using HarmonyLib;
 using UnityEngine;
+using Peasmod.GameModes;
+using Peasmod.Utility;
 
 namespace Peasmod.Patches
 {
@@ -56,24 +58,15 @@ namespace Peasmod.Patches
             }
             #endregion InvisibilityMode
             #region DoctorMode
-            if (Peasmod.Settings.doctoramount.GetValue() != 0)
+            if (DoctorMode.Doctors.Count != 0)
             {
-                if (DoctorMode.Doctor1 != null)
-                    if (DoctorMode.button != null && PlayerControl.LocalPlayer.PlayerId == DoctorMode.Doctor1.PlayerId && Input.GetKey(KeyCode.F))
-                        if (DoctorMode.button.Timer <= 0f && DoctorMode.button.CanUse() && DoctorMode.button.enabled && DoctorMode.button.killButtonManager.gameObject.active)
-                        {
-                            DoctorMode.button.killButtonManager.renderer.color = new Color(1f, 1f, 1f, 0.3f);
-                            DoctorMode.button.OnClick();
-                            DoctorMode.button.Timer = DoctorMode.button.MaxTimer;
-                        }
-                if (DoctorMode.Doctor2 != null)
-                    if (DoctorMode.button != null && PlayerControl.LocalPlayer.PlayerId == DoctorMode.Doctor2.PlayerId && Input.GetKey(KeyCode.F))
-                        if (DoctorMode.button.Timer <= 0f && DoctorMode.button.CanUse() && DoctorMode.button.enabled && DoctorMode.button.killButtonManager.gameObject.active)
-                        {
-                            DoctorMode.button.killButtonManager.renderer.color = new Color(1f, 1f, 1f, 0.3f);
-                            DoctorMode.button.OnClick();
-                            DoctorMode.button.Timer = DoctorMode.button.MaxTimer;
-                        }
+                if (DoctorMode.button != null && Input.GetKey(KeyCode.F))
+                    if (DoctorMode.button.Timer <= 0f && DoctorMode.button.CanUse() && DoctorMode.button.enabled && DoctorMode.button.killButtonManager.gameObject.active)
+                    {
+                        DoctorMode.button.killButtonManager.renderer.color = new Color(1f, 1f, 1f, 0.3f);
+                        DoctorMode.button.OnClick();
+                        DoctorMode.button.Timer = DoctorMode.button.MaxTimer;
+                    }
             }
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);

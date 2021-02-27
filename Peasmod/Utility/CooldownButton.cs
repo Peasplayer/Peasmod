@@ -10,7 +10,7 @@ using System.Reflection;
 using System.IO;
 using Reactor.Unstrip;
 
-namespace Peasmod
+namespace Peasmod.Utility
 {
     public class CooldownButton
     {
@@ -79,18 +79,8 @@ namespace Peasmod
             Stream myStream = assembly.GetManifestResourceStream(ResourceName);
             byte[] buttonTexture = Reactor.Extensions.Extensions.ReadFully(myStream);
             ImageConversion.LoadImage(tex, buttonTexture, false);
-            var test = Utils.CreateSprite(ResourceName);
             killButtonManager.renderer.sprite = GUIExtensions.CreateSprite(tex);
-            //killButtonManager.renderer.size = test.GetComponent<SpriteRenderer>().size;
-            killButtonManager.transform.localScale = test.GetComponent<SpriteRenderer>().transform.localScale;
-            test.Destroy();
-            //Utils.Log(killButtonManager.renderer.size.x + " | " + killButtonManager.renderer.size.y);
             button = killButtonManager.GetComponent<PassiveButton>();
-            foreach(var collider in button.Colliders)
-            {
-                collider.transform.localScale = killButtonManager.transform.localScale;
-            }
-            button.transform.localScale = killButtonManager.transform.localScale;
             button.OnClick.RemoveAllListeners();
             button.OnClick.AddListener((UnityEngine.Events.UnityAction)listener);
             void listener()
@@ -117,45 +107,27 @@ namespace Peasmod
             {
                 case Category.Everyone:
                     {
-                        canUse = true;
+                        canUse = !PlayerControl.LocalPlayer.Data.IsDead;
                         break;
                     }
                 case Category.OnlyCrewmate:
                     {
-                        canUse = !PlayerControl.LocalPlayer.Data.IsImpostor;
+                        canUse = !PlayerControl.LocalPlayer.Data.IsImpostor && !PlayerControl.LocalPlayer.Data.IsDead;
                         break;
                     }
                 case Category.OnlyImpostor:
                     {
-                        canUse = PlayerControl.LocalPlayer.Data.IsImpostor;
+                        canUse = PlayerControl.LocalPlayer.Data.IsImpostor && !PlayerControl.LocalPlayer.Data.IsDead;
                         break;
                     }
-                case Category.Doctor:
+                case Category.OnlyDoctor:
                     {
-                        if (DoctorMode.Doctor1 != null)
-                            if(DoctorMode.Doctor1.PlayerId == PlayerControl.LocalPlayer.PlayerId)
-                                canUse = !PlayerControl.LocalPlayer.Data.IsDead;
-                            else if (DoctorMode.Doctor2 != null)
-                                if(DoctorMode.Doctor2.PlayerId == PlayerControl.LocalPlayer.PlayerId)
-                                    canUse = !PlayerControl.LocalPlayer.Data.IsDead;
-                                else
-                                    canUse = false;
-                            else
-                                canUse = false;
+                        canUse = PlayerControl.LocalPlayer.IsRole(Role.Doctor) && !PlayerControl.LocalPlayer.Data.IsDead;
                         break;
                     }
-                case Category.Sheriff:
+                case Category.OnlySheriff:
                     {
-                        if (SheriffMode.Sheriff1 != null)
-                            if (SheriffMode.Sheriff1.PlayerId == PlayerControl.LocalPlayer.PlayerId)
-                                canUse = !PlayerControl.LocalPlayer.Data.IsDead;
-                            else if (SheriffMode.Sheriff2 != null)
-                                if (SheriffMode.Sheriff2.PlayerId == PlayerControl.LocalPlayer.PlayerId)
-                                    canUse = !PlayerControl.LocalPlayer.Data.IsDead;
-                                else
-                                    canUse = false;
-                            else
-                                canUse = false;
+                        canUse = PlayerControl.LocalPlayer.IsRole(Role.Sheriff) && !PlayerControl.LocalPlayer.Data.IsDead;
                         break;
                     }
             }
@@ -226,8 +198,8 @@ namespace Peasmod
             Everyone,
             OnlyCrewmate,
             OnlyImpostor,
-            Doctor,
-            Sheriff
+            OnlyDoctor,
+            OnlySheriff
         }
     }
 }

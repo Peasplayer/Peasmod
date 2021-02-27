@@ -5,12 +5,11 @@ using UnityEngine;
 using Hazel;
 using Reactor.Extensions;
 
-namespace Peasmod
+namespace Peasmod.GameModes
 {
     class MayorMode
     {
-        public static PlayerControl Mayor1;
-        public static PlayerControl Mayor2;
+        public static List<PlayerControl> Mayors = new List<PlayerControl>();
 
         public static Color MayorColor { get; } = new Color(17f / 255f, 49f / 255f, 255f / 255f);
     }
