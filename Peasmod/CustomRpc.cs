@@ -156,7 +156,7 @@ namespace Peasmod
                     break;
                 case (byte)CustomRpc.PotatoDies:
                     player = Utils.GetPlayer(reader.ReadByte());
-                    player.MurderPlayer(player);
+                    player.Die(DeathReason.Kill);
                     player.Data.IsImpostor = false;
                     player.Data.IsDead = true;
                     player.Collider.enabled = false;
