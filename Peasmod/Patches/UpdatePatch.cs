@@ -153,10 +153,6 @@ namespace Peasmod.Patches
                     {
                         player.nameText.Color = Palette.White;
                     }
-                    if (player.Data.IsDead)
-                    {
-                        player.Visible = false;
-                    }
                 }
                 HudManager.Instance.KillButton.SetCoolDown(0f, 1f);
                 if (HotPotatoMode.timer != null)

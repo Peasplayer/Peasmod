@@ -25,8 +25,9 @@ namespace Peasmod
         FreezeTime = 52,
         UnfreezeTime = 53,
         CreateDot = 54,
-        SheriffDies = 55,
-        PotatoDies = 56
+        SheriffKills = 55,
+        SheriffDies = 56,
+        PotatoDies = 57
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -36,6 +37,12 @@ namespace Peasmod
         {
             switch (packetId)
             {
+
+                case (byte)CustomRpc.SetRole:
+                    var player = Utils.GetPlayer(reader.ReadByte());
+                    Role role = (Role)reader.ReadByte();
+                    player.SetRole(role);
+                    break;
                 case (byte)CustomRpc.CreateVent:
                     var id = reader.ReadPackedInt32();
                     var position = reader.ReadVector2();
@@ -65,7 +72,7 @@ namespace Peasmod
                     break;
                 case (byte)CustomRpc.DragBody:
                     var test2 = reader.ReadPackedInt32();
-                    PlayerControl player = Utils.GetPlayer((byte)test2);
+                    player = Utils.GetPlayer((byte)test2);
                     var test = reader.ReadPackedInt32();
                     var body = Utils.GetDeadBody(test);
                     if (body != null)
@@ -146,15 +153,9 @@ namespace Peasmod
                     Sheriff.transform.position = deadBody.transform.position;
                     Sheriff.Collider.enabled = false;
                     break;
-                case (byte)CustomRpc.SetRole:
-                    player = Utils.GetPlayer(reader.ReadByte());
-                    Role role = (Role)reader.ReadByte();
-                    player.SetRole(role);
-                    break;
                 case (byte)CustomRpc.PotatoDies:
                     player = Utils.GetPlayer(reader.ReadByte());
                     player.MurderPlayer(player);
-                    player.Visible = false;
                     player.Data.IsImpostor = false;
                     player.Data.IsDead = true;
                     player.Collider.enabled = false;

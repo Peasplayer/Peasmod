@@ -80,7 +80,7 @@ namespace Peasmod
         {
             var ServerName = Config.Bind("Server", "Name", "Peaspowered");
             var ServerIp = Config.Bind("Server", "Ipv4 or Hostname", "au.peasplayer.tk");
-            var ServerPort = Config.Bind("Server", "Port", (ushort)25995);
+            var ServerPort = Config.Bind("Server", "Port", (ushort)30205);
             var defaultRegions = ServerManager.DefaultRegions.ToList();
             var ip = ServerIp.Value;
             if (Uri.CheckHostName(ServerIp.Value).ToString() == "Dns")
