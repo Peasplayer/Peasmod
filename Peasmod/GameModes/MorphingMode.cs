@@ -23,13 +23,18 @@ namespace Peasmod.GameModes
 
         public static void OnLabelClick(PlayerControl who, PlayerControl into, bool fromlabel)
         {
-            PlayerData.GetPlayerData(who);
+            if(!who.IsMorphed())
+                PlayerData.GetPlayerData(who);
             var data = PlayerData.GetPlayerData(into);
             who.RpcSetName(data.Name);
             who.RpcSetColor(data.Color);
             who.RpcSetSkin(data.Skin);
             who.RpcSetHat(data.Hat);
             who.RpcSetPet(data.Pet);
+            if(who.PlayerId == into.PlayerId)
+                who.SetMorphed(false);
+            else
+                who.SetMorphed(true);
             if (fromlabel)
             {
                 foreach (var button in labels)
@@ -107,7 +112,7 @@ namespace Peasmod.GameModes
             if (PlayerDatas.ContainsKey(player.PlayerId))
                 return PlayerDatas[player.PlayerId];
             else
-                return new PlayerData(player);
+                return null;
         }
     }
 }

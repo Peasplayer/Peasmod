@@ -16,28 +16,8 @@ namespace Peasmod.Patches
     {
         public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
         {
-            if(Peasmod.Settings.hotpotato.GetValue())
-            {
-                target.Data.IsImpostor = true;
-                __instance.Data.IsImpostor = false;
-                __instance.nameText.Color = Palette.White;
-                if (__instance.PlayerId == PlayerControl.LocalPlayer.PlayerId)
-                {
-                    HotPotatoMode.timer.GetComponent<TextRenderer>().Text = string.Empty;
-                    HudManager.Instance.KillButton.gameObject.SetActive(false);
-                }
-                if (target.PlayerId == PlayerControl.LocalPlayer.PlayerId)
-                {
-                    HotPotatoMode.timer.GetComponent<TextRenderer>().Text = "Timer";
-                    HotPotatoMode.Timer = Peasmod.Settings.hotpotatotimer.GetValue();
-                    HudManager.Instance.KillButton.gameObject.SetActive(true);
-                }
-            }
-            else
-            {
-                if (__instance.IsRole(Role.Sheriff))
+            if (__instance.IsRole(Role.Sheriff))
                     __instance.Data.IsImpostor = true;
-            }
         }
 
         public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)

@@ -132,6 +132,11 @@ namespace Peasmod
          * Assassin: Impostor geben ihm einmal einen Kill-Auftrag
          * Snitch: Wenn er alle Tasks gemacht hat sieht er die Impostor, ab 2 übrigen Tasks sehen die Impostor ihn
          * 
+         * Gamemodes:
+         * Freeze-Tag
+         * Zombie
+         * Räuber und Gendarm
+         * 
          */
 
 

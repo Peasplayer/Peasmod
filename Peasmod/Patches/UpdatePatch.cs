@@ -154,7 +154,7 @@ namespace Peasmod.Patches
                         player.nameText.Color = Palette.White;
                     }
                 }
-                HudManager.Instance.KillButton.SetCoolDown(0f, 1f);
+                HudManager.Instance.KillButton.gameObject.SetActive(false);
                 if (HotPotatoMode.timer != null)
                 {
                     if (!PlayerControl.LocalPlayer.Data.IsImpostor)
@@ -178,7 +178,10 @@ namespace Peasmod.Patches
                                     players.Add(_player);
                             }
                             var player = players[Peasmod.random.Next(0, players.Count)];
-                            PlayerControl.LocalPlayer.RpcMurderPlayer(player);
+                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.PotatoPassed, Hazel.SendOption.None, -1);
+                            writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                            writer.Write(player.PlayerId);
+                            AmongUsClient.Instance.FinishRpcImmediately(writer);
                             PlayerControl.LocalPlayer.Die(DeathReason.Kill);
                             PlayerControl.LocalPlayer.Data.IsImpostor = false;
                             PlayerControl.LocalPlayer.Collider.enabled = false;
@@ -187,9 +190,21 @@ namespace Peasmod.Patches
                             var scale = new Vector3(potato.transform.localScale.x + 2f, potato.transform.localScale.y + 2f);
                             potato.transform.localScale = scale;
                             potato.transform.position = PlayerControl.LocalPlayer.GetTruePosition();
-                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(player.NetId, (byte)CustomRpc.PotatoDies, Hazel.SendOption.None, -1);
+                            writer = AmongUsClient.Instance.StartRpcImmediately(player.NetId, (byte)CustomRpc.PotatoDies, Hazel.SendOption.None, -1);
                             writer.Write(PlayerControl.LocalPlayer.PlayerId);
                             AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        }
+                        if(Utils.GetDistBetweenPlayers(PlayerControl.LocalPlayer, Utils.GetClosestPlayer(PlayerControl.LocalPlayer)) <= GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance])
+                        {
+                            HotPotatoMode.CurrentTarget = Utils.GetClosestPlayer(PlayerControl.LocalPlayer);
+                            HotPotatoMode.button.enabled = true;
+                            HotPotatoMode.button.killButtonManager.renderer.color = Palette.EnabledColor;
+                        }
+                        else
+                        {
+                            HotPotatoMode.CurrentTarget = null;
+                            HotPotatoMode.button.enabled = false;
+                            HotPotatoMode.button.killButtonManager.renderer.color = Palette.DisabledColor;
                         }
                     }
                 }
@@ -453,7 +468,8 @@ namespace Peasmod.Patches
         public static void Prefix(HudManager __instance)
         {
             #region MorphingMode
-            MorphingMode.OnLabelClick(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer, false);
+            if(PlayerControl.LocalPlayer.IsMorphed())
+                MorphingMode.OnLabelClick(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer, false);
             #endregion MorphingMode
         }
     }

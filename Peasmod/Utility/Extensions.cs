@@ -102,6 +102,23 @@ namespace Peasmod.Utility
                 return Role.Crewmate;
         }
 
+        private static Dictionary<byte, bool> isMorphed = new Dictionary<byte, bool>();
+
+        public static bool IsMorphed(this PlayerControl player)
+        {
+            if (isMorphed.TryGetValue(player.PlayerId, out bool _isMorphed) == false)
+                _isMorphed = false;
+            return _isMorphed;
+        }
+
+        public static void SetMorphed(this PlayerControl player, bool morphed)
+        {
+            if (isMorphed.TryGetValue(player.PlayerId, out bool _isMorphed) == false)
+                isMorphed.Add(player.PlayerId, morphed);
+            else
+                isMorphed[player.PlayerId] = morphed;
+        }
+
         public static void ResetRoles()
         {
             JesterMode.Jesters = new List<PlayerControl>();

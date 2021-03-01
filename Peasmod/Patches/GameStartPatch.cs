@@ -66,6 +66,7 @@ namespace Peasmod.Patches
         {
             if(Peasmod.Settings.hotpotato.GetValue())
             {
+                HotPotatoMode.button = new CooldownButton(HotPotatoMode.OnClick, 1f, "Peasmod.Resources.Kill.png", 200f, new Vector2(0f, 0.3f), CooldownButton.Category.OnlyImpostor, HudManager.Instance);
                 HotPotatoMode.timer = Utils.CreateText(new Vector3(-5.25f, -2.5f), "Timer");
                 HotPotatoMode.Timer = Peasmod.Settings.hotpotatotimer.GetValue();
             }
@@ -114,6 +115,7 @@ namespace Peasmod.Patches
                 if (TestingStuff.testing)
                     TestingStuff.button = new CooldownButton(TestingStuff.OnClick, 1f, "Peasmod.Resources.DragBody.png", 200f, Vector2.zero, CooldownButton.Category.OnlyCrewmate, HudManager.Instance);
                 gameStarted = true;
+                PlayerData.GetPlayerData(PlayerControl.LocalPlayer);
                 HudManagerPatch.dots.Clear();
             }
         }

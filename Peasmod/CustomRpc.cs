@@ -27,7 +27,8 @@ namespace Peasmod
         CreateDot = 54,
         SheriffKills = 55,
         SheriffDies = 56,
-        PotatoDies = 57
+        PotatoDies = 57,
+        PotatoPassed = 58
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -163,6 +164,19 @@ namespace Peasmod
                     var scale = new Vector3(potato.transform.localScale.x+2f, potato.transform.localScale.y+2f);
                     potato.transform.localScale = scale;
                     potato.transform.position = player.GetTruePosition();
+                    break;
+                case (byte)CustomRpc.PotatoPassed:
+                    player = Utils.GetPlayer(reader.ReadByte());
+                    var target = Utils.GetPlayer(reader.ReadByte());
+                    target.Data.IsImpostor = true;
+                    player.Data.IsImpostor = false;
+                    player.nameText.Color = Palette.White;
+                    if (target.PlayerId == PlayerControl.LocalPlayer.PlayerId)
+                    {
+                        HotPotatoMode.timer.GetComponent<TextRenderer>().Text = "Timer";
+                        HotPotatoMode.Timer = Peasmod.Settings.hotpotatotimer.GetValue();
+                        HudManager.Instance.KillButton.gameObject.SetActive(true);
+                    }
                     break;
             }
         }
