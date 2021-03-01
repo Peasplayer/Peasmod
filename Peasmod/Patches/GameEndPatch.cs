@@ -62,8 +62,7 @@ namespace Peasmod.Patches
         public static void Prefix(PlayerControl __instance)
         {
             #region MorphingMode
-            foreach(var player in PlayerControl.AllPlayerControls)
-                MorphingMode.OnLabelClick(player, player, false);
+            MorphingMode.OnLabelClick(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer, false);
             #endregion MorphingMode
             #region JesterMode
             if (__instance.IsRole(Role.Jester))

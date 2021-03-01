@@ -15,7 +15,8 @@ namespace Peasmod.Patches
         {
             if (PlayerControl.LocalPlayer == null) return;
             if (PlayerControl.LocalPlayer.Data == null) return;
-            #region VentBuilding
+            #region KeyBindsOutOfUse
+            /*#region VentBuilding
             if(Peasmod.Settings.ventbuilding.GetValue())
             {
                 if (VentBuilding.button != null && PlayerControl.LocalPlayer.Data.IsImpostor && Input.GetKey(KeyCode.R))
@@ -68,6 +69,8 @@ namespace Peasmod.Patches
                         DoctorMode.button.Timer = DoctorMode.button.MaxTimer;
                     }
             }
+            #endregion DoctorMode*/
+            #endregion KeyBindsOutOfUse
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
             if (Input.GetMouseButtonDown(0))
@@ -86,7 +89,6 @@ namespace Peasmod.Patches
                 }
                 #endregion MorphingMode
             }
-            #endregion DoctorMode
         }
     }
 }

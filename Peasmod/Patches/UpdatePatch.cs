@@ -431,6 +431,10 @@ namespace Peasmod.Patches
                     MorphingMode.button.killButtonManager.gameObject.active = false;
                 }
                 #endregion MorphingMode
+                if(!Peasmod.Settings.reportbodys.GetValue())
+                {
+                    HudManager.Instance.ReportButton.gameObject.SetActive(false);
+                }
             }
             else
             {
@@ -449,8 +453,7 @@ namespace Peasmod.Patches
         public static void Prefix(HudManager __instance)
         {
             #region MorphingMode
-            foreach (var player in PlayerControl.AllPlayerControls)
-                MorphingMode.OnLabelClick(player, player, false);
+            MorphingMode.OnLabelClick(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer, false);
             #endregion MorphingMode
         }
     }
