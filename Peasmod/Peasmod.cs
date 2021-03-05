@@ -25,7 +25,7 @@ namespace Peasmod
         public const string Id = "tk.peasplayer.peasmod";
         public const string PluginName = "Peasmod";
         public const string PluginAuthor = "Peasplayer";
-        public const string PluginVersion = "1.7.4";
+        public const string PluginVersion = "1.8.0";
 
         public Harmony Harmony { get; } = new Harmony(Id);
         public static System.Random random = new System.Random();
@@ -71,7 +71,16 @@ namespace Peasmod
             {
                 static void Postfix(ref GameOptionsMenu __instance)
                 {
-                    __instance.GetComponentInParent<Scroller>().YBounds.max = 19.5f;
+                    __instance.GetComponentInParent<Scroller>().YBounds.max = 20f;
+                }
+            }
+
+            [HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.OnEnable))]
+            public static class GameSettingMenuPatch
+            {
+                static void Prefix(GameSettingMenu __instance)
+                {
+                    __instance.HideForOnline = new Il2CppReferenceArray<Transform>(0);
                 }
             }
         }
@@ -81,7 +90,6 @@ namespace Peasmod
             var ServerName = Config.Bind("Server", "Name", "Peaspowered");
             var ServerIp = Config.Bind("Server", "Ipv4 or Hostname", "au.peasplayer.tk");
             var ServerPort = Config.Bind("Server", "Port", (ushort)30205);
-            var defaultRegions = ServerManager.DefaultRegions.ToList();
             var ip = ServerIp.Value;
             if (Uri.CheckHostName(ServerIp.Value).ToString() == "Dns")
             {
@@ -97,6 +105,7 @@ namespace Peasmod
                 catch {}
             }
             var port = ServerPort.Value;
+            var defaultRegions = new List<RegionInfo>();
             defaultRegions.Insert(0, new RegionInfo(
                 ServerName.Value, ip, new[] {
                     new ServerInfo($"{ServerName.Value}-Master-1", ip, port)

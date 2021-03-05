@@ -5,7 +5,7 @@ using HarmonyLib;
 using Hazel;
 using UnityEngine;
 using UnhollowerBaseLib;
-using Peasmod.GameModes;
+using Peasmod.Gamemodes;
 using Peasmod.Utility;
 
 namespace Peasmod.Patches

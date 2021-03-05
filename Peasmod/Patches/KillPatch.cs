@@ -7,7 +7,7 @@ using Reactor.Extensions;
 using UnityEngine;
 using UnhollowerBaseLib;
 using Peasmod.Utility;
-using Peasmod.GameModes;
+using Peasmod.Gamemodes;
 
 namespace Peasmod.Patches
 {

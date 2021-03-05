@@ -5,7 +5,7 @@ using UnityEngine;
 using Peasmod.Utility;
 using Hazel;
 
-namespace Peasmod.GameModes
+namespace Peasmod.Gamemodes
 {
     class HotPotatoMode
     {
@@ -14,6 +14,7 @@ namespace Peasmod.GameModes
         public static PlayerControl CurrentTarget;
         public static GameObject timer;
         public static float Timer;
+        public static float TimeTillDeath;
 
         public static void OnClick()
         {
@@ -21,6 +22,7 @@ namespace Peasmod.GameModes
             PlayerControl.LocalPlayer.Data.IsImpostor = false;
             PlayerControl.LocalPlayer.nameText.Color = Palette.White;
             HotPotatoMode.timer.GetComponent<TextRenderer>().Text = string.Empty;
+            HotPotatoMode.TimeTillDeath -= 0.25f;
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.PotatoPassed, Hazel.SendOption.None, -1);
             writer.Write(PlayerControl.LocalPlayer.PlayerId);
             writer.Write(CurrentTarget.PlayerId);

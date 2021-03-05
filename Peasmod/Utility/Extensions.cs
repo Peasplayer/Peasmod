@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Hazel;
-using Peasmod.GameModes;
+using Peasmod.Gamemodes;
 
 namespace Peasmod.Utility
 {

@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Peasmod.Utility;
 
-namespace Peasmod.GameModes
+namespace Peasmod.Gamemodes
 {
     class MorphingMode
     {

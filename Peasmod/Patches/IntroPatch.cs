@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System;
 using Peasmod.Utility;
-using Peasmod.GameModes;
+using Peasmod.Gamemodes;
 
 namespace Peasmod.Patches
 {

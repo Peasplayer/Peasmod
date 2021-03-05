@@ -9,7 +9,7 @@ using Reactor.Extensions;
 using Reactor;
 using Peasmod.Utility;
 
-namespace Peasmod.GameModes
+namespace Peasmod.Gamemodes
 {
     class VentBuilding
     {

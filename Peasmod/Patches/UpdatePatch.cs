@@ -13,7 +13,7 @@ using System.Reflection;
 using System.IO;
 using Reactor.Unstrip;
 using Peasmod.Utility;
-using Peasmod.GameModes;
+using Peasmod.Gamemodes;
 
 namespace Peasmod.Patches
 {
@@ -34,109 +34,118 @@ namespace Peasmod.Patches
             {
                 string[] settings = __instance.GameSettings.Text.Split("\nSection");
                 __instance.GameSettings.Text = StringColor.Green + "Peasplayer" + StringColor.Lime + " feat. DrSchwammkopf" + StringColor.Reset + "\n" + settings[0];
-                string roles = "\nRoles: ";
-                if (Peasmod.Settings.jesteramount.GetValue() > 0)
+                string mode = "\nGamemode: ";
+                if (Peasmod.Settings.hotpotato.GetValue())
                 {
-                    if (roles == "\nRoles: ")
-                        roles += Peasmod.Settings.jesteramount.GetValue() + " Jester";
-                    else
-                        roles += ", " + Peasmod.Settings.jesteramount.GetValue() + " Jester"; ;
+                    mode += "HotPotato";
+                    __instance.GameSettings.Text += mode;
                 }
-                if (Peasmod.Settings.doctoramount.GetValue() > 0)
+                else
                 {
-                    if (roles == "\nRoles: ")
-                        roles += Peasmod.Settings.doctoramount.GetValue() + " Doctor";
-                    else
-                        roles += ", " + Peasmod.Settings.doctoramount.GetValue() + " Doctor"; ;
-                }
-                if (Peasmod.Settings.mayoramount.GetValue() > 0)
-                {
-                    if (roles == "\nRoles: ")
-                        roles += Peasmod.Settings.mayoramount.GetValue() + " Mayor";
-                    else
-                        roles += ", " + Peasmod.Settings.mayoramount.GetValue() + " Mayor"; ;
-                }
-                if (Peasmod.Settings.inspectoramount.GetValue() > 0)
-                {
-                    if (roles == "\nRoles: ")
-                        roles += Peasmod.Settings.inspectoramount.GetValue() + " Inspector";
-                    else
-                        roles += ", " + Peasmod.Settings.inspectoramount.GetValue() + " Inspector"; ;
-                }
-                if (Peasmod.Settings.sheriffamount.GetValue() > 0)
-                {
-                    if (roles == "\nRoles: ")
-                        roles += Peasmod.Settings.sheriffamount.GetValue() + " Sheriff";
-                    else
-                        roles += ", " + Peasmod.Settings.sheriffamount.GetValue() + " Sheriff"; ;
-                }
-                __instance.GameSettings.Text += roles;
-                string special = "\nSpecial: ";
-                var specials = 0;
-                if (Peasmod.Settings.crewventing.GetValue())
-                {
-                    if(special == "\nSpecial: ")
-                        special += "Crew-Venting";
-                    else
-                        special += ", Crew-Venting";
-                    ++specials;
-                }
-                if (Peasmod.Settings.ventbuilding.GetValue())
-                {
-                    if (special == "\nSpecial: ")
-                        special += "Vent-Building";
-                    else
-                        special += ", Vent-Building";
-                    ++specials;
-                }
-                if (Peasmod.Settings.bodydragging.GetValue())
-                {
-                    if (special == "\nSpecial: ")
-                        special += "Body-Dragging";
-                    else
-                        special += ", Body-Dragging";
-                    ++specials;
-                }
-                if (Peasmod.Settings.invisibility.GetValue())
-                {
-                    if (special == "\nSpecial: ")
-                        special += "Invisibility";
-                    else if(specials/3 > 0)
+                    string roles = "\nRoles: ";
+                    if (Peasmod.Settings.jesteramount.GetValue() > 0)
                     {
-                        special += "\n Invisibility";
-                        specials -= specials / 3 * 3;
+                        if (roles == "\nRoles: ")
+                            roles += Peasmod.Settings.jesteramount.GetValue() + " Jester";
+                        else
+                            roles += ", " + Peasmod.Settings.jesteramount.GetValue() + " Jester"; ;
                     }
-                    else
-                        special += ", Invisibility";
-                    ++specials;
-                }
-                if (Peasmod.Settings.freezetime.GetValue())
-                {
-                    if (special == "\nSpecial: ")
-                        special += "Time-Freezing";
-                    else if (specials / 3 > 0)
+                    if (Peasmod.Settings.doctoramount.GetValue() > 0)
                     {
-                        special += "\n Time-Freezing";
-                        specials -= specials / 3 * 3;
+                        if (roles == "\nRoles: ")
+                            roles += Peasmod.Settings.doctoramount.GetValue() + " Doctor";
+                        else
+                            roles += ", " + Peasmod.Settings.doctoramount.GetValue() + " Doctor"; ;
                     }
-                    else
-                        special += ", Time-Freezing";
-                    ++specials;
-                }
-                if (Peasmod.Settings.morphing.GetValue())
-                {
-                    if (special == "\nSpecial: ")
-                        special += "Morphing";
-                    else if (specials / 3 > 0)
+                    if (Peasmod.Settings.mayoramount.GetValue() > 0)
                     {
-                        special += "\n Morphing";
-                        specials -= specials / 3 * 3;
+                        if (roles == "\nRoles: ")
+                            roles += Peasmod.Settings.mayoramount.GetValue() + " Mayor";
+                        else
+                            roles += ", " + Peasmod.Settings.mayoramount.GetValue() + " Mayor"; ;
                     }
-                    else
-                        special += ", Morphing";
-                    ++specials;
+                    if (Peasmod.Settings.inspectoramount.GetValue() > 0)
+                    {
+                        if (roles == "\nRoles: ")
+                            roles += Peasmod.Settings.inspectoramount.GetValue() + " Inspector";
+                        else
+                            roles += ", " + Peasmod.Settings.inspectoramount.GetValue() + " Inspector"; ;
+                    }
+                    if (Peasmod.Settings.sheriffamount.GetValue() > 0)
+                    {
+                        if (roles == "\nRoles: ")
+                            roles += Peasmod.Settings.sheriffamount.GetValue() + " Sheriff";
+                        else
+                            roles += ", " + Peasmod.Settings.sheriffamount.GetValue() + " Sheriff"; ;
+                    }
+                    __instance.GameSettings.Text += roles;
+                    string special = "\nSpecial: ";
+                    var specials = 0;
+                    if (Peasmod.Settings.crewventing.GetValue())
+                    {
+                        if (special == "\nSpecial: ")
+                            special += "Crew-Venting";
+                        else
+                            special += ", Crew-Venting";
+                        ++specials;
+                    }
+                    if (Peasmod.Settings.ventbuilding.GetValue())
+                    {
+                        if (special == "\nSpecial: ")
+                            special += "Vent-Building";
+                        else
+                            special += ", Vent-Building";
+                        ++specials;
+                    }
+                    if (Peasmod.Settings.bodydragging.GetValue())
+                    {
+                        if (special == "\nSpecial: ")
+                            special += "Body-Dragging";
+                        else
+                            special += ", Body-Dragging";
+                        ++specials;
+                    }
+                    if (Peasmod.Settings.invisibility.GetValue())
+                    {
+                        if (special == "\nSpecial: ")
+                            special += "Invisibility";
+                        else if (specials / 3 > 0)
+                        {
+                            special += "\n Invisibility";
+                            specials -= specials / 3 * 3;
+                        }
+                        else
+                            special += ", Invisibility";
+                        ++specials;
+                    }
+                    if (Peasmod.Settings.freezetime.GetValue())
+                    {
+                        if (special == "\nSpecial: ")
+                            special += "Time-Freezing";
+                        else if (specials / 3 > 0)
+                        {
+                            special += "\n Time-Freezing";
+                            specials -= specials / 3 * 3;
+                        }
+                        else
+                            special += ", Time-Freezing";
+                        ++specials;
+                    }
+                    if (Peasmod.Settings.morphing.GetValue())
+                    {
+                        if (special == "\nSpecial: ")
+                            special += "Morphing";
+                        else if (specials / 3 > 0)
+                        {
+                            special += "\n Morphing";
+                            specials -= specials / 3 * 3;
+                        }
+                        else
+                            special += ", Morphing";
+                        ++specials;
+                    }
+                    __instance.GameSettings.Text += special;
                 }
-                __instance.GameSettings.Text += special;
             }
             #endregion GameSettingsText
             if (!PlayerControl.LocalPlayer) return;
@@ -178,6 +187,7 @@ namespace Peasmod.Patches
                                     players.Add(_player);
                             }
                             var player = players[Peasmod.random.Next(0, players.Count)];
+                            HotPotatoMode.TimeTillDeath -= 0.25f;
                             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.PotatoPassed, Hazel.SendOption.None, -1);
                             writer.Write(PlayerControl.LocalPlayer.PlayerId);
                             writer.Write(player.PlayerId);
@@ -381,6 +391,7 @@ namespace Peasmod.Patches
             #region TimeFreezing
             if (TimeFreezing.timeIsFroozen && !PlayerControl.LocalPlayer.Data.IsImpostor)
             {
+                Utils.Log("froozen");
                 if(!PlayerControl.LocalPlayer.Data.IsDead)
                 {
                     PlayerControl.LocalPlayer.moveable = false;
@@ -396,7 +407,7 @@ namespace Peasmod.Patches
                 #region InspectorMode
                 if (Timer < 0f)
                 {
-                    if(lastPosition == null && !PlayerControl.LocalPlayer.Data.IsDead)
+                    if(lastPosition == null && !PlayerControl.LocalPlayer.Data.IsDead && !PlayerControl.LocalPlayer.inVent)
                     {
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.CreateDot, Hazel.SendOption.None, -1);
                         writer.Write(PlayerControl.LocalPlayer.PlayerId);
@@ -454,56 +465,30 @@ namespace Peasmod.Patches
             else
             {
                 TimeFreezing.timeIsFroozen = false;
-                foreach(var player in PlayerControl.AllPlayerControls)
+                PlayerControl.LocalPlayer.moveable = true;
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.UnfreezeTime, Hazel.SendOption.None, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                var notinvisplayers = new List<Byte>();
+                foreach (var player in InvisibilityMode.invisplayers)
                 {
-                    player.Visible = true;
+                    if(Utils.GetPlayer(player) != null)
+                    {
+                        writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.Visible, Hazel.SendOption.None, -1);
+                        writer.WritePacked(player);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        var visible = Utils.GetPlayer(player);
+                        visible.Visible = true;
+                        notinvisplayers.Add(player);
+                    }
                 }
+                foreach(var id in notinvisplayers)
+                {
+                    InvisibilityMode.invisplayers.Remove(id);
+                }
+                PlayerControl.LocalPlayer.myRend.color = Palette.EnabledColor;
+                PlayerControl.LocalPlayer.HatRenderer.color = Palette.EnabledColor;
+                PlayerControl.LocalPlayer.MyPhysics.Skin.layer.color = Palette.EnabledColor;
             }
-        }
-    }
-
-    [HarmonyPatch(typeof(HudManager), nameof(HudManager.OpenMeetingRoom))]
-    public static class MeetingStartPatch
-    {
-        public static void Prefix(HudManager __instance)
-        {
-            #region MorphingMode
-            if(PlayerControl.LocalPlayer.IsMorphed())
-                MorphingMode.OnLabelClick(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer, false);
-            #endregion MorphingMode
-        }
-    }
-
-    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Update))]
-    public static class MeetingUpdatePatch
-    {
-        public static void Postfix(MeetingHud __instance)
-        {
-            #region JesterMode
-            foreach (var pstate in __instance.playerStates)
-                if (pstate.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId && PlayerControl.LocalPlayer.IsRole(Role.Jester))
-                    pstate.NameText.Color = JesterMode.JesterColor;
-            #endregion JesterMode
-            #region DoctorMode
-            foreach (var pstate in __instance.playerStates)
-                if (pstate.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId && PlayerControl.LocalPlayer.IsRole(Role.Doctor))
-                    pstate.NameText.Color = DoctorMode.DoctorColor;
-            #endregion DoctorMode
-            #region MayorMode
-            foreach (var pstate in __instance.playerStates)
-                if (pstate.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId && PlayerControl.LocalPlayer.IsRole(Role.Mayor))
-                    pstate.NameText.Color = MayorMode.MayorColor;
-            #endregion MayorMode
-            #region InspectorMode
-            foreach (var pstate in __instance.playerStates)
-                if (pstate.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId && PlayerControl.LocalPlayer.IsRole(Role.Inspector))
-                    pstate.NameText.Color = InspectorMode.InspectorColor;
-            #endregion InspectorMode
-            #region SheriffMode
-            foreach (var pstate in __instance.playerStates)
-                if (pstate.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId && PlayerControl.LocalPlayer.IsRole(Role.Sheriff))
-                    pstate.NameText.Color = SheriffMode.SheriffColor;
-            #endregion SheriffMode
         }
     }
 

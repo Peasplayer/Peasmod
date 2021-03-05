@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using HarmonyLib;
 using UnityEngine;
-using Peasmod.GameModes;
+using Peasmod.Gamemodes;
 using Peasmod.Utility;
 
 namespace Peasmod.Patches

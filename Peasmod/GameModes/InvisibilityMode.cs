@@ -10,7 +10,7 @@ using System.Linq;
 using UnhollowerBaseLib;
 using Peasmod.Utility;
 
-namespace Peasmod.GameModes
+namespace Peasmod.Gamemodes
 {
     class InvisibilityMode
     {

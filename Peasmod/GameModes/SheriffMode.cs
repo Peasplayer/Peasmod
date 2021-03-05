@@ -6,7 +6,7 @@ using Hazel;
 using Reactor.Extensions;
 using Peasmod.Utility;
 
-namespace Peasmod.GameModes
+namespace Peasmod.Gamemodes
 {
     class SheriffMode
     {

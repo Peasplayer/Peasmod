@@ -1,23 +1,67 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using Peasmod.Utility;
+using HarmonyLib;
+using Reactor.Extensions;
 
-namespace Peasmod.GameModes
+namespace Peasmod.Gamemodes
 {
     class TestingStuff
     {
         public static bool testing = false;
 
         public static CooldownButton button;
+        public static FollowerCamera cam;
+        public static Camera camera;
 
         public static void OnClick()
         {
-            var item = Utils.CreateSprite("Peasmod.Resources.Label.png");
-            var box = item.AddComponent<BoxCollider2D>();
-            box.isTrigger = true;
-            item.transform.localPosition = PlayerControl.LocalPlayer.transform.localPosition;
+            /*cam = Object.Instantiate<FollowerCamera>(HudManager.Instance.PlayerCam, HudManager.Instance.transform);//, HudManager.Instance.transform
+            cam.enabled = true;
+            cam.gameObject.SetActive(true);
+            Utils.Log(cam.transform.localScale.x + " | " + cam.transform.localScale.y + " | " + cam.transform.localScale.z);
+            cam.transform.localScale = new Vector3(0.2f, 0.2f);
+            //cam.transform.position -= new Vector3(1f, 1f);
+            Utils.Log(cam.transform.position.x + " | " + cam.transform.position.y);
+            //cam.Awake();
+            //camera.fieldOfView = 10f;
+            var playercam = HudManager.Instance.PlayerCam.GetComponent<Camera>();
+            camera = Object.Instantiate<Camera>(playercam);
+            playercam.clearFlags = CameraClearFlags.SolidColor;
+            camera.transform.SetParent(HudManager.Instance.transform);
+            camera.transform.position = cam.transform.position;
+            cam.transform.localScale = new Vector3(0.1f, 0.1f);
+            camera.transform.localScale = new Vector3(0.1f, 0.1f);
+            //cam.CamAspect = 0.2f;
+            camera.fieldOfView = 0.2f;
+            //Utils.Log(cam.CamAspect + "");
+            RenderTexture temporary = RenderTexture.GetTemporary((int)(256.0 * 1), 256, 16, (RenderTextureFormat)0);
+            camera.targetTexture = temporary;*/
+        }
+
+        [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
+        class Update
+        {
+            public static void Prefix(HudManager __instance)
+            {
+                if(cam != null)
+                {
+
+
+
+                    /*cam.transform.position = new Vector3(1f, 1f);
+                    //var camera = cam.GetComponent<Camera>();
+                    //camera.fieldOfView = 10f;
+                    camera.transform.SetParent(HudManager.Instance.transform);
+                    //camera.transform.position = cam.transform.position;
+                    camera.transform.localScale = new Vector3(1f, 1f);
+                    //cam.CamAspect = 0.2f;
+                    RenderTexture temporary = RenderTexture.GetTemporary((int)(256.0 * 1), 256, 16, (RenderTextureFormat)0);
+
+                    camera.targetTexture = temporary;*/
+                }
+            }
         }
 
         //public static SurvCamera camPref;

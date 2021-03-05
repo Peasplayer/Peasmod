@@ -7,7 +7,7 @@ using Reactor.Extensions;
 using System.Reflection;
 using System.IO;
 using Reactor.Unstrip;
-using Peasmod.GameModes;
+using Peasmod.Gamemodes;
 using Peasmod.Utility;
 
 namespace Peasmod.Patches
@@ -68,7 +68,8 @@ namespace Peasmod.Patches
             {
                 HotPotatoMode.button = new CooldownButton(HotPotatoMode.OnClick, 1f, "Peasmod.Resources.Kill.png", 200f, new Vector2(0f, 0.3f), CooldownButton.Category.OnlyImpostor, HudManager.Instance);
                 HotPotatoMode.timer = Utils.CreateText(new Vector3(-5.25f, -2.5f), "Timer");
-                HotPotatoMode.Timer = Peasmod.Settings.hotpotatotimer.GetValue();
+                HotPotatoMode.TimeTillDeath = Peasmod.Settings.hotpotatotimer.GetValue();
+                HotPotatoMode.Timer = HotPotatoMode.TimeTillDeath;
             }
             else
             {
@@ -115,7 +116,8 @@ namespace Peasmod.Patches
                 if (TestingStuff.testing)
                     TestingStuff.button = new CooldownButton(TestingStuff.OnClick, 1f, "Peasmod.Resources.DragBody.png", 200f, Vector2.zero, CooldownButton.Category.OnlyCrewmate, HudManager.Instance);
                 gameStarted = true;
-                PlayerData.GetPlayerData(PlayerControl.LocalPlayer);
+                foreach(var player in PlayerControl.AllPlayerControls)
+                    PlayerData.GetPlayerData(player);
                 HudManagerPatch.dots.Clear();
             }
         }

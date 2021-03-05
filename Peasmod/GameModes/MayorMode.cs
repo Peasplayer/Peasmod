@@ -5,7 +5,7 @@ using UnityEngine;
 using Hazel;
 using Reactor.Extensions;
 
-namespace Peasmod.GameModes
+namespace Peasmod.Gamemodes
 {
     class MayorMode
     {

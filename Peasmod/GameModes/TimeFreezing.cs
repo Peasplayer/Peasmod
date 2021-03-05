@@ -4,7 +4,7 @@ using System.Text;
 using Hazel;
 using Peasmod.Utility;
 
-namespace Peasmod.GameModes
+namespace Peasmod.Gamemodes
 {
     class TimeFreezing
     {

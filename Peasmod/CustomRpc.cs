@@ -7,7 +7,7 @@ using Reactor.Extensions;
 using UnityEngine;
 using Peasmod.Utility;
 using Peasmod.Patches;
-using Peasmod.GameModes;
+using Peasmod.Gamemodes;
 
 namespace Peasmod
 {
@@ -28,7 +28,8 @@ namespace Peasmod
         SheriffKills = 55,
         SheriffDies = 56,
         PotatoDies = 57,
-        PotatoPassed = 58
+        PotatoPassed = 58,
+        MorphBack = 59
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -129,7 +130,8 @@ namespace Peasmod
                     break;
                 case (byte)CustomRpc.UnfreezeTime:
                     TimeFreezing.timeIsFroozen = false;
-                    PlayerControl.LocalPlayer.moveable = true;
+                    if(PlayerControl.LocalPlayer != null)
+                        PlayerControl.LocalPlayer.moveable = true;
                     break;
                 case (byte)CustomRpc.CreateDot:
                     player = Utils.GetPlayer(reader.ReadByte());
@@ -171,12 +173,17 @@ namespace Peasmod
                     target.Data.IsImpostor = true;
                     player.Data.IsImpostor = false;
                     player.nameText.Color = Palette.White;
+                    HotPotatoMode.TimeTillDeath -= 0.25f;
                     if (target.PlayerId == PlayerControl.LocalPlayer.PlayerId)
                     {
                         HotPotatoMode.timer.GetComponent<TextRenderer>().Text = "Timer";
-                        HotPotatoMode.Timer = Peasmod.Settings.hotpotatotimer.GetValue();
+                        HotPotatoMode.Timer = HotPotatoMode.TimeTillDeath;
                         HudManager.Instance.KillButton.gameObject.SetActive(true);
                     }
+                    break;
+                case (byte)CustomRpc.MorphBack:
+                    if (PlayerControl.LocalPlayer.IsMorphed())
+                        MorphingMode.OnLabelClick(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer, false);
                     break;
             }
         }

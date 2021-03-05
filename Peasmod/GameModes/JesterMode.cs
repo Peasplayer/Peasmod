@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace Peasmod.GameModes
+namespace Peasmod.Gamemodes
 {
     class JesterMode
     {
