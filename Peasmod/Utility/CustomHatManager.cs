@@ -18,14 +18,13 @@ namespace Peasmod.Utility
 {
     class CustomHatManager
     {
-        public static string[] hats = { "PeasMask" };
 
         public static HatBehaviour CreateHat(string hat)
         {
             HatBehaviour newHat = new HatBehaviour();
             Texture2D tex = GUIExtensions.CreateEmptyTexture(2, 2);
             Assembly assembly = Assembly.GetExecutingAssembly();
-            Stream myStream = assembly.GetManifestResourceStream("Peasmod.Resources.Hats."+ hat + ".png");
+            Stream myStream = assembly.GetManifestResourceStream("Peasmod.Resources.Hats."+ hat);
             byte[] buttonTexture = Reactor.Extensions.Extensions.ReadFully(myStream);
             ImageConversion.LoadImage(tex, buttonTexture, false);
             newHat.MainImage = Sprite.Create(
@@ -50,10 +49,13 @@ namespace Peasmod.Utility
             if(!modded)
             {
                 modded = true;
-                foreach (string hat in CustomHatManager.hats)
-                {
+                var hats = new List<string>();
+                string[] fileEntries = Assembly.GetExecutingAssembly().GetManifestResourceNames();
+                foreach (string file in fileEntries)
+                    if (file.StartsWith("Peasmod.Resources.Hats.") && file.EndsWith(".png"))
+                        hats.Add(file.Split("Peasmod.Resources.Hats.")[1]);
+                foreach (string hat in hats)
                     __instance.AllHats.Add(CustomHatManager.CreateHat(hat));
-                }
                 __instance.AllHats.Sort((Il2CppSystem.Comparison<HatBehaviour>)((h1, h2) => h2.ProductId.CompareTo(h1.ProductId)));
             }
         }

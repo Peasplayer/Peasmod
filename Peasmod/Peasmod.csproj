@@ -21,6 +21,7 @@
     <ItemGroup>
 		<None Remove="Resources\BuildVent.png" />
 		<None Remove="Resources\Dot.png" />
+		<None Remove="Resources\Hats\DreamMask.png" />
 		<None Remove="Resources\Hats\PeasMask.png" />
 		<None Remove="Resources\Label.png" />
 		<None Remove="Resources\Morphing.png" />
@@ -44,6 +45,7 @@
 		<EmbeddedResource Include="Resources\Dot.png" />
 		<EmbeddedResource Include="Resources\Label.png" />
 		<EmbeddedResource Include="Resources\Hats\PeasMask.png" />
+		<EmbeddedResource Include="Resources\Hats\DreamMask.png" />
 		<EmbeddedResource Include="Resources\Morphing.png" />
 		<EmbeddedResource Include="Resources\Kill.png" />
 		<EmbeddedResource Include="Resources\Potato.png" />

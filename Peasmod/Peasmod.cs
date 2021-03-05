@@ -267,7 +267,7 @@ namespace Peasmod
                 __instance.text.Text += "\nReactor-Framework"+"\n" + PluginName + " v" + PluginVersion + " by " + StringColor.Green + PluginAuthor;
                 UnityEngine.GameObject.Destroy(UnityEngine.GameObject.Find("ReactorVersion"));
                 //if(UnityEngine.Object.FindObjectOfType<MainMenuManager>() != null && UnityEngine.Object.FindObjectOfType<MainMenuManager>().Announcement != null)
-                    //UnityEngine.Object.FindObjectOfType<MainMenuManager>().Announcement.gameObject.SetActive(true);
+                //UnityEngine.Object.FindObjectOfType<MainMenuManager>().Announcement.gameObject.SetActive(true);
             }
         }
 
