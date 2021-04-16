@@ -6,6 +6,7 @@ using Hazel;
 using Reactor;
 using Reactor.Extensions;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Peasmod.Utility;
@@ -27,7 +28,7 @@ namespace Peasmod.Gamemodes
                 PlayerData.GetPlayerData(who);
             var data = PlayerData.GetPlayerData(into);
             who.RpcSetName(data.Name);
-            who.RpcSetColor(data.Color);
+            who.RpcSetColor((byte)data.Color);
             who.RpcSetSkin(data.Skin);
             who.RpcSetHat(data.Hat);
             who.RpcSetPet(data.Pet);
@@ -40,10 +41,7 @@ namespace Peasmod.Gamemodes
                 foreach (var button in labels)
                     button.gameObject.Destroy();
                 labels.Clear();
-                button.killButtonManager.renderer.enabled = true;
-                button.killButtonManager.SetCoolDown(button.Timer, button.MaxTimer);
-                button.killButtonManager.enabled = true;
-                button.killButtonManager.gameObject.active = true;
+                button.Visibile = true;
                 menuOpen = false;
             }
         }
@@ -52,15 +50,15 @@ namespace Peasmod.Gamemodes
             if (menuOpen) return;
             menuOpen = true;
             menuOpenedAt = Time.time;
-            button.killButtonManager.renderer.enabled = false;
-            button.killButtonManager.SetCoolDown(0, 0);
-            button.killButtonManager.enabled = false;
-            button.killButtonManager.gameObject.active = false;
+            button.Visibile = false;
             if (PlayerData.GetPlayerData(PlayerControl.LocalPlayer) == null)
                 new PlayerData(PlayerControl.LocalPlayer);
             if (labelprefab == null)
             {
-                labelprefab = Utils.CreateSprite("Peasmod.Resources.Label.png");
+                var _object = new GameObject();
+                var _objectRenderer = _object.AddComponent<SpriteRenderer>();
+                _objectRenderer.sprite = Utils.CreateSprite("Peasmod.Resources.Label.png");
+                labelprefab = _object;
                 var collider = labelprefab.AddComponent<BoxCollider2D>();
                 collider.isTrigger = true;
                 collider.size = labelprefab.GetComponent<SpriteRenderer>().size;
@@ -75,14 +73,14 @@ namespace Peasmod.Gamemodes
                 var pos = button.killButtonManager.transform.localPosition + new Vector3(labels.Count / 4 * 1f - 0.2f, (-0.3f * (labels.Count - (labels.Count / 4 * 4))) + 0.45f, 1f);
                 label.transform.localPosition = pos;
                 label.transform.localScale = new Vector2(label.transform.localScale.x - 0.2f, label.transform.localScale.y - 0.2f);
-                TextRenderer text = UnityEngine.Object.Instantiate(HudManager.Instance.TaskText, label.transform);
+                TextMeshPro text = UnityEngine.Object.Instantiate(HudManager.Instance.TaskText, label.transform);
                 var data = PlayerData.GetPlayerData(player);
                 if(data == null)
                     data = new PlayerData(player);
-                text.Text = data.Name;
-                text.Color = Color.black;
+                text.text = data.Name;
+                text.color = Color.black;
                 text.transform.localPosition += new Vector3(-0.6f, 0.2f);
-                text.scale -= 0.2f;
+                text.transform.localScale -= new Vector3(0.2f, 0.2f);
                 label.GetComponent<SpriteRenderer>().material.color = Utils.ColorIdToColor(data.Color);
                 labels.Add(label);
             }
@@ -94,12 +92,12 @@ namespace Peasmod.Gamemodes
         private static Dictionary<byte, PlayerData> PlayerDatas = new Dictionary<byte, PlayerData>(); 
 
         public string Name;
-        public byte Color;
+        public int Color;
         public uint Hat, Skin, Pet;
 
         public PlayerData(PlayerControl player)
         {
-            Name = player.nameText.Text;
+            Name = player.nameText.text;
             Color = player.Data.ColorId;
             Hat = player.Data.HatId;
             Skin = player.Data.SkinId;

@@ -6,13 +6,13 @@ using Peasmod.Gamemodes;
 
 namespace Peasmod.Patches
 {
-    [HarmonyPatch(typeof(IntroCutscene.CoBegin__d), nameof(IntroCutscene.CoBegin__d.MoveNext))]
+    [HarmonyPatch(typeof(IntroCutscene.Nested_0), nameof(IntroCutscene.Nested_0.MoveNext))]
     public static class StartScreenPatch
     {
-        public static void Prefix(IntroCutscene.CoBegin__d __instance)
+        public static void Prefix(IntroCutscene.Nested_0 __instance)
         {
             #region HotPotatoMode
-            if(Peasmod.Settings.hotpotato.GetValue())
+            if(Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.HotPotato)
             {
                 var yourTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
                 foreach (var player in PlayerControl.AllPlayerControls)
@@ -21,8 +21,17 @@ namespace Peasmod.Patches
                 __instance.yourTeam = yourTeam;
             }
             #endregion HotPotatoMode
+            #region BattleRoyaleMode
+            else if(Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.BattleRoyale)
+            {
+                var yourTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+                foreach (var player in PlayerControl.AllPlayerControls)
+                    yourTeam.Add(player);
+                __instance.yourTeam = yourTeam;
+            }
+            #endregion BattleRoyaleMode
             #region JesterMode
-            if (PlayerControl.LocalPlayer.IsRole(Role.Jester))
+            else if (PlayerControl.LocalPlayer.IsRole(Role.Jester))
             {
                 var yourTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
                 yourTeam.Add(PlayerControl.LocalPlayer);
@@ -30,25 +39,36 @@ namespace Peasmod.Patches
             }
             #endregion JesterMode
         }
-        public static void Postfix(IntroCutscene.CoBegin__d __instance)
+        public static void Postfix(IntroCutscene.Nested_0 __instance)
         {
             #region HotPotatoMode
-            if (Peasmod.Settings.hotpotato.GetValue())
+            if (Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.HotPotato)
             {
                 var inst = __instance.__this;
-                inst.Title.Text = "HotPotato";
-                inst.Title.Color = HotPotatoMode.color;
-                inst.ImpostorText.Text = "Watch out for the Potato";
+                inst.Title.text = "HotPotato";
+                inst.Title.color = HotPotatoMode.color;
+                inst.ImpostorText.text = "Watch out for the Potato";
                 inst.BackgroundBar.material.color = HotPotatoMode.color;
             }
             #endregion HotPotatoMode
+            #region BatttleRoyaleMode
+            else if (Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.BattleRoyale)
+            {
+                var inst = __instance.__this;
+                inst.Title.text = "Battle Royale";
+                inst.Title.color = Palette.ImpostorRed;
+                inst.ImpostorText.text = "Be the last person alive";
+                inst.BackgroundBar.material.color = Palette.ImpostorRed;
+                PlayerControl.LocalPlayer.Data.IsImpostor = true;
+            }
+            #endregion BattleRoyaleMode
             #region JesterMode
             if (PlayerControl.LocalPlayer.IsRole(Role.Jester))
             {
                 var inst = __instance.__this;
-                inst.Title.Text = "Jester";
-                inst.Title.Color = JesterMode.JesterColor;
-                inst.ImpostorText.Text = "Get voted out";
+                inst.Title.text = "Jester";
+                inst.Title.color = JesterMode.JesterColor;
+                inst.ImpostorText.text = "Get voted out";
                 inst.BackgroundBar.material.color = JesterMode.JesterColor;
             }
             #endregion JesterMode
@@ -56,9 +76,9 @@ namespace Peasmod.Patches
             if (PlayerControl.LocalPlayer.IsRole(Role.Doctor))
             {
                 var inst = __instance.__this;
-                inst.Title.Text = "Doctor";
-                inst.Title.Color = DoctorMode.DoctorColor;
-                inst.ImpostorText.Text = "Revive dead crewmates";
+                inst.Title.text = "Doctor";
+                inst.Title.color = DoctorMode.DoctorColor;
+                inst.ImpostorText.text = "Revive dead crewmates";
                 inst.BackgroundBar.material.color = DoctorMode.DoctorColor;
             }
             #endregion DoctorMode
@@ -66,9 +86,9 @@ namespace Peasmod.Patches
             if (PlayerControl.LocalPlayer.IsRole(Role.Mayor))
             {
                 var inst = __instance.__this;
-                inst.Title.Text = "Mayor";
-                inst.Title.Color = MayorMode.MayorColor;
-                inst.ImpostorText.Text = "Your vote counts twice";
+                inst.Title.text = "Mayor";
+                inst.Title.color = MayorMode.MayorColor;
+                inst.ImpostorText.text = "Your vote counts twice";
                 inst.BackgroundBar.material.color = MayorMode.MayorColor;
             }
             #endregion MayorMode
@@ -76,9 +96,9 @@ namespace Peasmod.Patches
             if (PlayerControl.LocalPlayer.IsRole(Role.Inspector))
             {
                 var inst = __instance.__this;
-                inst.Title.Text = "Inspector";
-                inst.Title.Color = InspectorMode.InspectorColor;
-                inst.ImpostorText.Text = "Find evidence against the impostor";
+                inst.Title.text = "Inspector";
+                inst.Title.color = InspectorMode.InspectorColor;
+                inst.ImpostorText.text = "Find evidence against the impostor";
                 inst.BackgroundBar.material.color = InspectorMode.InspectorColor;
             }
             #endregion InspectorMode
@@ -86,12 +106,21 @@ namespace Peasmod.Patches
             if (PlayerControl.LocalPlayer.IsRole(Role.Sheriff))
             {
                 var inst = __instance.__this;
-                inst.Title.Text = "Sheriff";
-                inst.Title.Color = SheriffMode.SheriffColor;
-                inst.ImpostorText.Text = "Shot the impostor";
+                inst.Title.text = "Sheriff";
+                inst.Title.color = SheriffMode.SheriffColor;
+                inst.ImpostorText.text = "Shoot the impostor";
                 inst.BackgroundBar.material.color = SheriffMode.SheriffColor;
             }
             #endregion SheriffMode
+            #region ThanosMode
+            if(PlayerControl.LocalPlayer.IsRole(Role.Thanos))
+            {
+                var inst = __instance.__this;
+                inst.Title.text = "Thanos";
+                inst.Title.color = ThanosMode.ThanosColor;
+                inst.BackgroundBar.material.color = ThanosMode.ThanosColor;
+            }
+            #endregion ThanosMode
         }
     }
 }

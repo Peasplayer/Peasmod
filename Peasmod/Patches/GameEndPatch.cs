@@ -10,52 +10,63 @@ using Peasmod.Utility;
 
 namespace Peasmod.Patches
 {
-    [HarmonyPatch(typeof(TranslationController), nameof(TranslationController.GetString), new Type[] { typeof(StringNames), typeof(Il2CppReferenceArray<Il2CppSystem.Object>) })]
-    static class TranslationPatch
+    [HarmonyPatch(typeof(TranslationController), nameof(TranslationController.GetString),
+        new[] { typeof(StringNames), typeof(Il2CppReferenceArray<Il2CppSystem.Object>) })]
+    public class PatchColours
     {
-        static void Postfix(ref string __result, StringNames HKOIECMDOKL, Il2CppReferenceArray<Il2CppSystem.Object> EBKIKEILMLF)
-        {
+        public static bool Prefix(ref string __result, [HarmonyArgument(0)] StringNames name) {
             if (ExileController.Instance != null && ExileController.Instance.exiled != null)
             {
-                if (HKOIECMDOKL == StringNames.ExileTextPN || HKOIECMDOKL == StringNames.ExileTextSN)
+                if (name == StringNames.ExileTextPN || name == StringNames.ExileTextSN)
                 {
                     #region JesterMode
                     if (ExileController.Instance.exiled.Object.IsRole(Role.Jester))
+                    {
                         __result = ExileController.Instance.exiled.PlayerName + " was The Jester.";
+                    }
                     #endregion JesterMode
                     #region DoctorMode
                     if (ExileController.Instance.exiled.Object.IsRole(Role.Doctor))
+                    {
                         __result = ExileController.Instance.exiled.PlayerName + " was The Doctor.";
+                    }
                     #endregion DoctorMode
                     #region MayorMode
                     if (ExileController.Instance.exiled.Object.IsRole(Role.Mayor))
+                    {
                         __result = ExileController.Instance.exiled.PlayerName + " was The Mayor.";
+                    }
                     #endregion MayorMode
                     #region InspectorMode
                     if (ExileController.Instance.exiled.Object.IsRole(Role.Inspector))
+                    {
                         __result = ExileController.Instance.exiled.PlayerName + " was The Inspector.";
+                    }
                     #endregion InspectorMode
                     #region SheriffMode
                     if (ExileController.Instance.exiled.Object.IsRole(Role.Sheriff))
+                    {
                         __result = ExileController.Instance.exiled.PlayerName + " was The Sheriff.";
+                    }
                     #endregion SheriffMode
                     if (__result == null)
+                    {
                         if (Peasmod.impostors.Count == 1)
+                        {
                             __result = ExileController.Instance.exiled.PlayerName + " was not The Impostor.";
+                        }
                         else
+                        {
                             __result = ExileController.Instance.exiled.PlayerName + " was not An Impostor.";
-                }
-                if (HKOIECMDOKL == StringNames.ImpostorsRemainP || HKOIECMDOKL == StringNames.ImpostorsRemainS)
-                {
-                    #region JesterMode
-                    if (ExileController.Instance.exiled.Object.IsRole(Role.Jester))
-                        __result = "";
-                    #endregion JesterMode
+                        }
+                    }
+                    return false;
                 }
             }
+            return true;
         }
     }
-
+    
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Exiled))]
     public static class PlayerControlWinPatch
     {
@@ -85,6 +96,7 @@ namespace Peasmod.Patches
                     }
                 }
                 HandleWinRpc();
+                Utils.Log("1");
                 #if ITCH
                     ShipStatus.Method_34(GameOverReason.ImpostorByVote, false);
                 #elif STEAM
@@ -114,6 +126,24 @@ namespace Peasmod.Patches
                 EndGameScreenPatch.BGColor = JesterMode.JesterColor;
             }
             #endregion JesterMode
+            #region BattleRoyaleMode
+            if (Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.BattleRoyale && BattleRoyaleMode.HasWon)
+            {
+                if (PlayerControl.LocalPlayer.PlayerId == BattleRoyaleMode.Winner.PlayerId)
+                {
+                    EndGameScreenPatch.Text = "Victory Royale";
+                    EndGameScreenPatch.TextColor = Palette.CrewmateBlue;
+                    EndGameScreenPatch.Winner = "crew";
+                }
+                else
+                {
+                    EndGameScreenPatch.Text = "Defeat";
+                    EndGameScreenPatch.TextColor = Palette.ImpostorRed;
+                    EndGameScreenPatch.Winner = "impostor";
+                }
+                EndGameScreenPatch.BGColor = Palette.ImpostorRed;
+            }
+            #endregion BattleRoyaleMode
         }
     }
 
@@ -137,7 +167,14 @@ namespace Peasmod.Patches
                 TempData.winners = _winners;
             }
             #endregion JesterMode
-            ShipstatusOnEnablePatch.gameStarted = false;
+            #region BattleRoyaleMode
+            if(Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.BattleRoyale && BattleRoyaleMode.HasWon)
+            {
+                Il2CppSystem.Collections.Generic.List<WinningPlayerData> _winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
+                _winners.Add(new WinningPlayerData(BattleRoyaleMode.Winner.Data));
+                TempData.winners = _winners;
+            }
+            #endregion BattleRoyaleMode
         }
     }
 
@@ -170,12 +207,12 @@ namespace Peasmod.Patches
             };
             if (Text != null)
             {
-                __instance.WinText.Text = Text;
+                __instance.WinText.text = Text;
             }
 
             if (TextColor != null)
             {
-                __instance.WinText.Color = (Color)TextColor;
+                __instance.WinText.color = (Color)TextColor;
             }
 
             if (BGColor != null)
@@ -198,7 +235,7 @@ namespace Peasmod.Patches
     {
         public static bool Prefix()
         {
-            if(Peasmod.Settings.hotpotato.GetValue())
+            if(Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.HotPotato)
             {
                 var impostors = 0;
                 var crewmates = 0;
@@ -216,6 +253,24 @@ namespace Peasmod.Patches
                     return true;
                 else
                     return false;
+            }
+            else if(Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.BattleRoyale)
+            {
+                var alive = 0;
+                foreach (var player in PlayerControl.AllPlayerControls)
+                    if (!player.Data.IsDead)
+                    {
+                        BattleRoyaleMode.Winner = player;
+                        alive++;
+                    }
+                if (alive == 1)
+                {
+                    BattleRoyaleMode.HasWon = true;
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.VictoryRoyale, Hazel.SendOption.None, -1);
+                    writer.Write(BattleRoyaleMode.Winner.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                }
+                return false;//BattleRoyaleMode.HasWon;
             }
             return true;
         }

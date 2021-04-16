@@ -37,6 +37,11 @@ namespace Peasmod.Utility
                         if (sheriff.PlayerId == player.PlayerId)
                             return true;
                     return false;
+                case Role.Thanos:
+                    foreach (var thanos in ThanosMode.Thanos)
+                        if (thanos.PlayerId == player.PlayerId)
+                            return true;
+                    return false;
             }
             return false;
         }
@@ -65,6 +70,9 @@ namespace Peasmod.Utility
                         break;
                     case Role.Sheriff:
                         SheriffMode.Sheriffs.Add(player);
+                        break;
+                    case Role.Thanos:
+                        ThanosMode.Thanos.Add(player);
                         break;
                 }
         }
@@ -96,6 +104,9 @@ namespace Peasmod.Utility
             foreach (var sheriff in SheriffMode.Sheriffs)
                 if (sheriff.PlayerId == player.PlayerId)
                     return Role.Sheriff;
+            foreach (var thanos in ThanosMode.Thanos)
+                if (thanos.PlayerId == player.PlayerId)
+                    return Role.Thanos;
             if (player.Data.IsImpostor)
                 return Role.Impostor;
             else
@@ -122,10 +133,13 @@ namespace Peasmod.Utility
         public static void ResetRoles()
         {
             JesterMode.Jesters = new List<PlayerControl>();
+            JesterMode.JesterWon = false;
+            JesterMode.Winner = null;
             MayorMode.Mayors = new List<PlayerControl>();
             InspectorMode.Inspectors = new List<PlayerControl>();
             DoctorMode.Doctors = new List<PlayerControl>();
             SheriffMode.Sheriffs = new List<PlayerControl>();
+            ThanosMode.Thanos = new List<PlayerControl>();
         }
     }
 
@@ -137,6 +151,7 @@ namespace Peasmod.Utility
         Mayor = 3,
         Inspector = 4,
         Doctor = 5,
-        Sheriff = 6
+        Sheriff = 6,
+        Thanos = 7
     }
 }

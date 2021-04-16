@@ -9,10 +9,11 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using Peasmod.Utility;
 
 namespace Peasmod.Patches
 {
-    [HarmonyPatch(typeof(DiscordManager), nameof(DiscordManager.Start))]
+    /*[HarmonyPatch(typeof(DiscordManager), nameof(DiscordManager.Start))]
     class DiscordManagerPatch
     {
         public static bool Prefix(DiscordManager __instance)
@@ -26,14 +27,5 @@ namespace Peasmod.Patches
             //activityManager.UpdateActivity(activity, DiscordManager.c.field_Public_Static_UpdateActivityHandler_0);
             return false;
         }
-    }
-
-    [HarmonyPatch(typeof(DiscordManager), nameof(DiscordManager.FixedUpdate))]
-    class DiscordManagerJoinRequestPatch
-    {
-        public static void Prefix(DiscordManager __instance)
-        {
-            
-        }
-    }
+    }*/
 }

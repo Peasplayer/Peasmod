@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using UnhollowerBaseLib;
 using HarmonyLib;
 using Hazel;
 using Reactor.Extensions;
@@ -29,7 +30,9 @@ namespace Peasmod
         SheriffDies = 56,
         PotatoDies = 57,
         PotatoPassed = 58,
-        MorphBack = 59
+        MorphBack = 59,
+        BattleRoyaleInit = 60,
+        VictoryRoyale = 162
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -106,9 +109,9 @@ namespace Peasmod
                     InvisibilityMode.invisplayers.Add(invisible.PlayerId);
                     if (PlayerControl.LocalPlayer.Data.IsImpostor)
                     {
-                        invisible.myRend.color = Palette.DisabledColor;
-                        invisible.HatRenderer.color = Palette.DisabledColor;
-                        invisible.MyPhysics.Skin.layer.color = Palette.DisabledColor;
+                        invisible.myRend.color = Palette.DisabledClear;
+                        invisible.HatRenderer.color = Palette.DisabledClear;
+                        invisible.MyPhysics.Skin.layer.color = Palette.DisabledClear;
                     }
                     else
                     {
@@ -139,7 +142,9 @@ namespace Peasmod
                     {
                         if (PlayerControl.LocalPlayer.IsRole(Role.Inspector))
                         {
-                            var dot = Utils.CreateSprite("Peasmod.Resources.Dot.png");
+                            var dot = new GameObject();
+                            var _renderer = dot.AddComponent<SpriteRenderer>();
+                            _renderer.sprite = Utils.CreateSprite("Peasmod.Resources.Dot.png");
                             dot.transform.localPosition = new Vector3(player.GetTruePosition().x, player.GetTruePosition().y, player.transform.position.z);
                             dot.GetComponent<SpriteRenderer>().material.color = Utils.ColorIdToColor(player.Data.ColorId);
                             HudManagerPatch.dots.Add(dot, Time.time);
@@ -162,7 +167,9 @@ namespace Peasmod
                     player.Data.IsImpostor = false;
                     player.Data.IsDead = true;
                     player.Collider.enabled = false;
-                    var potato = Utils.CreateSprite("Peasmod.Resources.Potato.png");
+                    var potato = new GameObject();
+                    var renderer = potato.AddComponent<SpriteRenderer>();
+                    renderer.sprite = Utils.CreateSprite("Peasmod.Resources.Potato.png");
                     var scale = new Vector3(potato.transform.localScale.x+2f, potato.transform.localScale.y+2f);
                     potato.transform.localScale = scale;
                     potato.transform.position = player.GetTruePosition();
@@ -172,7 +179,7 @@ namespace Peasmod
                     var target = Utils.GetPlayer(reader.ReadByte());
                     target.Data.IsImpostor = true;
                     player.Data.IsImpostor = false;
-                    player.nameText.Color = Palette.White;
+                    player.nameText.color = Palette.White;
                     HotPotatoMode.TimeTillDeath -= 0.25f;
                     if (target.PlayerId == PlayerControl.LocalPlayer.PlayerId)
                     {
@@ -184,6 +191,21 @@ namespace Peasmod
                 case (byte)CustomRpc.MorphBack:
                     if (PlayerControl.LocalPlayer.IsMorphed())
                         MorphingMode.OnLabelClick(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer, false);
+                    break;
+                case (byte)CustomRpc.BattleRoyaleInit:
+                    foreach (var _player in PlayerControl.AllPlayerControls)
+                        _player.Data.IsImpostor = false;
+                    Il2CppStructArray<byte> _impostors = new byte[1];
+                    PlayerControl.LocalPlayer.SetInfected(_impostors);
+                    PlayerControl.LocalPlayer.Data.IsImpostor = true;
+                    HudManager.Instance.KillButton.gameObject.SetActive(true);
+                    break;
+                case (byte)CustomRpc.VictoryRoyale:
+                    player = Utils.GetPlayer(reader.ReadByte());
+                    BattleRoyaleMode.Winner = player;
+                    BattleRoyaleMode.HasWon = true;
+
+                    Patches.PlayerControlWinPatch.HandleWinRpc();
                     break;
             }
         }

@@ -25,8 +25,9 @@ namespace Peasmod.Utility
         public bool isEffectActive;
         public bool hasEffectDuration;
         public bool enabled = true;
+        public bool Visibile = true;
         public Category category;
-        private string ResourceName;
+        private Sprite ButtonSprite;
         public Action OnClick;
         private Action OnEffectEnd;
         private HudManager hudManager;
@@ -34,7 +35,7 @@ namespace Peasmod.Utility
         private bool canUse;
         public PassiveButton button;
 
-        public CooldownButton(Action OnClick, float Cooldown, string ImageEmbededResourcePath, float PixelsPerUnit, Vector2 PositionOffset, Category category, HudManager hudManager, float EffectDuration, Action OnEffectEnd)
+        public CooldownButton(Action OnClick, float Cooldown, string Image, float PixelsPerUnit, Vector2 PositionOffset, Category category, HudManager hudManager, float EffectDuration, Action OnEffectEnd)
         {
             this.hudManager = hudManager;
             this.OnClick = OnClick;
@@ -45,14 +46,19 @@ namespace Peasmod.Utility
             pixelsPerUnit = PixelsPerUnit;
             MaxTimer = Cooldown;
             Timer = MaxTimer;
-            ResourceName = ImageEmbededResourcePath;
+            Texture2D tex = GUIExtensions.CreateEmptyTexture();
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Stream myStream = assembly.GetManifestResourceStream(Image);
+            byte[] buttonTexture = Reactor.Extensions.Extensions.ReadFully(myStream);
+            ImageConversion.LoadImage(tex, buttonTexture, false);
+            ButtonSprite = GUIExtensions.CreateSprite(tex);
             hasEffectDuration = true;
             isEffectActive = false;
             buttons.Add(this);
             Start();
         }
 
-        public CooldownButton(Action OnClick, float Cooldown, string ImageEmbededResourcePath, float pixelsPerUnit, Vector2 PositionOffset, Category category, HudManager hudManager)
+        public CooldownButton(Action OnClick, float Cooldown, string Image, float pixelsPerUnit, Vector2 PositionOffset, Category category, HudManager hudManager)
         {
             this.hudManager = hudManager;
             this.OnClick = OnClick;
@@ -60,8 +66,13 @@ namespace Peasmod.Utility
             this.PositionOffset = PositionOffset;
             this.category = category;
             MaxTimer = Cooldown;
-            Timer = MaxTimer;
-            ResourceName = ImageEmbededResourcePath;
+            Timer = MaxTimer; 
+            Texture2D tex = GUIExtensions.CreateEmptyTexture();
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Stream myStream = assembly.GetManifestResourceStream(Image);
+            byte[] buttonTexture = Reactor.Extensions.Extensions.ReadFully(myStream);
+            ImageConversion.LoadImage(tex, buttonTexture, false);
+            ButtonSprite = GUIExtensions.CreateSprite(tex);
             hasEffectDuration = false;
             buttons.Add(this);
             Start();
@@ -71,15 +82,10 @@ namespace Peasmod.Utility
         {
             killButtonManager = UnityEngine.Object.Instantiate(hudManager.KillButton, hudManager.transform);
             startColorButton = killButtonManager.renderer.color;
-            startColorText = killButtonManager.TimerText.Color;
+            startColorText = killButtonManager.TimerText.color;
             killButtonManager.gameObject.SetActive(true);
             killButtonManager.renderer.enabled = true;
-            Texture2D tex = GUIExtensions.CreateEmptyTexture();
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            Stream myStream = assembly.GetManifestResourceStream(ResourceName);
-            byte[] buttonTexture = Reactor.Extensions.Extensions.ReadFully(myStream);
-            ImageConversion.LoadImage(tex, buttonTexture, false);
-            killButtonManager.renderer.sprite = GUIExtensions.CreateSprite(tex);
+            killButtonManager.renderer.sprite = ButtonSprite;
             button = killButtonManager.GetComponent<PassiveButton>();
             button.OnClick.RemoveAllListeners();
             button.OnClick.AddListener((UnityEngine.Events.UnityAction)listener);
@@ -94,7 +100,7 @@ namespace Peasmod.Utility
                     {
                         isEffectActive = true;
                         Timer = EffectDuration;
-                        killButtonManager.TimerText.Color = new Color(0, 255, 0);
+                        killButtonManager.TimerText.color = new Color(0, 255, 0);
                     }
                 }
             }
@@ -130,6 +136,11 @@ namespace Peasmod.Utility
                         canUse = PlayerControl.LocalPlayer.IsRole(Role.Sheriff) && !PlayerControl.LocalPlayer.Data.IsDead;
                         break;
                     }
+                case Category.OnlyThanos:
+                    {
+                        canUse = PlayerControl.LocalPlayer.IsRole(Role.Thanos) && !PlayerControl.LocalPlayer.Data.IsDead;
+                        break;
+                    }
             }
             return true;
         }
@@ -138,6 +149,13 @@ namespace Peasmod.Utility
             buttons.RemoveAll(item => item.killButtonManager == null);
             for (int i = 0; i < buttons.Count; i++)
             {
+                
+                //buttons[i].killButtonManager.renderer.sprite = buttons[i].ButtonSprite;
+                //buttons[i].killButtonManager.gameObject.SetActive(buttons[i].Visibile);
+                //CHECKE UPDATE
+                buttons[i].killButtonManager.renderer.enabled = buttons[i].Visibile;
+                buttons[i].killButtonManager.enabled = buttons[i].Visibile;
+                buttons[i].killButtonManager.gameObject.active = buttons[i].Visibile;
                 if (buttons[i].CanUse())
                     buttons[i].Update();
             }
@@ -151,7 +169,7 @@ namespace Peasmod.Utility
                 killButtonManager.renderer.color = new Color(1f, 1f, 1f, 1f);
                 if (isEffectActive)
                 {
-                    killButtonManager.TimerText.Color = startColorText;
+                    killButtonManager.TimerText.color = startColorText;
                     Timer = MaxTimer;
                     isEffectActive = false;
                     OnEffectEnd();
@@ -185,13 +203,12 @@ namespace Peasmod.Utility
 
         public void SetTexture(String resource)
         {
-            ResourceName = resource;
             Texture2D tex = GUIExtensions.CreateEmptyTexture();
             Assembly assembly = Assembly.GetExecutingAssembly();
-            Stream myStream = assembly.GetManifestResourceStream(ResourceName);
+            Stream myStream = assembly.GetManifestResourceStream(resource);
             byte[] buttonTexture = Reactor.Extensions.Extensions.ReadFully(myStream);
             ImageConversion.LoadImage(tex, buttonTexture, false);
-            killButtonManager.renderer.sprite = GUIExtensions.CreateSprite(tex);
+            ButtonSprite = GUIExtensions.CreateSprite(tex);
         }
         public enum Category
         {
@@ -199,7 +216,8 @@ namespace Peasmod.Utility
             OnlyCrewmate,
             OnlyImpostor,
             OnlyDoctor,
-            OnlySheriff
+            OnlySheriff,
+            OnlyThanos
         }
     }
 }
