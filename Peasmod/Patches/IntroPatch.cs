@@ -12,7 +12,7 @@ namespace Peasmod.Patches
         public static void Prefix(IntroCutscene.Nested_0 __instance)
         {
             #region HotPotatoMode
-            if(Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.HotPotato)
+            if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.HotPotato))
             {
                 var yourTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
                 foreach (var player in PlayerControl.AllPlayerControls)
@@ -22,7 +22,7 @@ namespace Peasmod.Patches
             }
             #endregion HotPotatoMode
             #region BattleRoyaleMode
-            else if(Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.BattleRoyale)
+            else if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale))
             {
                 var yourTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
                 foreach (var player in PlayerControl.AllPlayerControls)
@@ -42,7 +42,7 @@ namespace Peasmod.Patches
         public static void Postfix(IntroCutscene.Nested_0 __instance)
         {
             #region HotPotatoMode
-            if (Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.HotPotato)
+            if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.HotPotato))
             {
                 var inst = __instance.__this;
                 inst.Title.text = "HotPotato";
@@ -52,7 +52,7 @@ namespace Peasmod.Patches
             }
             #endregion HotPotatoMode
             #region BatttleRoyaleMode
-            else if (Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.BattleRoyale)
+            else if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale))
             {
                 var inst = __instance.__this;
                 inst.Title.text = "Battle Royale";

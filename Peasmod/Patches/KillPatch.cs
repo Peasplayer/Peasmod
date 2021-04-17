@@ -18,7 +18,7 @@ namespace Peasmod.Patches
         {
             if (__instance.IsRole(Role.Sheriff))
                 __instance.Data.IsImpostor = true;
-            if (Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.HotPotato)
+            if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.HotPotato))
                 return false;
             return true;
         }

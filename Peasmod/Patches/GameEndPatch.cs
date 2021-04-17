@@ -127,7 +127,7 @@ namespace Peasmod.Patches
             }
             #endregion JesterMode
             #region BattleRoyaleMode
-            if (Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.BattleRoyale && BattleRoyaleMode.HasWon)
+            if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale) && BattleRoyaleMode.HasWon)
             {
                 if (PlayerControl.LocalPlayer.PlayerId == BattleRoyaleMode.Winner.PlayerId)
                 {
@@ -168,7 +168,7 @@ namespace Peasmod.Patches
             }
             #endregion JesterMode
             #region BattleRoyaleMode
-            if(Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.BattleRoyale && BattleRoyaleMode.HasWon)
+            if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale) && BattleRoyaleMode.HasWon)
             {
                 Il2CppSystem.Collections.Generic.List<WinningPlayerData> _winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
                 _winners.Add(new WinningPlayerData(BattleRoyaleMode.Winner.Data));
@@ -235,7 +235,7 @@ namespace Peasmod.Patches
     {
         public static bool Prefix()
         {
-            if(Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.HotPotato)
+            if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.HotPotato))
             {
                 var impostors = 0;
                 var crewmates = 0;
@@ -254,7 +254,7 @@ namespace Peasmod.Patches
                 else
                     return false;
             }
-            else if(Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.BattleRoyale)
+            else if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale))
             {
                 var alive = 0;
                 foreach (var player in PlayerControl.AllPlayerControls)

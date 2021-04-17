@@ -150,13 +150,12 @@ namespace Peasmod.Utility
             for (int i = 0; i < buttons.Count; i++)
             {
                 
-                //buttons[i].killButtonManager.renderer.sprite = buttons[i].ButtonSprite;
-                //buttons[i].killButtonManager.gameObject.SetActive(buttons[i].Visibile);
-                //CHECKE UPDATE
+                buttons[i].killButtonManager.renderer.sprite = buttons[i].ButtonSprite;
+                buttons[i].killButtonManager.gameObject.SetActive(buttons[i].Visibile);
                 buttons[i].killButtonManager.renderer.enabled = buttons[i].Visibile;
                 buttons[i].killButtonManager.enabled = buttons[i].Visibile;
                 buttons[i].killButtonManager.gameObject.active = buttons[i].Visibile;
-                if (buttons[i].CanUse())
+                if (buttons[i].CanUse() && buttons[i].Visibile)
                     buttons[i].Update();
             }
         }

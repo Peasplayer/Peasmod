@@ -18,7 +18,7 @@ namespace Peasmod.Patches
         static void Prefix(ShipStatus __instance)
         {
             #region VentBuilding
-            if ((Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.None && Peasmod.Settings.ventbuilding.GetValue()) || Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.HotPotato)
+            if ((Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.None) && Peasmod.Settings.VentBuilding.GetValue()) || Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.HotPotato))
             {
                 var vents = GameObject.FindObjectsOfType<Vent>();
                 bool first = true;
@@ -69,11 +69,11 @@ namespace Peasmod.Patches
             byte[] buttonTexture = Reactor.Extensions.Extensions.ReadFully(myStream);
             ImageConversion.LoadImage(tex, buttonTexture, false);
             GUIExtensions.CreateSprite(tex);
-            if(Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.HotPotato)
+            if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.HotPotato))
             {
                 HotPotatoMode.button = new CooldownButton(HotPotatoMode.OnClick, 1f, "Peasmod.Resources.Kill.png", 200f, new Vector2(0f, 0.3f), CooldownButton.Category.OnlyImpostor, HudManager.Instance);
                 HotPotatoMode.timer = Utils.CreateText(new Vector3(-5.25f, -2.5f), "Timer");
-                HotPotatoMode.TimeTillDeath = Peasmod.Settings.hotpotatotimer.GetValue();
+                HotPotatoMode.TimeTillDeath = Peasmod.Settings.HotPotatoTimer.GetValue();
                 HotPotatoMode.Timer = HotPotatoMode.TimeTillDeath;
                 foreach (var player in PlayerControl.AllPlayerControls)
                 {
@@ -88,7 +88,7 @@ namespace Peasmod.Patches
                         player.RemoveTask(task);
                 }
             }
-            else if(Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.BattleRoyale)
+            else if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale))
             {
                 foreach (var player in PlayerControl.AllPlayerControls)
                 {
@@ -126,32 +126,32 @@ namespace Peasmod.Patches
             {
                 Peasmod.impostorbuttons.Clear();
                 InvisibilityMode.invisplayers.Clear();
-                if (Peasmod.Settings.ventbuilding.GetValue())
+                if (Peasmod.Settings.VentBuilding.GetValue())
                 {
-                    VentBuilding.button = new CooldownButton(VentBuilding.OnClicked, Peasmod.Settings.ventbuildingcooldown.GetValue(), "Peasmod.Resources.BuildVent.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance);
+                    VentBuilding.button = new CooldownButton(VentBuilding.OnClicked, Peasmod.Settings.VentBuildingCooldown.GetValue(), "Peasmod.Resources.BuildVent.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance);
                     Peasmod.impostorbuttons.Add(VentBuilding.button);
                 }
-                if (Peasmod.Settings.bodydragging.GetValue())
+                if (Peasmod.Settings.BodyDragging.GetValue())
                 {
                     BodyDragging.button = new CooldownButton(BodyDragging.OnClicked, 0.5f, "Peasmod.Resources.DragBody.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance);
                     BodyDragging.button.PositionOffset = new Vector2(0f, 1.2f * Peasmod.impostorbuttons.Count);
                     Peasmod.impostorbuttons.Add(BodyDragging.button);
                 }
-                if (Peasmod.Settings.invisibility.GetValue())
+                if (Peasmod.Settings.Invisibility.GetValue())
                 {
-                    InvisibilityMode.button = new CooldownButton(InvisibilityMode.OnClicked, Peasmod.Settings.invisibilitycooldown.GetValue(), "Peasmod.Resources.Hide.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance, Peasmod.Settings.invisibilityduration.GetValue(), InvisibilityMode.OnEnded);
+                    InvisibilityMode.button = new CooldownButton(InvisibilityMode.OnClicked, Peasmod.Settings.InvisibilityCooldown.GetValue(), "Peasmod.Resources.Hide.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance, Peasmod.Settings.InvisibilityDuration.GetValue(), InvisibilityMode.OnEnded);
                     InvisibilityMode.button.PositionOffset = new Vector2(0f, 1.2f * Peasmod.impostorbuttons.Count);
                     Peasmod.impostorbuttons.Add(InvisibilityMode.button);
                 }
-                if (Peasmod.Settings.freezetime.GetValue())
+                if (Peasmod.Settings.FreezeTime.GetValue())
                 {
-                    TimeFreezing.button = new CooldownButton(TimeFreezing.OnClick, Peasmod.Settings.freezetimecooldown.GetValue(), "Peasmod.Resources.TimeFreezing.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance, Peasmod.Settings.freezetimeduration.GetValue(), TimeFreezing.OnEnded);
+                    TimeFreezing.button = new CooldownButton(TimeFreezing.OnClick, Peasmod.Settings.FreezeTimeCooldown.GetValue(), "Peasmod.Resources.TimeFreezing.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance, Peasmod.Settings.FreezeTimeDuration.GetValue(), TimeFreezing.OnEnded);
                     TimeFreezing.button.PositionOffset = new Vector2(0f + (Peasmod.impostorbuttons.Count / 3 * 1.3f), 1.2f * (Peasmod.impostorbuttons.Count - (Peasmod.impostorbuttons.Count / 3 * 3)));
                     Peasmod.impostorbuttons.Add(TimeFreezing.button);
                 }
-                if (Peasmod.Settings.morphing.GetValue())
+                if (Peasmod.Settings.Morphing.GetValue())
                 {
-                    MorphingMode.button = new CooldownButton(MorphingMode.OnClick, Peasmod.Settings.morphingcooldown.GetValue(), "Peasmod.Resources.Morphing.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance);
+                    MorphingMode.button = new CooldownButton(MorphingMode.OnClick, Peasmod.Settings.MorphingCooldown.GetValue(), "Peasmod.Resources.Morphing.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance);
                     MorphingMode.button.PositionOffset = new Vector2(0f + (Peasmod.impostorbuttons.Count / 3 * 1.3f), 1.2f * (Peasmod.impostorbuttons.Count - (Peasmod.impostorbuttons.Count / 3 * 3)));
                     Peasmod.impostorbuttons.Add(MorphingMode.button);
                 }
@@ -160,16 +160,16 @@ namespace Peasmod.Patches
             JesterMode.HandleTasks();
             #endregion JesterMode
             #region DoctorMode
-            if (Peasmod.Settings.doctoramount.GetValue() >= 1)
-                DoctorMode.button = new CooldownButton(DoctorMode.OnClicked, Peasmod.Settings.doctorcooldown.GetValue(), "Peasmod.Resources.Revive.png", 200f, Vector2.zero, CooldownButton.Category.OnlyDoctor, HudManager.Instance);
+            if (Peasmod.Settings.DoctorAmount.GetValue() >= 1)
+                DoctorMode.button = new CooldownButton(DoctorMode.OnClicked, Peasmod.Settings.DoctorCooldown.GetValue(), "Peasmod.Resources.Revive.png", 200f, Vector2.zero, CooldownButton.Category.OnlyDoctor, HudManager.Instance);
             #endregion DoctorMode
             #region SheriffMode
-            if (Peasmod.Settings.sheriffamount.GetValue() >= 1)
+            if (Peasmod.Settings.SheriffAmount.GetValue() >= 1)
             {
                 SheriffMode.CurrentTarget = null;
                 if (SheriffMode.button != null)
                     SheriffMode.button.killButtonManager.CurrentTarget = null;
-                SheriffMode.button = new CooldownButton(SheriffMode.OnClicked, Peasmod.Settings.sheriffcooldown.GetValue(), "Peasmod.Resources.Kill.png", 200f, Vector2.zero, CooldownButton.Category.OnlySheriff, HudManager.Instance);
+                SheriffMode.button = new CooldownButton(SheriffMode.OnClicked, Peasmod.Settings.SheriffCooldown.GetValue(), "Peasmod.Resources.Kill.png", 200f, Vector2.zero, CooldownButton.Category.OnlySheriff, HudManager.Instance);
             }
             #endregion SheriffMode
             if (TestingStuff.testing)

@@ -13,17 +13,26 @@ namespace Peasmod.Patches
 {
     class MeetingPatch
     {
-        [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Confirm))]
+        [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CalculateVotes))]
         public static class VotePatch
         {
-            public static bool Prefix(MeetingHud __instance, [HarmonyArgument(0)] sbyte suspect)
+            public static bool Prefix(MeetingHud __instance, ref Il2CppStructArray<byte> __result)
             {
-                if (PlayerControl.LocalPlayer.IsRole(Role.Mayor) && !PlayerControl.LocalPlayer.Data.IsDead)
+                byte[] numArray = new byte[13];
+                for (int index1 = 0; index1 < __instance.playerStates.Length; ++index1)
                 {
-                    __instance.CmdCastVote(PlayerControl.LocalPlayer.PlayerId, suspect);
-                    return false;
+                    PlayerVoteArea playerState = __instance.playerStates[index1];
+                    if (playerState.didVote)
+                    {
+                        int index2 = (int)playerState.votedFor + 1;
+                        if (index2 >= 0 && index2 < numArray.Length)
+                            ++numArray[index2];
+                        if (Utils.GetPlayer((byte)playerState.TargetPlayerId).IsRole(Role.Mayor))
+                            ++numArray[index2];
+                    }
                 }
-                return true;
+                __result = numArray;
+                return false;
             }
 
             /*[HarmonyPriority(Priority.First)]
@@ -43,7 +52,7 @@ namespace Peasmod.Patches
         {
             public static bool Prefix(HudManager __instance)
             {
-                if(Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.HotPotato || Peasmod.Settings.gamemode.GetValue() == (int)Peasmod.Settings.GameMode.BattleRoyale)
+                if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.HotPotato) || Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale))
                 {
                     return false;
                 }
