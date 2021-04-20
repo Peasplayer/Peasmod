@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using HarmonyLib;
 using Hazel;
@@ -255,7 +256,25 @@ namespace Peasmod.Patches
                     return false;
             }
             else if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale))
-            {
+            {   
+                int num = (from x in GameData.Instance.AllPlayers.ToArray() where !x.IsDead && !x.Disconnected select x).ToArray<GameData.PlayerInfo>().Length;
+                bool flag2 = num == 1;
+                if (flag2)
+                {
+                    PlayerControl winner =
+                        (from x in PlayerControl.AllPlayerControls.ToArray() where !x.Data.IsDead && !x.Data.Disconnected select x)
+                        .ToArray<PlayerControl>().First();
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.VictoryRoyale, Hazel.SendOption.None, -1);
+                    writer.Write(winner.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    foreach (var player in PlayerControl.AllPlayerControls)
+                    {
+                        if (player.PlayerId != winner.PlayerId)
+                            player.Data.IsImpostor = false;
+                    }
+                    ShipStatus.RpcEndGame(GameOverReason.ImpostorByVote, false);
+                }
+                return false;
                 var alive = 0;
                 foreach (var player in PlayerControl.AllPlayerControls)
                     if (!player.Data.IsDead)
@@ -272,6 +291,19 @@ namespace Peasmod.Patches
                 }
                 return false;//BattleRoyaleMode.HasWon;
             }
+            return true;
+        }
+    }
+    
+    [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.RpcEndGame))]
+    [HarmonyPriority(Priority.First)]
+    public static class RPCEndGamePatch
+    {
+        public static bool Prefix(ShipStatus __instance, [HarmonyArgument(0)] GameOverReason reason)
+        {
+            if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale) && Peasmod.GameStarted &&
+                reason == GameOverReason.HumansByTask)
+                return false;
             return true;
         }
     }

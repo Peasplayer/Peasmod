@@ -239,20 +239,22 @@ namespace Peasmod.Patches
                         HudManager.Instance.KillButton.gameObject.SetActive(false);
                     else
                     {
-                        if (Utils.GetClosestPlayer(PlayerControl.LocalPlayer) != null && Utils.GetDistBetweenPlayers(PlayerControl.LocalPlayer, Utils.GetClosestPlayer(PlayerControl.LocalPlayer)) <= GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance])
+                        if (PlayerControl.LocalPlayer.FindClosestTarget(GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance]) != null)
                         {
                             //BattleRoyaleMode.CurrentTarget = Utils.GetClosestPlayer(PlayerControl.LocalPlayer);
+                            var target = PlayerControl.LocalPlayer.FindClosestTarget(
+                                GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance]);
                             HudManager.Instance.KillButton.enabled = true;
                             HudManager.Instance.KillButton.renderer.color = Palette.EnabledColor;
                             HudManager.Instance.KillButton.renderer.material.SetFloat("_Desat", 0.0f);
-                            HudManager.Instance.KillButton.CurrentTarget = Utils.GetClosestPlayer(PlayerControl.LocalPlayer);
+                            HudManager.Instance.KillButton.SetTarget(target);
                         }
                         else
                         {
                             //BattleRoyaleMode.CurrentTarget = null;
                             HudManager.Instance.KillButton.enabled = false;
                             HudManager.Instance.KillButton.renderer.color = Palette.DisabledClear;
-                            HudManager.Instance.KillButton.CurrentTarget = null;
+                            HudManager.Instance.KillButton.SetTarget(null);
                         }
                     }
                     /*PlayerControl target = Utils.GetClosestPlayer(PlayerControl.LocalPlayer);
@@ -546,16 +548,16 @@ namespace Peasmod.Patches
             else
             {
                 TimeFreezing.timeIsFroozen = false;
-                if (!PlayerControl.LocalPlayer.moveable)
-                    PlayerControl.LocalPlayer.moveable = true;
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.UnfreezeTime, Hazel.SendOption.None, -1);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                //if (!PlayerControl.LocalPlayer.moveable)
+                //    PlayerControl.LocalPlayer.moveable = true;
+                //MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.UnfreezeTime, Hazel.SendOption.None, -1);
+                //AmongUsClient.Instance.FinishRpcImmediately(writer);
                 var notinvisplayers = new List<Byte>();
                 foreach (var player in InvisibilityMode.invisplayers)
                 {
                     if(Utils.GetPlayer(player) != null)
                     {
-                        writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.Visible, Hazel.SendOption.None, -1);
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.Visible, Hazel.SendOption.None, -1);
                         writer.WritePacked(player);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         var visible = Utils.GetPlayer(player);
@@ -579,6 +581,12 @@ namespace Peasmod.Patches
     {
         static void Prefix(PlayerControl __instance)
         {
+            #region BattleRoyle
+            if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale) && Peasmod.GameStarted)
+            {
+                __instance.Data.IsImpostor = !__instance.Data.IsDead;
+            } 
+            #endregion BattleRoyale
             #region VentBuilding
             if (__instance.AmOwner && VentBuilding.button != null && VentBuilding.button.killButtonManager != null)
             {
@@ -609,7 +617,7 @@ namespace Peasmod.Patches
             {
                 if (__instance.currentTarget == null)
                 {
-                    //__instance.UseButton.sprite = __instance.UseImage;
+                    //__instance.UseButton.sprite = 
                     __instance.UseButton.color = UseButtonManager.DisabledColor;
                     __instance.enabled = false;
                 }

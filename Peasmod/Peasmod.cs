@@ -8,12 +8,14 @@ using Reactor;
 using Reactor.Extensions;
 using System.Collections.Generic;
 using System;
+using System.IO;
 using System.Net;
 using Essentials.Options;
 using UnityEngine;
 using UnhollowerBaseLib;
 using BepInEx.Logging;
 using System.Linq;
+using System.Reflection;
 using Peasmod.Utility;
 using UnhollowerRuntimeLib;
 
@@ -26,10 +28,12 @@ namespace Peasmod
     {
         public const string Id = "tk.peasplayer.peasmod";
         public const string PluginName = "Peasmod";
-        public const string PluginAuthor = "Peasplayerᵈᵉᵛ#0693";
-        public const string PluginVersion = "2.1.0-beta4";
+        public const string PluginAuthor = "Peasplayerᵈᵉᵛ#2541";
+        public const string PluginVersion = "2.1.0-beta6";
         public const string PluginPage = "peascord.tk";
 
+        public static Peasmod Instance { get { return PluginSingleton<Peasmod>.Instance; } }
+        
         public Harmony Harmony { get; } = new Harmony(Id);
         public static ManualLogSource Logger { get; private set; }
         public static System.Random random = new System.Random();
@@ -113,7 +117,7 @@ namespace Peasmod
             {
                 None = 0,
                 HotPotato = 1,
-                BattleRoyale =2
+                BattleRoyale = 2
             }
 
             public static bool IsGameMode(GameMode mode)
@@ -354,11 +358,29 @@ namespace Peasmod
             static void Postfix(VersionShower __instance)
             {
                 __instance.text.text += "\nReactor-Framework" + "\n" + PluginName + " v" + PluginVersion + " \nby " + StringColor.Green + PluginAuthor + " " + StringColor.Reset + PluginPage;
+                __instance.transform.position -= new Vector3(0, 0.5f, 0);
+                AccountManager.Instance.accountTab.gameObject.SetActive(false);
                 foreach (var _object in GameObject.FindObjectsOfTypeAll(Il2CppType.Of<GameObject>()))
                     if (_object.name.Contains("ReactorVersion"))
                         GameObject.Destroy(_object);
                 //if(UnityEngine.Object.FindObjectOfType<MainMenuManager>() != null && UnityEngine.Object.FindObjectOfType<MainMenuManager>().Announcement != null)
                 //UnityEngine.Object.FindObjectOfType<MainMenuManager>().Announcement.gameObject.SetActive(true);
+            }
+        }
+        
+        [HarmonyPatch(typeof(MainMenuManager), "Start")]
+        public static class MainMenuManagerStartPatch
+        {
+            public static void Postfix()
+            {
+                Texture2D tex = GUIExtensions.CreateEmptyTexture();
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                Stream myStream = assembly.GetManifestResourceStream("Peasmod.Resources.Peasmod.png");
+                byte[] buttonTexture = Reactor.Extensions.Extensions.ReadFully(myStream);
+                ImageConversion.LoadImage(tex, buttonTexture, false);
+                GameObject.Find("bannerLogo_AmongUs").GetComponent<SpriteRenderer>().sprite = GUIExtensions.CreateSprite(tex);
+                GameObject.Find("AmongUsLogo").GetComponent<SpriteRenderer>().sprite = GUIExtensions.CreateSprite(tex);
+                GameObject.Find("AmongUsLogo").transform.position += new Vector3(0.3f, 0, 0);
             }
         }
 

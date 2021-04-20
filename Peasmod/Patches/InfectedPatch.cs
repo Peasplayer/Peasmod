@@ -2,6 +2,7 @@
 using Hazel;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 using Reactor.Extensions;
 using UnhollowerBaseLib;
 using Peasmod.Utility;
@@ -12,29 +13,39 @@ namespace Peasmod.Patches
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RpcSetInfected))]
     public static class SetInfectedPatch
     {
-        public static void Prefix(PlayerControl __instance,
-            [HarmonyArgument(0)] Il2CppReferenceArray<GameData.PlayerInfo> impostors)
+        public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] Il2CppReferenceArray<GameData.PlayerInfo> impostors)
         {
-            if (PlayerControl.AllPlayerControls.Count == 1) return;
+            if (PlayerControl.AllPlayerControls.Count == 1) return true;
             if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.HotPotato))
             {
-
+                return true;
             }
             else if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale))
             {
-                foreach (var _player in PlayerControl.AllPlayerControls)
+                byte[] array = (from x in PlayerControl.AllPlayerControls.ToArray() select x.PlayerId).ToArray<byte>();
+                bool amClient = AmongUsClient.Instance.AmClient;
+                if (amClient)
+                {
+                    __instance.SetInfected(array);
+                }
+                MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(__instance.NetId, 3, Hazel.SendOption.Reliable);
+                messageWriter.WriteBytesAndSize(array);
+                messageWriter.EndMessage();
+                return false;
+                /*foreach (var _player in PlayerControl.AllPlayerControls)
                     _player.Data.IsImpostor = false;
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.BattleRoyaleInit, Hazel.SendOption.None, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 Il2CppStructArray<byte> _impostors = new byte[1];
                 PlayerControl.LocalPlayer.SetInfected(_impostors);
                 PlayerControl.LocalPlayer.Data.IsImpostor = true;
-                HudManager.Instance.KillButton.gameObject.SetActive(true);
+                HudManager.Instance.KillButton.gameObject.SetActive(true);*/
             }
+
+            return true;
         }
 
-        public static void Postfix(PlayerControl __instance,
-            [HarmonyArgument(0)] Il2CppReferenceArray<GameData.PlayerInfo> impostors)
+        public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] Il2CppReferenceArray<GameData.PlayerInfo> impostors)
         {
             if (PlayerControl.AllPlayerControls.Count == 1) return;
             if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.None))
@@ -97,7 +108,7 @@ namespace Peasmod.Patches
             }
             else if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale))
             {
-                Il2CppReferenceArray<GameData.PlayerInfo> _impostors = new GameData.PlayerInfo[PlayerControl.AllPlayerControls._size + 1];
+                /*Il2CppReferenceArray<GameData.PlayerInfo> _impostors = new GameData.PlayerInfo[PlayerControl.AllPlayerControls._size + 1];
                 int i = 0;
                 foreach (var player in PlayerControl.AllPlayerControls)
                 {
@@ -106,7 +117,7 @@ namespace Peasmod.Patches
                     i++;
                 }
                 impostors = _impostors;
-                //PlayerControl.LocalPlayer.RpcSetInfected(_impostors);
+                //PlayerControl.LocalPlayer.RpcSetInfected(_impostors);*/
             }
         }
     }

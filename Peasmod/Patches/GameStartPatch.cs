@@ -102,9 +102,10 @@ namespace Peasmod.Patches
                     foreach (PlayerTask task in removeTask)
                         player.RemoveTask(task);
                 }
-                foreach (var player in PlayerControl.AllPlayerControls)
-                    player.Data.IsImpostor = true;
+                //foreach (var player in PlayerControl.AllPlayerControls)
+                //   player.Data.IsImpostor = true;
                 //HudManager.Instance.KillButton.gameObject.SetActive(true);
+                //HudManager.Instance.UseButton.gameObject.SetActive(false);
                 //BattleRoyaleMode.button = new CooldownButton(BattleRoyaleMode.OnClick, 5f, "Peasmod.Resources.Kill.png", 200f, Vector2.zero, CooldownButton.Category.Everyone, HudManager.Instance);
             }
             else if (false)//Peasmod.Settings.thanos.GetValue())

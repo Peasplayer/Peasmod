@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using Hazel;
+using UnityEngine;
 using Peasmod.Gamemodes;
 
 namespace Peasmod.Utility
@@ -113,7 +114,7 @@ namespace Peasmod.Utility
                 return Role.Crewmate;
         }
 
-        private static Dictionary<byte, bool> isMorphed = new Dictionary<byte, bool>();
+        private static System.Collections.Generic.Dictionary<byte, bool> isMorphed = new System.Collections.Generic.Dictionary<byte, bool>();
 
         public static bool IsMorphed(this PlayerControl player)
         {
@@ -129,6 +130,46 @@ namespace Peasmod.Utility
             else
                 isMorphed[player.PlayerId] = morphed;
         }
+        
+        public static PlayerControl FindClosestTarget(this PlayerControl player, float distance)
+                {
+                    PlayerControl playerControl1 = (PlayerControl)null;
+                    if (!ShipStatus.Instance)
+                        return (PlayerControl)null;
+                    Vector2 truePosition = player.GetTruePosition();
+                    System.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers.ToArray().ToList();
+                    for (int index = 0; index < allPlayers.Count; ++index)
+                    {
+                        GameData.PlayerInfo playerInfo = allPlayers[index];
+                        if (!playerInfo.Disconnected && playerInfo.PlayerId != player.PlayerId && !playerInfo.IsDead)
+                        {
+                            PlayerControl playerControl2 = playerInfo.Object;
+                            if (playerControl2)
+                            {
+                                Vector2 vector2 = playerControl2.GetTruePosition() - truePosition;
+                                float magnitude = vector2.magnitude;
+                                if (magnitude <= distance && !PhysicsHelpers.AnyNonTriggersBetween(truePosition, vector2.normalized, magnitude, Constants.ShipAndObjectsMask))
+                                {
+                                    playerControl1 = playerControl2;
+                                    distance = magnitude;
+                                }
+                            }
+                        }
+                    }
+                    return playerControl1;
+                }
+        
+                public static PlayerControl GetPlayer(this byte id)
+                {
+                    foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+                    {
+                        if (player.PlayerId == id)
+                        {
+                            return player;
+                        }
+                    }
+                    return null;
+                }
 
         public static void ResetRoles()
         {

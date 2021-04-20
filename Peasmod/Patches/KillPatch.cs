@@ -47,4 +47,13 @@ namespace Peasmod.Patches
             #endregion InvisibilityMode
         }
     }
+
+    [HarmonyPatch(typeof(KillButtonManager), nameof(KillButtonManager.SetTarget))]
+    class KillButtonSetTarget
+    {
+        public static void Prefix(KillButtonManager __instance, [HarmonyArgument(0)] PlayerControl target)
+        {
+            //Utils.Log("Target has been set to " + target.nameText.text);
+        }
+    }
 }

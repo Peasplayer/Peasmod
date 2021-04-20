@@ -201,11 +201,16 @@ namespace Peasmod
                     HudManager.Instance.KillButton.gameObject.SetActive(true);
                     break;
                 case (byte)CustomRpc.VictoryRoyale:
-                    player = Utils.GetPlayer(reader.ReadByte());
-                    BattleRoyaleMode.Winner = player;
+                   var  winner = Utils.GetPlayer(reader.ReadByte());
+                    /*BattleRoyaleMode.Winner = player;
                     BattleRoyaleMode.HasWon = true;
 
-                    Patches.PlayerControlWinPatch.HandleWinRpc();
+                    Patches.PlayerControlWinPatch.HandleWinRpc();*/
+                    foreach (var _player in PlayerControl.AllPlayerControls)
+                    {
+                        if (_player.PlayerId != winner.PlayerId)
+                            _player.Data.IsImpostor = false;
+                    }
                     break;
             }
         }

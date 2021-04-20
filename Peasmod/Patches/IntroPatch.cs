@@ -21,15 +21,6 @@ namespace Peasmod.Patches
                 __instance.yourTeam = yourTeam;
             }
             #endregion HotPotatoMode
-            #region BattleRoyaleMode
-            else if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale))
-            {
-                var yourTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
-                foreach (var player in PlayerControl.AllPlayerControls)
-                    yourTeam.Add(player);
-                __instance.yourTeam = yourTeam;
-            }
-            #endregion BattleRoyaleMode
             #region JesterMode
             else if (PlayerControl.LocalPlayer.IsRole(Role.Jester))
             {
