@@ -16,6 +16,7 @@ using UnhollowerBaseLib;
 using BepInEx.Logging;
 using System.Linq;
 using System.Reflection;
+using Hazel.Udp;
 using Peasmod.Utility;
 using UnhollowerRuntimeLib;
 
@@ -29,7 +30,7 @@ namespace Peasmod
         public const string Id = "tk.peasplayer.peasmod";
         public const string PluginName = "Peasmod";
         public const string PluginAuthor = "Peasplayerᵈᵉᵛ#2541";
-        public const string PluginVersion = "2.1.0-beta6";
+        public const string PluginVersion = "2.1.0";
         public const string PluginPage = "peascord.tk";
 
         public static Peasmod Instance { get { return PluginSingleton<Peasmod>.Instance; } }
@@ -42,6 +43,8 @@ namespace Peasmod
         public static List<PlayerControl> impostors = new List<PlayerControl>();
         
         public static List<CooldownButton> impostorbuttons = new List<CooldownButton>();
+
+        public static List<IRegionInfo> regionInfos = new List<IRegionInfo>();
 
         public static bool GameStarted { get { 
                 return GameData.Instance && ShipStatus.Instance && AmongUsClient.Instance && (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started || AmongUsClient.Instance.GameMode == GameModes.FreePlay);
@@ -155,12 +158,8 @@ namespace Peasmod
             }
         }
 
-        public override void Load()
+        public static IRegionInfo RegisterServer(string name, string ip, ushort port)
         {
-            var ServerName = Config.Bind("Server", "Name", "Peaspowered");
-            var ServerIp = Config.Bind("Server", "Ipv4 or Hostname", "au.peasplayer.tk");
-            var ServerPort = Config.Bind("Server", "Port", (ushort)25911);
-            var ip = ServerIp.Value;
             if (Uri.CheckHostName(ip).ToString() == "Dns")
             {
                 try
@@ -174,22 +173,32 @@ namespace Peasmod
                 }
                 catch {}
             }
-            var port = ServerPort.Value;
+
+            return new DnsRegionInfo(name, name, StringNames.NoTranslation, new[]
+            {
+                new ServerInfo($"{name}-Master-1", ip, port)
+            }).Cast<IRegionInfo>();
+        }
+        
+        public override void Load()
+        {
+            #region ServerRegions
             var defaultRegions = new List<IRegionInfo>();
-            defaultRegions.Add(new DnsRegionInfo(ServerName.Value, ServerName.Value, StringNames.NoTranslation, new[] {
-                new ServerInfo($"{ServerName.Value}-Master-1", ip, port)
-            }).Cast<IRegionInfo>());
+            defaultRegions.Add(RegisterServer(Config.Bind("Server", "Name", "Peaspowered").Value, 
+                Config.Bind("Server", "Ipv4 or Hostname", "au.peasplayer.tk").Value, 
+                Config.Bind("Server", "Port", (ushort)25911).Value));
+            //defaultRegions.Add(RegisterServer("skeld.net", "192.241.154.115", 22023));
+            defaultRegions.Add(RegisterServer("matux.fr", "152.228.160.91", 22023));
             var UseLocalHost = Config.Bind("Server", "UseLocalHost", false);
-            ServerPort = Config.Bind("Server", "LocalPort", (ushort)22023);
             if (UseLocalHost.Value)
             {
-                ip = "127.0.0.1";
-                port = ServerPort.Value;
-                defaultRegions.Add(new DnsRegionInfo("Localhost", "Localhost", StringNames.NoTranslation, new[] {
-                    new ServerInfo($"Localhost-Master-1", ip, port)
-                }).Cast<IRegionInfo>());
+                defaultRegions.Add(RegisterServer("Localhost", "127.0.0.1", Config.Bind("Server", "LocalPort", (ushort)22023).Value));
             }
             ServerManager.DefaultRegions = defaultRegions.ToArray();
+            ServerManager.Instance.AvailableRegions = defaultRegions.ToArray();
+            ServerManager.Instance.SaveServers();
+            regionInfos = defaultRegions;
+            #endregion ServerRegions
             Logger = this.Log;
             CustomOption.ShamelessPlug = false;
             #region OptionsHudVisibility
@@ -226,6 +235,7 @@ namespace Peasmod
              * Essentials: https://github.com/DorCoMaNdO/Reactor-Essentials
              * Author: DorComando (https://github.com/DorCoMaNdO)
              */
+            Harmony.Unpatch(typeof(UdpConnection).GetMethod("HandleSend"), HarmonyPatchType.Prefix, ReactorPlugin.Id);
             Harmony.PatchAll();
         }
 

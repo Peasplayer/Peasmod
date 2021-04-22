@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
-		<Version>2.1.0-beta6</Version>
+		<Version>2.1.0</Version>
 		<Mappings>NuclearPowered/Mappings:0.4.0</Mappings>
 
 		<Description>Peasmod</Description>
