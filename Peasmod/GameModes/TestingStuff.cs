@@ -14,8 +14,8 @@ namespace Peasmod.Gamemodes
         public static bool testing = false;
 
         public static CooldownButton button;
-        public static FollowerCamera cam;
-        public static Camera camera;
+        //public static FollowerCamera cam;
+        //public static Camera camera;
 
         public static void OnClick()
         {
@@ -53,7 +53,7 @@ namespace Peasmod.Gamemodes
         {
             public static void Prefix(HudManager __instance)
             {
-                if(cam != null)
+                //if(cam != null)
                 {
 
 

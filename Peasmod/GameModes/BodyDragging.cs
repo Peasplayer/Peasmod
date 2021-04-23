@@ -21,6 +21,8 @@ namespace Peasmod.Gamemodes
 
         public static void OnClicked()
         {
+            var buttonTextures = Peasmod.Instance.Config.Bind("Settings", "ButtonTextures", true, "If set to true the textures that Peasplayer made will be used. Else the textures of Gravity will be used.");
+            var resource = buttonTextures.Value ? "Peasmod.Resources.Buttons.Peasplayer" : "Peasmod.Resources.Buttons.Gravity";
             if(draggers.Contains(PlayerControl.LocalPlayer.PlayerId))
             {
                 bodys.RemoveAt(draggers.IndexOf(PlayerControl.LocalPlayer.PlayerId));
@@ -28,11 +30,11 @@ namespace Peasmod.Gamemodes
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.DropBody, Hazel.SendOption.None, -1);
                 writer.WritePacked(PlayerControl.LocalPlayer.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-                button.SetTexture("Peasmod.Resources.DragBody.png");
+                button.SetTexture(resource + ".DragBody.png");
             }
             else
             {
-                button.SetTexture("Peasmod.Resources.DropBody.png");
+                button.SetTexture(resource + ".DropBody.png");
                 List<DeadBody> _bodys = new List<DeadBody>();
                 foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(), PlayerControl.LocalPlayer.MaxReportDistance-2f, Constants.PlayersOnlyMask))
                 {

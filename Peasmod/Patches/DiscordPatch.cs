@@ -2,15 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using HarmonyLib;
-using Reactor;
 using Discord;
 using InnerNet;
-using System.Collections;
-using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.SceneManagement;
-using Peasmod.Utility;
-using Discord;
 
 namespace Peasmod.Patches
 {
@@ -19,32 +12,17 @@ namespace Peasmod.Patches
     {
         public static bool Prefix(DiscordManager __instance)
         {
-            /*try
-            {
-                __instance.Field_1 = new Discord.Discord(787398232540053544, 1UL);
-                __instance.Field_1.GetImageManager();
-                var activityManager = __instance.Field_1.GetActivityManager();
-                activityManager.RegisterSteam(945360U);
-            }
-            catch
-            {
-                Debug.LogWarning("Discord messed up");
-            }
-            return false;*/
-            
             try
 			{
 				__instance.Field_1 = new Discord.Discord(787398232540053544, 1UL);
 				ActivityManager activityManager = __instance.Field_1.GetActivityManager();
 				activityManager.RegisterSteam(945360U);
 				__instance.SetInMenus();
-				
 			}
 			catch
 			{
 			}
 			return false;
-	        
         }
     }
     
@@ -78,7 +56,6 @@ namespace Peasmod.Patches
 	        AmongUsClient.Instance.Connect((MatchMakerModes)1);
 	        __instance.StartCoroutine(__instance.CoJoinGame());
 			return false;
-	        
         }
     }
 }
