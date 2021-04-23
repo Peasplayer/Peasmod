@@ -3,17 +3,22 @@ using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using HarmonyLib;
 using Hazel;
+using InnerNet;
 using Reactor;
 using Reactor.Extensions;
 using System.Collections.Generic;
 using System;
+using System.IO;
 using System.Net;
-using Essentials.CustomOptions;
+using Essentials.Options;
 using UnityEngine;
 using UnhollowerBaseLib;
 using BepInEx.Logging;
 using System.Linq;
+using System.Reflection;
+using Hazel.Udp;
 using Peasmod.Utility;
+using UnhollowerRuntimeLib;
 
 namespace Peasmod
 {
@@ -24,10 +29,14 @@ namespace Peasmod
     {
         public const string Id = "tk.peasplayer.peasmod";
         public const string PluginName = "Peasmod";
-        public const string PluginAuthor = "Peasplayer";
-        public const string PluginVersion = "1.8.0";
+        public const string PluginAuthor = "Peasplayerᵈᵉᵛ#2541";
+        public const string PluginVersion = "2.1.0";
+        public const string PluginPage = "peascord.tk";
 
+        public static Peasmod Instance { get { return PluginSingleton<Peasmod>.Instance; } }
+        
         public Harmony Harmony { get; } = new Harmony(Id);
+        public static ManualLogSource Logger { get; private set; }
         public static System.Random random = new System.Random();
 
         public static List<PlayerControl> crewmates = new List<PlayerControl>();
@@ -35,43 +44,98 @@ namespace Peasmod
         
         public static List<CooldownButton> impostorbuttons = new List<CooldownButton>();
 
+        public static List<IRegionInfo> regionInfos = new List<IRegionInfo>();
+
+        public static bool GameStarted { get { 
+                return GameData.Instance && ShipStatus.Instance && AmongUsClient.Instance && (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started || AmongUsClient.Instance.GameMode == GameModes.FreePlay);
+            } }
+
         public static class Settings
         {
-            public static CustomStringOption section1 = CustomOption.AddString("section", "Section", new string[] { "Peasmod" });
-            public static CustomToggleOption venting = CustomOption.AddToggle("venting", "Venting", true, true);
-            public static CustomToggleOption reportbodys = CustomOption.AddToggle("reportbodys", "Body-Reporting", true, true);
-            public static CustomToggleOption sabotaging = CustomOption.AddToggle("sabotaging", "Sabotaging", true, true);
-            public static CustomToggleOption crewventing = CustomOption.AddToggle("crewventing", "Crew-Venting", true, false);
-            public static CustomToggleOption ventbuilding = CustomOption.AddToggle("ventbuilding", "Vent-Building", true, false);
-            public static CustomNumberOption ventbuildingcooldown = CustomOption.AddNumber("ventbuildingcooldown", "Vent-Building-Cooldown", true, 7, 2, 30, 1);
-            public static CustomToggleOption bodydragging = CustomOption.AddToggle("bodydragging", "Body-Dragging", true, false);
-            public static CustomToggleOption invisibility = CustomOption.AddToggle("invisibility", "Invisibility", true, false);
-            public static CustomNumberOption invisibilitycooldown = CustomOption.AddNumber("invisibilitycooldown", "Invisibility-Cooldown", true, 20, 2, 60, 2);
-            public static CustomNumberOption invisibilityduration = CustomOption.AddNumber("invisibilityduration", "Invisibility-Duration", true, 10, 2, 30, 1);
-            public static CustomToggleOption freezetime = CustomOption.AddToggle("freezetime", "Time-Freezing", true, false);
-            public static CustomNumberOption freezetimecooldown = CustomOption.AddNumber("freezetimecooldown", "Time-Freezing-Cooldown", true, 20, 2, 60, 2);
-            public static CustomNumberOption freezetimeduration = CustomOption.AddNumber("freezetimeduration", "Time-Freezing-Duration", true, 10, 2, 30, 1);
-            public static CustomToggleOption morphing = CustomOption.AddToggle("morphing", "Morphing", true, false);
-            public static CustomNumberOption morphingcooldown = CustomOption.AddNumber("morphingcooldown", "Morphing-Cooldown", true, 20, 2, 60, 2);
-            public static CustomStringOption section2 = CustomOption.AddString("section", "Section", new string[] { "Roles" });
-            public static CustomNumberOption jesteramount = CustomOption.AddNumber("jesters", "Jesters", true, 0, 0, 9, 1);
-            public static CustomNumberOption doctoramount = CustomOption.AddNumber("doctors", "Doctors", true, 0, 0, 9, 1);
-            public static CustomNumberOption doctorcooldown = CustomOption.AddNumber("doctorcooldown", "Revive-Cooldown", true, 10, 2, 60, 2);
-            public static CustomNumberOption mayoramount = CustomOption.AddNumber("mayors", "Mayors", true, 0, 0, 9, 1);
-            public static CustomNumberOption inspectoramount = CustomOption.AddNumber("inspectors", "Inspectors", true, 0, 0, 9, 1);
-            public static CustomNumberOption sheriffamount = CustomOption.AddNumber("sheriffs", "Sheriffs", true, 0, 0, 9, 1);
-            public static CustomNumberOption sheriffcooldown = CustomOption.AddNumber("sheriffcooldown", "Shoot-Cooldown", true, 10, 2, 60, 2);
-            //public static CustomNumberOption engineeramount = CustomOption.AddNumber("engineers", "Engineers", true, 0, 0, 2, 1);
-            public static CustomStringOption section3 = CustomOption.AddString("section", "Section", new string[] { "Modes" });
-            public static CustomToggleOption hotpotato = CustomOption.AddToggle("hotpotato", "HotPotato", true, false);
-            public static CustomNumberOption hotpotatotimer = CustomOption.AddNumber("hotpotatotimer", "HotPotato-Timer", true, 10, 2, 60, 2);
+            public static CustomOptionHeader Header = CustomOption.AddHeader(StringColor.Green + "Peasmod" + StringColor.Reset, true, true, false);
+            private static readonly CustomOption SectionGeneral = CustomOption.AddButton("˅ General", true, false, false);
+            public static readonly CustomToggleOption Venting = CustomOption.AddToggle("venting", "• Venting", true, true);
+            public static readonly CustomToggleOption ReportBodys = CustomOption.AddToggle("reportbodys", "• Body-Reporting", true, true);
+            public static readonly CustomToggleOption Sabotaging = CustomOption.AddToggle("sabotaging", "• Sabotaging", true, true);
+            private static readonly CustomOption SectionSpecial = CustomOption.AddButton("˅ Special", true, false, false);
+            public static readonly CustomToggleOption CrewVenting = CustomOption.AddToggle("crewventing", "• Crew-Venting", true, false);
+            public static readonly CustomToggleOption VentBuilding = CustomOption.AddToggle("ventbuilding", "• Vent-Building", true, false);
+            public static readonly CustomNumberOption VentBuildingCooldown = CustomOption.AddNumber("ventbuildingcooldown", "╚══ Vent-Building-Cooldown", true, 7, 2, 30, 1);
+            public static readonly CustomToggleOption BodyDragging = CustomOption.AddToggle("bodydragging", "• Body-Dragging", true, false);
+            public static readonly CustomToggleOption Invisibility = CustomOption.AddToggle("invisibility", "• Invisibility", true, false);
+            public static readonly CustomNumberOption InvisibilityCooldown = CustomOption.AddNumber("invisibilitycooldown", "╚══ Invisibility-Cooldown", true, 20, 2, 60, 2);
+            public static readonly CustomNumberOption InvisibilityDuration = CustomOption.AddNumber("invisibilityduration", "╚══ Invisibility-Duration", true, 10, 2, 30, 1);
+            public static readonly CustomToggleOption FreezeTime = CustomOption.AddToggle("freezetime", "• Time-Freezing", true, false);
+            public static readonly CustomNumberOption FreezeTimeCooldown = CustomOption.AddNumber("freezetimecooldown", "╚══ Time-Freezing-Cooldown", true, 20, 2, 60, 2);
+            public static readonly CustomNumberOption FreezeTimeDuration = CustomOption.AddNumber("freezetimeduration", "╚══ Time-Freezing-Duration", true, 10, 2, 30, 1);
+            public static readonly CustomToggleOption Morphing = CustomOption.AddToggle("morphing", "• Morphing", true, false);
+            public static readonly CustomNumberOption MorphingCooldown = CustomOption.AddNumber("morphingcooldown", "╚══ Morphing-Cooldown", true, 20, 2, 60, 2);
+            private static readonly CustomOptionButton SectionRoles = CustomOption.AddButton("˅ Roles", true, false, false);
+            //public static CustomToggleOption thanos = CustomOption.AddToggle("thanos", "Thanos", true, false);
+            public static readonly CustomNumberOption JesterAmount = CustomOption.AddNumber("jesters", "• Jesters", true, 0, 0, 9, 1);
+            public static readonly CustomNumberOption DoctorAmount = CustomOption.AddNumber("doctors", "• Doctors", true, 0, 0, 9, 1);
+            public static readonly CustomNumberOption DoctorCooldown = CustomOption.AddNumber("doctorcooldown", "╚══ Revive-Cooldown", true, 10, 2, 60, 2);
+            public static readonly CustomNumberOption MayorAmount = CustomOption.AddNumber("mayors", "• Mayors", true, 0, 0, 9, 1);
+            public static readonly CustomNumberOption InspectorAmount = CustomOption.AddNumber("inspectors", "• Inspectors", true, 0, 0, 9, 1);
+            public static readonly CustomNumberOption SheriffAmount = CustomOption.AddNumber("sheriffs", "• Sheriffs", true, 0, 0, 9, 1);
+            public static readonly CustomNumberOption SheriffCooldown = CustomOption.AddNumber("sheriffcooldown", "╚══ Shoot-Cooldown", true, 10, 2, 60, 2);
+            public static readonly CustomStringOption Gamemode = CustomOption.AddString("gamemode", "Gamemode", new string[] { "None", "HotPotato", "Battle Royale" });
+            public static readonly CustomNumberOption HotPotatoTimer = CustomOption.AddNumber("hotpotatotimer", "HotPotato-Timer", true, 10, 2, 60, 2);
+            
+            public static void SectionGeneralListener(bool value)
+            {
+                Venting.MenuVisible = value;
+                ReportBodys.MenuVisible = value;
+                Sabotaging.MenuVisible = value;
+            }
+            
+            public static void SectionSpecialListener(bool value)
+            {
+                CrewVenting.MenuVisible = value;
+                VentBuilding.MenuVisible = value;
+                VentBuildingCooldown.MenuVisible = value;
+                BodyDragging.MenuVisible = value;
+                Invisibility.MenuVisible = value;
+                InvisibilityCooldown.MenuVisible = value;
+                InvisibilityDuration.MenuVisible = value;
+                FreezeTime.MenuVisible = value;
+                FreezeTimeCooldown.MenuVisible = value;
+                FreezeTimeDuration.MenuVisible = value;
+                Morphing.MenuVisible = value;
+                MorphingCooldown.MenuVisible = value;
+            }
+            
+            public static void SectionRolesListener(bool value)
+            {
+                JesterAmount.MenuVisible = value;
+                DoctorAmount.MenuVisible = value;
+                DoctorCooldown.MenuVisible = value;
+                MayorAmount.MenuVisible = value;
+                InspectorAmount.MenuVisible = value;
+                SheriffAmount.MenuVisible = value;
+                SheriffCooldown.MenuVisible = value;
+            }
+            
+            public enum GameMode
+            {
+                None = 0,
+                HotPotato = 1,
+                BattleRoyale = 2
+            }
+
+            public static bool IsGameMode(GameMode mode)
+            {
+                if (Gamemode.GetValue() == (int) mode)
+                    return true;
+                return false;
+            }
 
             [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Update))]
             class GameOptionsMenuUpdate
             {
                 static void Postfix(ref GameOptionsMenu __instance)
                 {
-                    __instance.GetComponentInParent<Scroller>().YBounds.max = 20f;
+                    __instance.GetComponentInParent<Scroller>().YBounds.max = 21.5f;
                 }
             }
 
@@ -81,21 +145,26 @@ namespace Peasmod
                 static void Prefix(GameSettingMenu __instance)
                 {
                     __instance.HideForOnline = new Il2CppReferenceArray<Transform>(0);
+                    
+                    SectionGeneral.SetValue(false);
+                    SectionGeneral.OnValueChanged += (sender,args) => { SectionGeneralListener((bool)args.Value); };
+                    
+                    SectionSpecial.SetValue(false);
+                    SectionSpecial.OnValueChanged += (sender,args) => { SectionSpecialListener((bool)args.Value); };
+                    
+                    SectionRoles.SetValue(false);
+                    SectionRoles.OnValueChanged += (sender,args) => { SectionRolesListener((bool)args.Value); };
                 }
             }
         }
 
-        public override void Load()
+        public static IRegionInfo RegisterServer(string name, string ip, ushort port)
         {
-            var ServerName = Config.Bind("Server", "Name", "Peaspowered");
-            var ServerIp = Config.Bind("Server", "Ipv4 or Hostname", "au.peasplayer.tk");
-            var ServerPort = Config.Bind("Server", "Port", (ushort)30205);
-            var ip = ServerIp.Value;
-            if (Uri.CheckHostName(ServerIp.Value).ToString() == "Dns")
+            if (Uri.CheckHostName(ip).ToString() == "Dns")
             {
                 try
                 {
-                    foreach (IPAddress address in Dns.GetHostAddresses(ServerIp.Value))
+                    foreach (IPAddress address in Dns.GetHostAddresses(ip))
                         if (address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                         {
                             ip = address.ToString();
@@ -104,14 +173,69 @@ namespace Peasmod
                 }
                 catch {}
             }
-            var port = ServerPort.Value;
-            var defaultRegions = new List<RegionInfo>();
-            defaultRegions.Insert(0, new RegionInfo(
-                ServerName.Value, ip, new[] {
-                    new ServerInfo($"{ServerName.Value}-Master-1", ip, port)
-                })
-            );
+
+            return new DnsRegionInfo(name, name, StringNames.NoTranslation, new[]
+            {
+                new ServerInfo($"{name}-Master-1", ip, port)
+            }).Cast<IRegionInfo>();
+        }
+        
+        public override void Load()
+        {
+            #region ServerRegions
+            var defaultRegions = new List<IRegionInfo>();
+            defaultRegions.Add(RegisterServer(Config.Bind("Server", "Name", "Peaspowered").Value, 
+                Config.Bind("Server", "Ipv4 or Hostname", "au.peasplayer.tk").Value, 
+                Config.Bind("Server", "Port", (ushort)25911).Value));
+            //defaultRegions.Add(RegisterServer("skeld.net", "192.241.154.115", 22023));
+            defaultRegions.Add(RegisterServer("matux.fr", "152.228.160.91", 22023));
+            var UseLocalHost = Config.Bind("Server", "UseLocalHost", false);
+            if (UseLocalHost.Value)
+            {
+                defaultRegions.Add(RegisterServer("Localhost", "127.0.0.1", Config.Bind("Server", "LocalPort", (ushort)22023).Value));
+            }
             ServerManager.DefaultRegions = defaultRegions.ToArray();
+            ServerManager.Instance.AvailableRegions = defaultRegions.ToArray();
+            ServerManager.Instance.SaveServers();
+            regionInfos = defaultRegions;
+            #endregion ServerRegions
+            Logger = this.Log;
+            CustomOption.ShamelessPlug = false;
+            #region OptionsHudVisibility
+            Settings.SectionGeneralListener(false);
+            Settings.SectionSpecialListener(false);
+            Settings.SectionRolesListener(false);
+            Settings.Venting.HudVisible = false;
+            Settings.ReportBodys.HudVisible = false;
+            Settings.Sabotaging.HudVisible = false;
+            Settings.CrewVenting.HudVisible = false;
+            Settings.VentBuilding.HudVisible = false;
+            Settings.VentBuildingCooldown.HudVisible = false;
+            Settings.BodyDragging.HudVisible = false;
+            Settings.Invisibility.HudVisible = false;
+            Settings.InvisibilityCooldown.HudVisible = false;
+            Settings.InvisibilityDuration.HudVisible = false;
+            Settings.FreezeTime.HudVisible = false;
+            Settings.FreezeTimeCooldown.HudVisible = false;
+            Settings.FreezeTimeDuration.HudVisible = false;
+            Settings.Morphing.HudVisible = false;
+            Settings.MorphingCooldown.HudVisible = false;
+            Settings.JesterAmount.HudVisible = false;
+            Settings.DoctorAmount.HudVisible = false;
+            Settings.DoctorCooldown.HudVisible = false;
+            Settings.MayorAmount.HudVisible = false;
+            Settings.InspectorAmount.HudVisible = false;
+            Settings.SheriffAmount.HudVisible = false;
+            Settings.SheriffCooldown.HudVisible = false;
+            Settings.Gamemode.HudVisible = false;
+            Settings.HotPotatoTimer.HudVisible = false;
+            #endregion OptionsHudVisibility
+            /*
+             * I disabled the credits in game. I provide credit here and on my repository. If there is any problem with the author of this library feel free to contact me via email: peasplayer@peasplayer.t
+             * Essentials: https://github.com/DorCoMaNdO/Reactor-Essentials
+             * Author: DorComando (https://github.com/DorCoMaNdO)
+             */
+            Harmony.Unpatch(typeof(UdpConnection).GetMethod("HandleSend"), HarmonyPatchType.Prefix, ReactorPlugin.Id);
             Harmony.PatchAll();
         }
 
@@ -140,6 +264,7 @@ namespace Peasmod
          * Summoner: Kann einen rausgevoteten Spieler reviven.
          * Assassin: Impostor geben ihm einmal einen Kill-Auftrag
          * Snitch: Wenn er alle Tasks gemacht hat sieht er die Impostor, ab 2 übrigen Tasks sehen die Impostor ihn
+         * President: Kann jemandem zum Major machen
          * 
          * Gamemodes:
          * Freeze-Tag
@@ -166,34 +291,12 @@ namespace Peasmod
             }
         }
 
-        [HarmonyPatch(typeof(UseButtonManager), nameof(UseButtonManager.SetTarget))]
-        class SabotagePatch
-        {
-            static void Postfix(UseButtonManager __instance)
-            {
-                if (!Settings.sabotaging.GetValue())
-                {
-                    if(__instance.currentTarget == null)
-                    {
-                        __instance.UseButton.sprite = __instance.UseImage;
-                        __instance.UseButton.color = UseButtonManager.DisabledColor;
-                        __instance.enabled = false;
-                    } 
-                    else
-                    {
-                        __instance.UseButton.color = UseButtonManager.EnabledColor;
-                        __instance.enabled = true;
-                    }
-                }
-            }
-        }
-
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.ReportClosest))]
         class BodyReportButtonPatch
         {
             static void Prefix(PlayerControl __instance)
             {   
-                if(!Settings.reportbodys.GetValue())
+                if(!Settings.ReportBodys.GetValue() || Peasmod.Settings.IsGameMode(Settings.GameMode.BattleRoyale) || Peasmod.Settings.IsGameMode(Settings.GameMode.HotPotato))
                 {
                     foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(__instance.GetTruePosition(), __instance.MaxReportDistance, Constants.PlayersOnlyMask))
                     {
@@ -201,7 +304,7 @@ namespace Peasmod
                         {
                             DeadBody component = (DeadBody)((Component)collider2D).GetComponent<DeadBody>();
                             component.Reported = true;
-                            DestroyableSingleton<ReportButtonManager>.Instance.renderer.color = Palette.DisabledColor;
+                            DestroyableSingleton<ReportButtonManager>.Instance.renderer.color = Palette.DisabledClear;
                             DestroyableSingleton<ReportButtonManager>.Instance.renderer.material.SetFloat("_Desat", 1f);
                         }
                     }
@@ -215,7 +318,7 @@ namespace Peasmod
             public static bool Prefix(Vent __instance, ref float __result, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
             {   
                 float distance = float.MaxValue;
-                if (!__instance.enabled || !Settings.venting.GetValue())
+                if (!__instance.enabled || !Settings.Venting.GetValue())
                 {
                     canUse = false;
                     couldUse = false;
@@ -232,7 +335,7 @@ namespace Peasmod
                 }
                 else
                 {
-                    if (Settings.crewventing.GetValue())
+                    if (Settings.CrewVenting.GetValue())
                     {
                         couldUse = !localPlayer.Data.IsDead;
                         canUse = couldUse;
@@ -255,7 +358,7 @@ namespace Peasmod
         {
             public static void Postfix(PingTracker __instance)
             {
-                __instance.text.Text += "\n"+PluginName+" v"+PluginVersion+ "\n by " + StringColor.Green + PluginAuthor;
+                __instance.text.text += "\n"+PluginName+" v"+PluginVersion+ "\n by " + StringColor.Green + PluginAuthor;
             }
         }
 
@@ -264,10 +367,39 @@ namespace Peasmod
         {
             static void Postfix(VersionShower __instance)
             {
-                __instance.text.Text += "\nReactor-Framework"+"\n" + PluginName + " v" + PluginVersion + " by " + StringColor.Green + PluginAuthor;
-                UnityEngine.GameObject.Destroy(UnityEngine.GameObject.Find("ReactorVersion"));
+                __instance.text.text += "\nReactor-Framework" + "\n" + PluginName + " v" + PluginVersion + " \nby " + StringColor.Green + PluginAuthor + " " + StringColor.Reset + PluginPage;
+                __instance.transform.position -= new Vector3(0, 0.5f, 0);
+                AccountManager.Instance.accountTab.gameObject.SetActive(false);
+                foreach (var _object in GameObject.FindObjectsOfTypeAll(Il2CppType.Of<GameObject>()))
+                    if (_object.name.Contains("ReactorVersion"))
+                        GameObject.Destroy(_object);
                 //if(UnityEngine.Object.FindObjectOfType<MainMenuManager>() != null && UnityEngine.Object.FindObjectOfType<MainMenuManager>().Announcement != null)
                 //UnityEngine.Object.FindObjectOfType<MainMenuManager>().Announcement.gameObject.SetActive(true);
+            }
+        }
+        
+        [HarmonyPatch(typeof(MainMenuManager), "Start")]
+        public static class MainMenuManagerStartPatch
+        {
+            public static void Postfix()
+            {
+                Texture2D tex = GUIExtensions.CreateEmptyTexture();
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                Stream myStream = assembly.GetManifestResourceStream("Peasmod.Resources.Peasmod.png");
+                byte[] buttonTexture = Reactor.Extensions.Extensions.ReadFully(myStream);
+                ImageConversion.LoadImage(tex, buttonTexture, false);
+                GameObject.Find("bannerLogo_AmongUs").GetComponent<SpriteRenderer>().sprite = GUIExtensions.CreateSprite(tex);
+                GameObject.Find("AmongUsLogo").GetComponent<SpriteRenderer>().sprite = GUIExtensions.CreateSprite(tex);
+                GameObject.Find("AmongUsLogo").transform.position += new Vector3(0.3f, 0, 0);
+            }
+        }
+
+        [HarmonyPatch(typeof(JoinGameButton), nameof(JoinGameButton.OnClick))]
+        public static class JoinGameButtonOnClickPatch
+        {
+            static void Postfix(JoinGameButton __instance)
+            {
+                AmongUsClient.Instance.SetEndpoint(DestroyableSingleton<ServerManager>.Instance.OnlineNetAddress, DestroyableSingleton<ServerManager>.Instance.OnlineNetPort);
             }
         }
 

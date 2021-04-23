@@ -20,7 +20,7 @@ namespace Peasmod.Gamemodes
         {
             CurrentTarget.Data.IsImpostor = true;
             PlayerControl.LocalPlayer.Data.IsImpostor = false;
-            PlayerControl.LocalPlayer.nameText.Color = Palette.White;
+            PlayerControl.LocalPlayer.nameText.color = Palette.White;
             HotPotatoMode.timer.GetComponent<TextRenderer>().Text = string.Empty;
             HotPotatoMode.TimeTillDeath -= 0.25f;
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.PotatoPassed, Hazel.SendOption.None, -1);

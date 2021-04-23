@@ -30,58 +30,63 @@ namespace Peasmod.Patches
         public static void Postfix(HudManager __instance)
         {
             #region GameSettingsText
-            if (__instance.GameSettings != null && !__instance.GameSettings.Text.Contains("Peasplayer") && __instance.GameSettings.Text.Contains("Peasmod"))
+            if (__instance.GameSettings != null && !__instance.GameSettings.text.Contains("Peasplayer") && __instance.GameSettings.text.Contains("Peasmod"))
             {
-                string[] settings = __instance.GameSettings.Text.Split("\nSection");
-                __instance.GameSettings.Text = StringColor.Green + "Peasplayer" + StringColor.Lime + " feat. DrSchwammkopf" + StringColor.Reset + "\n" + settings[0];
+                string[] settings = __instance.GameSettings.text.Split("\nSection");
+                __instance.GameSettings.text = StringColor.Green + "Peasplayer" + StringColor.Reset + "\n" + settings[0];
                 string mode = "\nGamemode: ";
-                if (Peasmod.Settings.hotpotato.GetValue())
+                if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.HotPotato))
                 {
                     mode += "HotPotato";
-                    __instance.GameSettings.Text += mode;
+                    __instance.GameSettings.text += mode;
+                }
+                else if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale))
+                {
+                    mode += "Battle Royale";
+                    __instance.GameSettings.text += mode;
                 }
                 else
                 {
                     string roles = "\nRoles: ";
-                    if (Peasmod.Settings.jesteramount.GetValue() > 0)
+                    if (Peasmod.Settings.JesterAmount.GetValue() > 0)
                     {
                         if (roles == "\nRoles: ")
-                            roles += Peasmod.Settings.jesteramount.GetValue() + " Jester";
+                            roles += Peasmod.Settings.JesterAmount.GetValue() + " Jester";
                         else
-                            roles += ", " + Peasmod.Settings.jesteramount.GetValue() + " Jester"; ;
+                            roles += ", " + Peasmod.Settings.JesterAmount.GetValue() + " Jester"; ;
                     }
-                    if (Peasmod.Settings.doctoramount.GetValue() > 0)
+                    if (Peasmod.Settings.DoctorAmount.GetValue() > 0)
                     {
                         if (roles == "\nRoles: ")
-                            roles += Peasmod.Settings.doctoramount.GetValue() + " Doctor";
+                            roles += Peasmod.Settings.DoctorAmount.GetValue() + " Doctor";
                         else
-                            roles += ", " + Peasmod.Settings.doctoramount.GetValue() + " Doctor"; ;
+                            roles += ", " + Peasmod.Settings.DoctorAmount.GetValue() + " Doctor"; ;
                     }
-                    if (Peasmod.Settings.mayoramount.GetValue() > 0)
+                    if (Peasmod.Settings.MayorAmount.GetValue() > 0)
                     {
                         if (roles == "\nRoles: ")
-                            roles += Peasmod.Settings.mayoramount.GetValue() + " Mayor";
+                            roles += Peasmod.Settings.MayorAmount.GetValue() + " Mayor";
                         else
-                            roles += ", " + Peasmod.Settings.mayoramount.GetValue() + " Mayor"; ;
+                            roles += ", " + Peasmod.Settings.MayorAmount.GetValue() + " Mayor"; ;
                     }
-                    if (Peasmod.Settings.inspectoramount.GetValue() > 0)
+                    if (Peasmod.Settings.InspectorAmount.GetValue() > 0)
                     {
                         if (roles == "\nRoles: ")
-                            roles += Peasmod.Settings.inspectoramount.GetValue() + " Inspector";
+                            roles += Peasmod.Settings.InspectorAmount.GetValue() + " Inspector";
                         else
-                            roles += ", " + Peasmod.Settings.inspectoramount.GetValue() + " Inspector"; ;
+                            roles += ", " + Peasmod.Settings.InspectorAmount.GetValue() + " Inspector"; ;
                     }
-                    if (Peasmod.Settings.sheriffamount.GetValue() > 0)
+                    if (Peasmod.Settings.SheriffAmount.GetValue() > 0)
                     {
                         if (roles == "\nRoles: ")
-                            roles += Peasmod.Settings.sheriffamount.GetValue() + " Sheriff";
+                            roles += Peasmod.Settings.SheriffAmount.GetValue() + " Sheriff";
                         else
-                            roles += ", " + Peasmod.Settings.sheriffamount.GetValue() + " Sheriff"; ;
+                            roles += ", " + Peasmod.Settings.SheriffAmount.GetValue() + " Sheriff"; ;
                     }
-                    __instance.GameSettings.Text += roles;
+                    __instance.GameSettings.text += roles;
                     string special = "\nSpecial: ";
                     var specials = 0;
-                    if (Peasmod.Settings.crewventing.GetValue())
+                    if (Peasmod.Settings.CrewVenting.GetValue())
                     {
                         if (special == "\nSpecial: ")
                             special += "Crew-Venting";
@@ -89,7 +94,7 @@ namespace Peasmod.Patches
                             special += ", Crew-Venting";
                         ++specials;
                     }
-                    if (Peasmod.Settings.ventbuilding.GetValue())
+                    if (Peasmod.Settings.VentBuilding.GetValue())
                     {
                         if (special == "\nSpecial: ")
                             special += "Vent-Building";
@@ -97,7 +102,7 @@ namespace Peasmod.Patches
                             special += ", Vent-Building";
                         ++specials;
                     }
-                    if (Peasmod.Settings.bodydragging.GetValue())
+                    if (Peasmod.Settings.BodyDragging.GetValue())
                     {
                         if (special == "\nSpecial: ")
                             special += "Body-Dragging";
@@ -105,7 +110,7 @@ namespace Peasmod.Patches
                             special += ", Body-Dragging";
                         ++specials;
                     }
-                    if (Peasmod.Settings.invisibility.GetValue())
+                    if (Peasmod.Settings.Invisibility.GetValue())
                     {
                         if (special == "\nSpecial: ")
                             special += "Invisibility";
@@ -118,7 +123,7 @@ namespace Peasmod.Patches
                             special += ", Invisibility";
                         ++specials;
                     }
-                    if (Peasmod.Settings.freezetime.GetValue())
+                    if (Peasmod.Settings.FreezeTime.GetValue())
                     {
                         if (special == "\nSpecial: ")
                             special += "Time-Freezing";
@@ -131,7 +136,7 @@ namespace Peasmod.Patches
                             special += ", Time-Freezing";
                         ++specials;
                     }
-                    if (Peasmod.Settings.morphing.GetValue())
+                    if (Peasmod.Settings.Morphing.GetValue())
                     {
                         if (special == "\nSpecial: ")
                             special += "Morphing";
@@ -144,23 +149,23 @@ namespace Peasmod.Patches
                             special += ", Morphing";
                         ++specials;
                     }
-                    __instance.GameSettings.Text += special;
+                    __instance.GameSettings.text += special;
                 }
             }
             #endregion GameSettingsText
             if (!PlayerControl.LocalPlayer) return;
             #region HotPotatoMode
-            if (Peasmod.Settings.hotpotato.GetValue())
+            if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.HotPotato))
             {
                 foreach (var player in PlayerControl.AllPlayerControls)
                 {
                     if (player.Data.IsImpostor)
                     {
-                        player.nameText.Color = HotPotatoMode.color;
+                        player.nameText.color = HotPotatoMode.color;
                     } 
                     else
                     {
-                        player.nameText.Color = Palette.White;
+                        player.nameText.color = Palette.White;
                     }
                 }
                 HudManager.Instance.KillButton.gameObject.SetActive(false);
@@ -192,11 +197,14 @@ namespace Peasmod.Patches
                             writer.Write(PlayerControl.LocalPlayer.PlayerId);
                             writer.Write(player.PlayerId);
                             AmongUsClient.Instance.FinishRpcImmediately(writer);
+                            player.Data.IsImpostor = true;
                             PlayerControl.LocalPlayer.Die(DeathReason.Kill);
                             PlayerControl.LocalPlayer.Data.IsImpostor = false;
                             PlayerControl.LocalPlayer.Collider.enabled = false;
                             HudManager.Instance.ShadowQuad.gameObject.SetActive(false);
-                            var potato = Utils.CreateSprite("Peasmod.Resources.Potato.png");
+                            var potato = new GameObject("potato");
+                            var render = potato.AddComponent<SpriteRenderer>();
+                            render.sprite = Utils.CreateSprite("Peasmod.Resources.Potato.png");
                             var scale = new Vector3(potato.transform.localScale.x + 2f, potato.transform.localScale.y + 2f);
                             potato.transform.localScale = scale;
                             potato.transform.position = PlayerControl.LocalPlayer.GetTruePosition();
@@ -204,45 +212,116 @@ namespace Peasmod.Patches
                             writer.Write(PlayerControl.LocalPlayer.PlayerId);
                             AmongUsClient.Instance.FinishRpcImmediately(writer);
                         }
-                        if(Utils.GetDistBetweenPlayers(PlayerControl.LocalPlayer, Utils.GetClosestPlayer(PlayerControl.LocalPlayer)) <= GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance])
+                        if(Utils.GetClosestPlayer(PlayerControl.LocalPlayer) != null && Utils.GetDistBetweenPlayers(PlayerControl.LocalPlayer, Utils.GetClosestPlayer(PlayerControl.LocalPlayer)) <= GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance])
                         {
                             HotPotatoMode.CurrentTarget = Utils.GetClosestPlayer(PlayerControl.LocalPlayer);
                             HotPotatoMode.button.enabled = true;
-                            HotPotatoMode.button.killButtonManager.renderer.color = Palette.EnabledColor;
+                            HotPotatoMode.button.killButtonManager.renderer.sprite = Utils.CreateSprite("Peasmod.Resources.Kill.png");
                         }
                         else
                         {
                             HotPotatoMode.CurrentTarget = null;
                             HotPotatoMode.button.enabled = false;
-                            HotPotatoMode.button.killButtonManager.renderer.color = Palette.DisabledColor;
+                            HotPotatoMode.button.killButtonManager.renderer.color = Palette.DisabledClear;
                         }
                     }
                 }
             }
             #endregion HotPotatoMode
+            #region BattleRoyaleMode
+            else if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale))
+            {
+                if(Peasmod.GameStarted)
+                {
+                    //if (BattleRoyaleMode.button != null)
+                    //    BattleRoyaleMode.button.killButtonManager.transform.position = HudManager.Instance.KillButton.transform.position;
+                    if (PlayerControl.LocalPlayer.Data.IsDead)
+                        HudManager.Instance.KillButton.gameObject.SetActive(false);
+                    else
+                    {
+                        if (PlayerControl.LocalPlayer.FindClosestTarget(GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance]) != null)
+                        {
+                            //BattleRoyaleMode.CurrentTarget = Utils.GetClosestPlayer(PlayerControl.LocalPlayer);
+                            var target = PlayerControl.LocalPlayer.FindClosestTarget(
+                                GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance]);
+                            HudManager.Instance.KillButton.enabled = true;
+                            HudManager.Instance.KillButton.renderer.color = Palette.EnabledColor;
+                            HudManager.Instance.KillButton.renderer.material.SetFloat("_Desat", 0.0f);
+                            HudManager.Instance.KillButton.SetTarget(target);
+                        }
+                        else
+                        {
+                            //BattleRoyaleMode.CurrentTarget = null;
+                            HudManager.Instance.KillButton.enabled = false;
+                            HudManager.Instance.KillButton.renderer.color = Palette.DisabledClear;
+                            HudManager.Instance.KillButton.SetTarget(null);
+                        }
+                    }
+                    /*PlayerControl target = Utils.GetClosestPlayer(PlayerControl.LocalPlayer);
+                    if (Utils.GetDistBetweenPlayers(PlayerControl.LocalPlayer, target) > GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance])
+                        target = null;
+                    if (target == null)
+                    {
+                        BattleRoyaleMode.button.killButtonManager.renderer.color = Palette.DisabledColor;
+                        if (BattleRoyaleMode.CurrentTarget != null)
+                        {
+                            SpriteRenderer renderer = BattleRoyaleMode.CurrentTarget.myRend;
+                            renderer.material.SetFloat("_Outline", 0f);
+                        }
+                        BattleRoyaleMode.CurrentTarget = target;
+                        BattleRoyaleMode.button.enabled = false;
+                    }
+                    else
+                    {
+                        SpriteRenderer renderer = target.myRend;
+                        renderer.material.SetFloat("_Outline", 1f);
+                        renderer.material.SetColor("_OutlineColor", Color.red);
+                        if (BattleRoyaleMode.CurrentTarget != null)
+                        {
+                            renderer = BattleRoyaleMode.CurrentTarget.myRend;
+                            renderer.material.SetFloat("_Outline", 1f);
+                            renderer.material.SetColor("_OutlineColor", Color.red);
+                        }
+                        BattleRoyaleMode.button.killButtonManager.renderer.color = Palette.EnabledColor;
+                        BattleRoyaleMode.CurrentTarget = target;
+                        BattleRoyaleMode.button.enabled = true;
+                    }
+                    BattleRoyaleMode.button.killButtonManager.renderer.color = Palette.DisabledGrey;*/
+                    if (BattleRoyaleMode.HasKilled)
+                        HudManager.Instance.KillButton.SetCoolDown(0, 1);
+                    foreach(var player in PlayerControl.AllPlayerControls)
+                    {
+                        if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId)
+                            player.nameText.color = Palette.ImpostorRed;
+                        else
+                            player.nameText.color = Palette.White;
+                    }
+                }
+            }
+            #endregion BattleRoyaleMode
             #region JesterMode
             if (PlayerControl.LocalPlayer.IsRole(Role.Jester))
-                PlayerControl.LocalPlayer.nameText.Color = JesterMode.JesterColor;
+                PlayerControl.LocalPlayer.nameText.color = JesterMode.JesterColor;
             #endregion JesterMode
             #region DoctorMode
             if (PlayerControl.LocalPlayer.IsRole(Role.Doctor))
-                PlayerControl.LocalPlayer.nameText.Color = DoctorMode.DoctorColor;
+                PlayerControl.LocalPlayer.nameText.color = DoctorMode.DoctorColor;
             #endregion JesterMode
             #region MayorMode
             if (PlayerControl.LocalPlayer.IsRole(Role.Mayor))
-                PlayerControl.LocalPlayer.nameText.Color = MayorMode.MayorColor;
+                PlayerControl.LocalPlayer.nameText.color = MayorMode.MayorColor;
             #endregion MayorMode
             #region InspectorMode
             if (PlayerControl.LocalPlayer.IsRole(Role.Inspector))
-                PlayerControl.LocalPlayer.nameText.Color = InspectorMode.InspectorColor;
+                PlayerControl.LocalPlayer.nameText.color = InspectorMode.InspectorColor;
             #endregion InspectorMode
             #region SheriffMode
             if (PlayerControl.LocalPlayer.IsRole(Role.Sheriff))
-                PlayerControl.LocalPlayer.nameText.Color = SheriffMode.SheriffColor;
+                PlayerControl.LocalPlayer.nameText.color = SheriffMode.SheriffColor;
             #endregion SheriffMode
             #region VentBuilding
             CooldownButton.HudUpdate();
-            if(Peasmod.Settings.ventbuilding.GetValue())
+            if(Peasmod.Settings.VentBuilding.GetValue())
             {
                 if (VentBuilding.button != null)
                 {
@@ -252,7 +331,7 @@ namespace Peasmod.Patches
                         hits = hits.ToArray().Where((c) => (c.name.Contains("Vent") || !c.isTrigger) && c.gameObject.layer != 8 && c.gameObject.layer != 5).ToArray();
                         if (hits.Count() != 0)
                         {
-                            VentBuilding.button.killButtonManager.renderer.color = Palette.DisabledColor;
+                            VentBuilding.button.killButtonManager.renderer.color = Palette.DisabledClear;
                             VentBuilding.button.enabled = false;
                         }
                         else
@@ -287,7 +366,7 @@ namespace Peasmod.Patches
                         }
                         if (bodys.Count == 0)
                         {
-                            BodyDragging.button.killButtonManager.renderer.color = Palette.DisabledColor;
+                            BodyDragging.button.killButtonManager.renderer.color = Palette.DisabledClear;
                             BodyDragging.button.enabled = false;
                         }
                         else
@@ -315,7 +394,7 @@ namespace Peasmod.Patches
                     }
                     if (bodys.Count == 0)
                     {
-                        DoctorMode.button.killButtonManager.renderer.color = Palette.DisabledColor;
+                        DoctorMode.button.killButtonManager.renderer.color = Palette.DisabledClear;
                         DoctorMode.button.enabled = false;
                     }
                     else
@@ -342,7 +421,7 @@ namespace Peasmod.Patches
                             target = null;
                         if (target == null)
                         {
-                            SheriffMode.button.killButtonManager.renderer.color = Palette.DisabledColor;
+                            SheriffMode.button.killButtonManager.renderer.color = Palette.DisabledClear;
                             if (SheriffMode.CurrentTarget != null)
                             {
                                 SpriteRenderer renderer = SheriffMode.CurrentTarget.myRend;
@@ -377,9 +456,9 @@ namespace Peasmod.Patches
                 {
                     if (PlayerControl.LocalPlayer.PlayerId == player.PlayerId || PlayerControl.LocalPlayer.Data.IsImpostor)
                     {
-                        player.myRend.color = Palette.DisabledColor;
-                        player.HatRenderer.color = Palette.DisabledColor;
-                        player.MyPhysics.Skin.layer.color = Palette.DisabledColor;
+                        player.myRend.color = Palette.DisabledClear;
+                        player.HatRenderer.color = Palette.DisabledClear;
+                        player.MyPhysics.Skin.layer.color = Palette.DisabledClear;
                     }
                     else
                     {
@@ -388,21 +467,25 @@ namespace Peasmod.Patches
                 }
             }
             #endregion InvisibilityMode
+            #region ThanosMode
+            if (PlayerControl.LocalPlayer.IsRole(Role.Thanos))
+                PlayerControl.LocalPlayer.nameText.color = ThanosMode.ThanosColor;
+            #endregion ThanosMode
             #region TimeFreezing
             if (TimeFreezing.timeIsFroozen && !PlayerControl.LocalPlayer.Data.IsImpostor)
             {
-                Utils.Log("froozen");
                 if(!PlayerControl.LocalPlayer.Data.IsDead)
                 {
                     PlayerControl.LocalPlayer.moveable = false;
                     if (Minigame.Instance != null)
                         Minigame.Instance.ForceClose();
-                    PlayerControl.LocalPlayer.MyPhysics.ResetAnim();
+                    PlayerControl.LocalPlayer.MyPhysics.ResetAnimState();
+                    PlayerControl.LocalPlayer.MyPhysics.ResetMoveState();
                     PlayerControl.LocalPlayer.MyPhysics.body.velocity = Vector2.zero;
                 }
             }
             #endregion TimeFreezing
-            if (ShipstatusOnEnablePatch.gameStarted)
+            if (Peasmod.GameStarted)
             {
                 #region InspectorMode
                 if (Timer < 0f)
@@ -457,7 +540,7 @@ namespace Peasmod.Patches
                     MorphingMode.button.killButtonManager.gameObject.active = false;
                 }
                 #endregion MorphingMode
-                if(!Peasmod.Settings.reportbodys.GetValue())
+                if(!Peasmod.Settings.ReportBodys.GetValue() || Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale))
                 {
                     HudManager.Instance.ReportButton.gameObject.SetActive(false);
                 }
@@ -465,15 +548,16 @@ namespace Peasmod.Patches
             else
             {
                 TimeFreezing.timeIsFroozen = false;
-                PlayerControl.LocalPlayer.moveable = true;
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.UnfreezeTime, Hazel.SendOption.None, -1);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                //if (!PlayerControl.LocalPlayer.moveable)
+                //    PlayerControl.LocalPlayer.moveable = true;
+                //MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.UnfreezeTime, Hazel.SendOption.None, -1);
+                //AmongUsClient.Instance.FinishRpcImmediately(writer);
                 var notinvisplayers = new List<Byte>();
                 foreach (var player in InvisibilityMode.invisplayers)
                 {
                     if(Utils.GetPlayer(player) != null)
                     {
-                        writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.Visible, Hazel.SendOption.None, -1);
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.Visible, Hazel.SendOption.None, -1);
                         writer.WritePacked(player);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         var visible = Utils.GetPlayer(player);
@@ -497,6 +581,12 @@ namespace Peasmod.Patches
     {
         static void Prefix(PlayerControl __instance)
         {
+            #region BattleRoyle
+            if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale) && Peasmod.GameStarted)
+            {
+                __instance.Data.IsImpostor = !__instance.Data.IsDead;
+            } 
+            #endregion BattleRoyale
             #region VentBuilding
             if (__instance.AmOwner && VentBuilding.button != null && VentBuilding.button.killButtonManager != null)
             {
@@ -507,7 +597,7 @@ namespace Peasmod.Patches
             }
             #endregion VentBuilding
             #region BodyDragging
-            if(Peasmod.Settings.bodydragging.GetValue())
+            if(Peasmod.Settings.BodyDragging.GetValue())
             {
                 if (BodyDragging.draggers.Contains(__instance.PlayerId))
                 {
@@ -515,6 +605,28 @@ namespace Peasmod.Patches
                 }
             }
             #endregion BodyDragging
+        }
+    }
+
+    [HarmonyPatch(typeof(UseButtonManager), nameof(UseButtonManager.SetTarget))]
+    class SabotagePatch
+    {
+        static void Postfix(UseButtonManager __instance)
+        {
+            if ((!Peasmod.Settings.Sabotaging.GetValue() || Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale)) && Peasmod.GameStarted)
+            {
+                if (__instance.currentTarget == null)
+                {
+                    //__instance.UseButton.sprite = 
+                    __instance.UseButton.color = UseButtonManager.DisabledColor;
+                    __instance.enabled = false;
+                }
+                else
+                {
+                    __instance.UseButton.color = UseButtonManager.EnabledColor;
+                    __instance.enabled = true;
+                }
+            }
         }
     }
 }

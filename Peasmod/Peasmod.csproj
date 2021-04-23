@@ -1,28 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
-        <Version>1.8.0</Version>
-        <Mappings>NuclearPowered/Mappings:0.1.2</Mappings>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Version>2.1.0</Version>
+		<Mappings>NuclearPowered/Mappings:0.4.0</Mappings>
 
-        <Description>Peasnod</Description>
-        <Authors>Peasplayer</Authors>
-    </PropertyGroup>
+		<Description>Peasmod</Description>
+		<Authors>Peasplayer</Authors>
+		<GameVersion>2021.4.12s</GameVersion>
+		<DefineConstants>$(DefineConstants);STEAM</DefineConstants>
+		<LangVersion>preview</LangVersion>
+	</PropertyGroup>
 
-    <PropertyGroup Condition="'$(GamePlatform)' == 'Steam'">
-        <GameVersion>2020.12.9s</GameVersion>
-        <DefineConstants>$(DefineConstants);STEAM</DefineConstants>
-    </PropertyGroup>
+	<ItemGroup>
+		<Deobfuscate Include="$(AmongUs)\BepInEx\plugins\Reactor-$(GameVersion).dll" />
+	</ItemGroup>
 
-    <PropertyGroup Condition="'$(GamePlatform)' == 'Itch'">
-        <GameVersion>2020.11.17i</GameVersion>
-        <DefineConstants>$(DefineConstants);ITCH</DefineConstants>
-    </PropertyGroup>
+	<Target Name="Copy" AfterTargets="Reobfuscate">
+		<Copy SourceFiles="$(OutputPath)reobfuscated/$(AssemblyName)-$(GameVersion).dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" />
+	</Target>
 
     <ItemGroup>
 		<None Remove="Resources\BuildVent.png" />
 		<None Remove="Resources\Dot.png" />
 		<None Remove="Resources\Hats\DreamMask.png" />
 		<None Remove="Resources\Hats\PeasMask.png" />
+		<None Remove="Resources\Hats\KristalCrown.png" />
 		<None Remove="Resources\Label.png" />
 		<None Remove="Resources\Morphing.png" />
 		<None Remove="Resources\Revive.png" />
@@ -32,10 +34,12 @@
 		<None Remove="Resources\TimeFreezing.png" />
 		<None Remove="Resources\Kill.png" />
 		<None Remove="Resources\Potato.png" />
+		<None Remove="Resources\Peasmod.png" />
 	</ItemGroup>
 
     <ItemGroup>
         <Deobfuscate Include="$(AmongUs)\BepInEx\plugins\Reactor-$(GameVersion).dll" />
+		<Deobfuscate Include="$(AmongUs)\BepInEx\plugins\Essentials-$(GameVersion).dll" />
         <EmbeddedResource Include="Resources\BuildVent.png" />
 		<EmbeddedResource Include="Resources\Revive.png" />
 		<EmbeddedResource Include="Resources\DragBody.png" />
@@ -46,19 +50,22 @@
 		<EmbeddedResource Include="Resources\Label.png" />
 		<EmbeddedResource Include="Resources\Hats\PeasMask.png" />
 		<EmbeddedResource Include="Resources\Hats\DreamMask.png" />
+		<EmbeddedResource Include="Resources\Hats\KristalCrown.png" />
 		<EmbeddedResource Include="Resources\Morphing.png" />
 		<EmbeddedResource Include="Resources\Kill.png" />
 		<EmbeddedResource Include="Resources\Potato.png" />
-        <PackageReference Include="Reactor.OxygenFilter.MSBuild" Version="0.2.5" />
+		<EmbeddedResource Include="Resources\Peasmod.png" />
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="Essentials">
-        <HintPath>$(AmongUs)\BepInEx\plugins\Essentials-$(GameVersion).dll</HintPath>
-      </Reference>
+      <PackageReference Include="Reactor.OxygenFilter.MSBuild" Version="0.3.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
     </ItemGroup>
 
-    <Target Name="Copy" AfterTargets="Reobfuscate">
-        <Copy SourceFiles="$(OutputPath)reobfuscated/$(AssemblyName)-$(GameVersion).dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" Condition="'$(Configuration)' == 'Debug'" />
-    </Target>
+
+    <ItemGroup>
+		<Deobfuscate Include="$(AmongUs)\BepInEx\plugins\Essentials-$(GameVersion).dll" />
+    </ItemGroup>
 </Project>

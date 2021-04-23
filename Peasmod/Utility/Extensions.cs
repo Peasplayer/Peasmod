@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using Hazel;
+using UnityEngine;
 using Peasmod.Gamemodes;
 
 namespace Peasmod.Utility
@@ -37,6 +38,11 @@ namespace Peasmod.Utility
                         if (sheriff.PlayerId == player.PlayerId)
                             return true;
                     return false;
+                case Role.Thanos:
+                    foreach (var thanos in ThanosMode.Thanos)
+                        if (thanos.PlayerId == player.PlayerId)
+                            return true;
+                    return false;
             }
             return false;
         }
@@ -65,6 +71,9 @@ namespace Peasmod.Utility
                         break;
                     case Role.Sheriff:
                         SheriffMode.Sheriffs.Add(player);
+                        break;
+                    case Role.Thanos:
+                        ThanosMode.Thanos.Add(player);
                         break;
                 }
         }
@@ -96,13 +105,16 @@ namespace Peasmod.Utility
             foreach (var sheriff in SheriffMode.Sheriffs)
                 if (sheriff.PlayerId == player.PlayerId)
                     return Role.Sheriff;
+            foreach (var thanos in ThanosMode.Thanos)
+                if (thanos.PlayerId == player.PlayerId)
+                    return Role.Thanos;
             if (player.Data.IsImpostor)
                 return Role.Impostor;
             else
                 return Role.Crewmate;
         }
 
-        private static Dictionary<byte, bool> isMorphed = new Dictionary<byte, bool>();
+        private static System.Collections.Generic.Dictionary<byte, bool> isMorphed = new System.Collections.Generic.Dictionary<byte, bool>();
 
         public static bool IsMorphed(this PlayerControl player)
         {
@@ -118,14 +130,57 @@ namespace Peasmod.Utility
             else
                 isMorphed[player.PlayerId] = morphed;
         }
+        
+        public static PlayerControl FindClosestTarget(this PlayerControl player, float distance)
+                {
+                    PlayerControl playerControl1 = (PlayerControl)null;
+                    if (!ShipStatus.Instance)
+                        return (PlayerControl)null;
+                    Vector2 truePosition = player.GetTruePosition();
+                    System.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers.ToArray().ToList();
+                    for (int index = 0; index < allPlayers.Count; ++index)
+                    {
+                        GameData.PlayerInfo playerInfo = allPlayers[index];
+                        if (!playerInfo.Disconnected && playerInfo.PlayerId != player.PlayerId && !playerInfo.IsDead)
+                        {
+                            PlayerControl playerControl2 = playerInfo.Object;
+                            if (playerControl2)
+                            {
+                                Vector2 vector2 = playerControl2.GetTruePosition() - truePosition;
+                                float magnitude = vector2.magnitude;
+                                if (magnitude <= distance && !PhysicsHelpers.AnyNonTriggersBetween(truePosition, vector2.normalized, magnitude, Constants.ShipAndObjectsMask))
+                                {
+                                    playerControl1 = playerControl2;
+                                    distance = magnitude;
+                                }
+                            }
+                        }
+                    }
+                    return playerControl1;
+                }
+        
+                public static PlayerControl GetPlayer(this byte id)
+                {
+                    foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+                    {
+                        if (player.PlayerId == id)
+                        {
+                            return player;
+                        }
+                    }
+                    return null;
+                }
 
         public static void ResetRoles()
         {
             JesterMode.Jesters = new List<PlayerControl>();
+            JesterMode.JesterWon = false;
+            JesterMode.Winner = null;
             MayorMode.Mayors = new List<PlayerControl>();
             InspectorMode.Inspectors = new List<PlayerControl>();
             DoctorMode.Doctors = new List<PlayerControl>();
             SheriffMode.Sheriffs = new List<PlayerControl>();
+            ThanosMode.Thanos = new List<PlayerControl>();
         }
     }
 
@@ -137,6 +192,7 @@ namespace Peasmod.Utility
         Mayor = 3,
         Inspector = 4,
         Doctor = 5,
-        Sheriff = 6
+        Sheriff = 6,
+        Thanos = 7
     }
 }

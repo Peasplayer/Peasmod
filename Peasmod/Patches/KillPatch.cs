@@ -14,14 +14,19 @@ namespace Peasmod.Patches
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
     class KillPatch
     {
-        public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
+        public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
         {
             if (__instance.IsRole(Role.Sheriff))
-                    __instance.Data.IsImpostor = true;
+                __instance.Data.IsImpostor = true;
+            if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.HotPotato))
+                return false;
+            return true;
         }
 
         public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
         {
+            if (__instance.PlayerId == PlayerControl.LocalPlayer.PlayerId)
+                BattleRoyaleMode.HasKilled = true;
             if (__instance.IsRole(Role.Sheriff))
                 __instance.Data.IsImpostor = false;
         }
@@ -35,11 +40,20 @@ namespace Peasmod.Patches
             #region InvisibilityMode
             if (InvisibilityMode.invisplayers.Contains(killer.PlayerId))
             {
-                killer.myRend.color = Palette.DisabledColor;
-                killer.HatRenderer.color = Palette.DisabledColor;
-                killer.MyPhysics.Skin.layer.color = Palette.DisabledColor;
+                killer.myRend.color = Palette.DisabledClear;
+                killer.HatRenderer.color = Palette.DisabledClear;
+                killer.MyPhysics.Skin.layer.color = Palette.DisabledClear;
             }
             #endregion InvisibilityMode
+        }
+    }
+
+    [HarmonyPatch(typeof(KillButtonManager), nameof(KillButtonManager.SetTarget))]
+    class KillButtonSetTarget
+    {
+        public static void Prefix(KillButtonManager __instance, [HarmonyArgument(0)] PlayerControl target)
+        {
+            //Utils.Log("Target has been set to " + target.nameText.text);
         }
     }
 }

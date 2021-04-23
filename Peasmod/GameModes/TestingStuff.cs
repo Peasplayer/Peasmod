@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using System.Reflection;
+using System.IO;
 using Peasmod.Utility;
 using HarmonyLib;
 using Reactor.Extensions;
@@ -17,6 +19,12 @@ namespace Peasmod.Gamemodes
 
         public static void OnClick()
         {
+            Texture2D tex = GUIExtensions.CreateEmptyTexture();
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Stream myStream = assembly.GetManifestResourceStream("Peasmod.Resources.Revive.png");
+            byte[] buttonTexture = Reactor.Extensions.Extensions.ReadFully(myStream);
+            ImageConversion.LoadImage(tex, buttonTexture, false);
+            var test = new Essentials.UI.CooldownButton(GUIExtensions.CreateSprite(tex), Essentials.UI.HudPosition.TopRight, 5);
             /*cam = Object.Instantiate<FollowerCamera>(HudManager.Instance.PlayerCam, HudManager.Instance.transform);//, HudManager.Instance.transform
             cam.enabled = true;
             cam.gameObject.SetActive(true);

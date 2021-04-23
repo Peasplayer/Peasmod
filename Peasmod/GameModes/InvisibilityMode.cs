@@ -24,9 +24,9 @@ namespace Peasmod.Gamemodes
             writer.WritePacked(PlayerControl.LocalPlayer.PlayerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             invisplayers.Add(PlayerControl.LocalPlayer.PlayerId);
-            PlayerControl.LocalPlayer.myRend.color = Palette.DisabledColor;
-            PlayerControl.LocalPlayer.HatRenderer.color = Palette.DisabledColor;
-            PlayerControl.LocalPlayer.MyPhysics.Skin.layer.color = Palette.DisabledColor;
+            PlayerControl.LocalPlayer.myRend.color = Palette.DisabledClear;
+            PlayerControl.LocalPlayer.HatRenderer.color = Palette.DisabledClear;
+            PlayerControl.LocalPlayer.MyPhysics.Skin.layer.color = Palette.DisabledClear;
             //HudManager.Instance.ShowMap((Action<MapBehaviour>)(m => m.ShowCountOverlay()));
             //PlayerControl.LocalPlayer.moveable = true;
             //MapBehaviour.Instance.ShowCountOverlay();

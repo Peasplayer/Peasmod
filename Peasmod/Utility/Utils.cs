@@ -8,25 +8,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Reflection;
 using System.IO;
+using TMPro;
 using Reactor.Unstrip;
 
 namespace Peasmod.Utility
 {
     public class StringColor
     {
-        public const string Reset = "[]";
-        public const string White = "[ffffffff]";
-        public const string Black = "[000000ff]";
-        public const string Red = "[ff0000ff]";
-        public const string Green = "[169116ff]";
-        public const string Blue = "[0400ffff]";
-        public const string Yellow = "[f5e90cff]";
-        public const string Purple = "[a600ffff]";
-        public const string Cyan = "[00fff2ff]";
-        public const string Pink = "[e34dd4ff]";
-        public const string Orange = "[ff8c00ff]";
-        public const string Brown = "[8c5108ff]";
-        public const string Lime = "[1eff00ff]";
+        public const string Reset = "<color=#ffffffff>";
+        public const string White = "<color=#ffffffff>";
+        public const string Black = "<color=#000000ff>";
+        public const string Red = "<color=#ff0000ff>";
+        public const string Green = "<color=#169116ff>";
+        public const string Blue = "<color=#0400ffff>";
+        public const string Yellow = "<color=#f5e90cff>";
+        public const string Purple = "<color=#a600ffff>";
+        public const string Cyan = "<color=#00fff2ff>";
+        public const string Pink = "<color=#e34dd4ff>";
+        public const string Orange = "<color=#ff8c00ff>";
+        public const string Brown = "<color=#8c5108ff>";
+        public const string Lime = "<color=#1eff00ff>";
     }
 
     public class Utils
@@ -34,7 +35,7 @@ namespace Peasmod.Utility
 
         public static void Log(String message)
         {
-            System.Console.WriteLine("["+ Peasmod.PluginName+"s] "+message);
+            Peasmod.Logger.Log(BepInEx.Logging.LogLevel.Info, message);
         }
 
         public static PlayerControl GetPlayer(byte id)
@@ -65,7 +66,7 @@ namespace Peasmod.Utility
         {
 
             if (HudManager.Instance.roomTracker.transform.localPosition.y > -3f)
-                return HudManager.Instance.roomTracker.text.Text;
+                return HudManager.Instance.roomTracker.text.text;
             return "Outside/Hallway";
         }
 
@@ -93,7 +94,7 @@ namespace Peasmod.Utility
             return go;
         }
 
-        public static GameObject CreateSprite(string image)
+        public static Sprite CreateSprite(string image)
         {
             Texture2D tex = GUIExtensions.CreateEmptyTexture();
             Assembly assembly = Assembly.GetExecutingAssembly();
@@ -101,13 +102,13 @@ namespace Peasmod.Utility
             byte[] buttonTexture = Reactor.Extensions.Extensions.ReadFully(myStream);
             ImageConversion.LoadImage(tex, buttonTexture, false);
             var _objectSprite = GUIExtensions.CreateSprite(tex);
-            var _object = new GameObject();
-            var _objectRenderer = _object.AddComponent<SpriteRenderer>();
-            _objectRenderer.sprite = _objectSprite;
-            return _object;
+            //var _object = new GameObject();
+            //var _objectRenderer = _object.AddComponent<SpriteRenderer>();
+            //_objectRenderer.sprite = _objectSprite;
+            return _objectSprite;
         }
 
-        public static TextRenderer CreateText(Position pos, string text)
+        public static TextMeshPro CreateText(Position pos, string text)
         {
             GameObject go = new GameObject();
             go.transform.SetParent(HudManager.Instance.gameObject.transform);
@@ -116,12 +117,12 @@ namespace Peasmod.Utility
                     go.transform.localPosition = new Vector3(-5.25f, -2.5f);
                     break;
             }
-            TextRenderer _text = UnityEngine.Object.Instantiate(HudManager.Instance.TaskText, go.transform);
-            _text.Text = text;
+            TextMeshPro _text = UnityEngine.Object.Instantiate(HudManager.Instance.TaskText, go.transform);
+            _text.text = text;
             return _text;
         }
 
-        public static Color ColorIdToColor(byte id)
+        public static Color ColorIdToColor(int id)
         {
             Color color = new Color();
             switch(id)

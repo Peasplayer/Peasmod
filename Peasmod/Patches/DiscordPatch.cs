@@ -9,6 +9,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using Peasmod.Utility;
+using Discord;
 
 namespace Peasmod.Patches
 {
@@ -17,23 +19,66 @@ namespace Peasmod.Patches
     {
         public static bool Prefix(DiscordManager __instance)
         {
-            __instance.presence = new Discord.Discord(787398232540053544, 1UL);
-            __instance.presence.GetImageManager();
-            var activityManager = __instance.presence.GetActivityManager();
-            activityManager.RegisterSteam(945360U);
-            //Activity activity = null;
-            //activity.State = "Being cool";
-            //activityManager.UpdateActivity(activity, DiscordManager.c.field_Public_Static_UpdateActivityHandler_0);
-            return false;
+            /*try
+            {
+                __instance.Field_1 = new Discord.Discord(787398232540053544, 1UL);
+                __instance.Field_1.GetImageManager();
+                var activityManager = __instance.Field_1.GetActivityManager();
+                activityManager.RegisterSteam(945360U);
+            }
+            catch
+            {
+                Debug.LogWarning("Discord messed up");
+            }
+            return false;*/
+            
+            try
+			{
+				__instance.Field_1 = new Discord.Discord(787398232540053544, 1UL);
+				ActivityManager activityManager = __instance.Field_1.GetActivityManager();
+				activityManager.RegisterSteam(945360U);
+				__instance.SetInMenus();
+				
+			}
+			catch
+			{
+			}
+			return false;
+	        
         }
     }
-
-    [HarmonyPatch(typeof(DiscordManager), nameof(DiscordManager.FixedUpdate))]
-    class DiscordManagerJoinRequestPatch
+    
+    [HarmonyPatch(typeof(DiscordManager), nameof(DiscordManager.HandleJoinRequest))]
+    class HandleJoinPatch
     {
-        public static void Prefix(DiscordManager __instance)
+        public static bool Prefix(DiscordManager __instance, [HarmonyArgument((0))] string joinSecret)
         {
-            
+	        if (!joinSecret.StartsWith("join"))
+	        {
+		        return false;
+	        }
+	        if (!AmongUsClient.Instance)
+	        {
+		        return false;
+	        }
+	        if (!DestroyableSingleton<DiscordManager>.InstanceExists)
+	        {
+		        return false;
+	        }
+	        if (AmongUsClient.Instance.mode != MatchMakerModes.None)
+	        {
+		        return false;
+	        }
+	        AmongUsClient.Instance.GameMode = (GameModes)1;
+	        AmongUsClient.Instance.GameId = GameCode.GameNameToInt(joinSecret.Substring(4));
+	        AmongUsClient.Instance.SetEndpoint(ServerManager.Instance.OnlineNetAddress, ServerManager.Instance.OnlineNetPort);
+	        AmongUsClient.Instance.MainMenuScene = "MMOnline";
+	        AmongUsClient.Instance.OnlineScene = "OnlineGame";
+	        DestroyableSingleton<DiscordManager>.Instance.StopAllCoroutines();
+	        AmongUsClient.Instance.Connect((MatchMakerModes)1);
+	        __instance.StartCoroutine(__instance.CoJoinGame());
+			return false;
+	        
         }
     }
 }
