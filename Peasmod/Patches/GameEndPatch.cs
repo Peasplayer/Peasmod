@@ -128,7 +128,7 @@ namespace Peasmod.Patches
             }
             #endregion JesterMode
             #region BattleRoyaleMode
-            if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale) && BattleRoyaleMode.HasWon)
+            /*if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale) && BattleRoyaleMode.HasWon)
             {
                 if (PlayerControl.LocalPlayer.PlayerId == BattleRoyaleMode.Winner.PlayerId)
                 {
@@ -143,7 +143,7 @@ namespace Peasmod.Patches
                     EndGameScreenPatch.Winner = "impostor";
                 }
                 EndGameScreenPatch.BGColor = Palette.ImpostorRed;
-            }
+            }*/
             #endregion BattleRoyaleMode
         }
     }
@@ -172,7 +172,7 @@ namespace Peasmod.Patches
             if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale) && BattleRoyaleMode.HasWon)
             {
                 Il2CppSystem.Collections.Generic.List<WinningPlayerData> _winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
-                _winners.Add(new WinningPlayerData(BattleRoyaleMode.Winner.Data));
+                //_winners.Add(new WinningPlayerData(BattleRoyaleMode.Winner.Data));
                 TempData.winners = _winners;
             }
             #endregion BattleRoyaleMode
@@ -275,21 +275,6 @@ namespace Peasmod.Patches
                     ShipStatus.RpcEndGame(GameOverReason.ImpostorByVote, false);
                 }
                 return false;
-                var alive = 0;
-                foreach (var player in PlayerControl.AllPlayerControls)
-                    if (!player.Data.IsDead)
-                    {
-                        BattleRoyaleMode.Winner = player;
-                        alive++;
-                    }
-                if (alive == 1)
-                {
-                    BattleRoyaleMode.HasWon = true;
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.VictoryRoyale, Hazel.SendOption.None, -1);
-                    writer.Write(BattleRoyaleMode.Winner.PlayerId);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                }
-                return false;//BattleRoyaleMode.HasWon;
             }
             return true;
         }

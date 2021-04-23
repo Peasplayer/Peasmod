@@ -55,7 +55,7 @@ namespace Peasmod.Utility
                         hats.Add(file.Split("Peasmod.Resources.Hats.")[1]);
                 foreach (string hat in hats)
                     __instance.AllHats.Add(CustomHatManager.CreateHat(hat));
-                __instance.AllHats.Sort((Il2CppSystem.Comparison<HatBehaviour>)((h1, h2) => h2.ProductId.CompareTo(h1.ProductId)));
+                __instance.AllHats.Sort((Il2CppSystem.Comparison<HatBehaviour>) ((h1, h2) => h2.ProductId.CompareTo(h1.ProductId)));
             }
         }
     }

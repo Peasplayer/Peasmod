@@ -65,10 +65,14 @@ namespace Peasmod.Patches
         {
             Texture2D tex = GUIExtensions.CreateEmptyTexture();
             Assembly assembly = Assembly.GetExecutingAssembly();
-            Stream myStream = assembly.GetManifestResourceStream("Peasmod.Resources.Revive.png");
+            Stream myStream = assembly.GetManifestResourceStream("Peasmod.Resources.Buttons.Peasplayer.Revive.png");
             byte[] buttonTexture = Reactor.Extensions.Extensions.ReadFully(myStream);
             ImageConversion.LoadImage(tex, buttonTexture, false);
             GUIExtensions.CreateSprite(tex);
+            
+            var buttonTextures = Peasmod.Instance.Config.Bind("Settings", "ButtonTextures", true, "If set to true the textures that Peasplayer made will be used. Else the textures of Gravity will be used.");
+            var resource = buttonTextures.Value ? "Peasmod.Resources.Buttons.Peasplayer" : "Peasmod.Resources.Buttons.Gravity";
+            
             if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.HotPotato))
             {
                 HotPotatoMode.button = new CooldownButton(HotPotatoMode.OnClick, 1f, "Peasmod.Resources.Kill.png", 200f, new Vector2(0f, 0.3f), CooldownButton.Category.OnlyImpostor, HudManager.Instance);
@@ -108,7 +112,7 @@ namespace Peasmod.Patches
                 //HudManager.Instance.UseButton.gameObject.SetActive(false);
                 //BattleRoyaleMode.button = new CooldownButton(BattleRoyaleMode.OnClick, 5f, "Peasmod.Resources.Kill.png", 200f, Vector2.zero, CooldownButton.Category.Everyone, HudManager.Instance);
             }
-            else if (false)//Peasmod.Settings.thanos.GetValue())
+            /*else if (false)//Peasmod.Settings.thanos.GetValue())
             {
                 foreach (var thanos in ThanosMode.Thanos)
                 {
@@ -122,37 +126,38 @@ namespace Peasmod.Patches
                     foreach (PlayerTask task in removeTask)
                         thanos.RemoveTask(task);
                 }
-            }
+            }*/
             else
             {
                 Peasmod.impostorbuttons.Clear();
                 InvisibilityMode.invisplayers.Clear();
+                Utils.Log(resource);
                 if (Peasmod.Settings.VentBuilding.GetValue())
                 {
-                    VentBuilding.button = new CooldownButton(VentBuilding.OnClicked, Peasmod.Settings.VentBuildingCooldown.GetValue(), "Peasmod.Resources.BuildVent.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance);
+                    VentBuilding.button = new CooldownButton(VentBuilding.OnClicked, Peasmod.Settings.VentBuildingCooldown.GetValue(), resource + ".BuildVent.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance);
                     Peasmod.impostorbuttons.Add(VentBuilding.button);
                 }
                 if (Peasmod.Settings.BodyDragging.GetValue())
                 {
-                    BodyDragging.button = new CooldownButton(BodyDragging.OnClicked, 0.5f, "Peasmod.Resources.DragBody.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance);
+                    BodyDragging.button = new CooldownButton(BodyDragging.OnClicked, 0.5f, resource + ".DragBody.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance);
                     BodyDragging.button.PositionOffset = new Vector2(0f, 1.2f * Peasmod.impostorbuttons.Count);
                     Peasmod.impostorbuttons.Add(BodyDragging.button);
                 }
                 if (Peasmod.Settings.Invisibility.GetValue())
                 {
-                    InvisibilityMode.button = new CooldownButton(InvisibilityMode.OnClicked, Peasmod.Settings.InvisibilityCooldown.GetValue(), "Peasmod.Resources.Hide.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance, Peasmod.Settings.InvisibilityDuration.GetValue(), InvisibilityMode.OnEnded);
+                    InvisibilityMode.button = new CooldownButton(InvisibilityMode.OnClicked, Peasmod.Settings.InvisibilityCooldown.GetValue(), resource + ".Hide.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance, Peasmod.Settings.InvisibilityDuration.GetValue(), InvisibilityMode.OnEnded);
                     InvisibilityMode.button.PositionOffset = new Vector2(0f, 1.2f * Peasmod.impostorbuttons.Count);
                     Peasmod.impostorbuttons.Add(InvisibilityMode.button);
                 }
                 if (Peasmod.Settings.FreezeTime.GetValue())
                 {
-                    TimeFreezing.button = new CooldownButton(TimeFreezing.OnClick, Peasmod.Settings.FreezeTimeCooldown.GetValue(), "Peasmod.Resources.TimeFreezing.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance, Peasmod.Settings.FreezeTimeDuration.GetValue(), TimeFreezing.OnEnded);
+                    TimeFreezing.button = new CooldownButton(TimeFreezing.OnClick, Peasmod.Settings.FreezeTimeCooldown.GetValue(), resource + ".TimeFreezing.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance, Peasmod.Settings.FreezeTimeDuration.GetValue(), TimeFreezing.OnEnded);
                     TimeFreezing.button.PositionOffset = new Vector2(0f + (Peasmod.impostorbuttons.Count / 3 * 1.3f), 1.2f * (Peasmod.impostorbuttons.Count - (Peasmod.impostorbuttons.Count / 3 * 3)));
                     Peasmod.impostorbuttons.Add(TimeFreezing.button);
                 }
                 if (Peasmod.Settings.Morphing.GetValue())
                 {
-                    MorphingMode.button = new CooldownButton(MorphingMode.OnClick, Peasmod.Settings.MorphingCooldown.GetValue(), "Peasmod.Resources.Morphing.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance);
+                    MorphingMode.button = new CooldownButton(MorphingMode.OnClick, Peasmod.Settings.MorphingCooldown.GetValue(), resource + ".Morphing.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance);
                     MorphingMode.button.PositionOffset = new Vector2(0f + (Peasmod.impostorbuttons.Count / 3 * 1.3f), 1.2f * (Peasmod.impostorbuttons.Count - (Peasmod.impostorbuttons.Count / 3 * 3)));
                     Peasmod.impostorbuttons.Add(MorphingMode.button);
                 }
@@ -162,7 +167,7 @@ namespace Peasmod.Patches
             #endregion JesterMode
             #region DoctorMode
             if (Peasmod.Settings.DoctorAmount.GetValue() >= 1)
-                DoctorMode.button = new CooldownButton(DoctorMode.OnClicked, Peasmod.Settings.DoctorCooldown.GetValue(), "Peasmod.Resources.Revive.png", 200f, Vector2.zero, CooldownButton.Category.OnlyDoctor, HudManager.Instance);
+                DoctorMode.button = new CooldownButton(DoctorMode.OnClicked, Peasmod.Settings.DoctorCooldown.GetValue(), resource + ".Revive.png", 200f, Vector2.zero, CooldownButton.Category.OnlyDoctor, HudManager.Instance);
             #endregion DoctorMode
             #region SheriffMode
             if (Peasmod.Settings.SheriffAmount.GetValue() >= 1)
@@ -174,7 +179,7 @@ namespace Peasmod.Patches
             }
             #endregion SheriffMode
             if (TestingStuff.testing)
-                TestingStuff.button = new CooldownButton(TestingStuff.OnClick, 1f, "Peasmod.Resources.DragBody.png", 200f, Vector2.zero, CooldownButton.Category.OnlyCrewmate, HudManager.Instance);
+                TestingStuff.button = new CooldownButton(TestingStuff.OnClick, 1f, resource + ".DragBody.png", 200f, Vector2.zero, CooldownButton.Category.OnlyCrewmate, HudManager.Instance);
             foreach (var player in PlayerControl.AllPlayerControls)
                 PlayerData.GetPlayerData(player);
             HudManagerPatch.dots.Clear();

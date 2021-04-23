@@ -61,44 +61,40 @@ namespace Peasmod.Patches
         {
             public static void Prefix(OptionsMenuBehaviour __instance)
             {
-                var resolutionSlider = __instance.Tabs[1].Content.GetComponent<ResolutionSlider>();
-                if (resolutionSlider == null)
-                    Utils.Log("null");
-                //resolutionSlider.VSync.gameObject.transform.position +=
-                //    new Vector3(0, 0.3f, 0);
-                var test = GameObject.Instantiate(resolutionSlider.VSync, resolutionSlider.VSync.gameObject.transform);
-                test.gameObject.transform.position -=
+                /*var resolutionSlider = __instance.Tabs[1].Content.GetComponent<ResolutionSlider>();
+                var textures = GameObject.Instantiate(resolutionSlider.VSync, resolutionSlider.VSync.gameObject.transform);
+                textures.gameObject.transform.position -=
                     new Vector3(0, 0.6f, 0);
-                var button = test.GetComponent<PassiveButton>();
+                var button = textures.GetComponent<PassiveButton>();
                 button.OnClick = new Button.ButtonClickedEvent();
-                var buttonTextures = Peasmod.Instance.Config.Bind("Settings", "ButtonTextures", true, "If set to true the textures that Peasplayer made will be used. Else the textures of [ARTIST] will be used.");
+                var buttonTextures = Peasmod.Instance.Config.Bind("Settings", "ButtonTextures", true, "If set to true the textures that Peasplayer made will be used. Else the textures of Gravity will be used.");
                 if (buttonTextures.Value)
                 {
-                    test.UpdateText(true);
-                    test.Text.text = "Textures: Peasplayer";
+                    textures.UpdateText(true);
+                    textures.Text.text = "Textures: Peasplayer";
                 }
                 else
                 {
-                    test.UpdateText(false);
-                    test.Text.text = "Textures: [ARTIST]";
+                    textures.UpdateText(false);
+                    textures.Text.text = "Textures: Gravity";
                 }
                 
                 button.OnClick.AddListener((UnityAction)test1);
                 void test1()
                 {
-                    if (test.onState)
+                    if (textures.onState)
                     {
                         buttonTextures.Value = false;
-                        test.UpdateText(false);
-                        test.Text.text = "Textures: [ARTIST]";
+                        textures.UpdateText(false);
+                        textures.Text.text = "Textures: Gravity";
                     }
                     else
                     {
                         buttonTextures.Value = true;
-                        test.UpdateText(true);
-                        test.Text.text = "Textures: Peasplayer";
+                        textures.UpdateText(true);
+                        textures.Text.text = "Textures: Peasplayer";
                     }
-                }
+                }*/
             }
         }
     }
