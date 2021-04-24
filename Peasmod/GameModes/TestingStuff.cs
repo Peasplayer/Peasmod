@@ -5,6 +5,8 @@ using System.Reflection;
 using System.IO;
 using Peasmod.Utility;
 using HarmonyLib;
+using Il2CppSystem;
+using Il2CppSystem.Threading;
 using Reactor.Extensions;
 
 namespace Peasmod.Gamemodes
@@ -71,6 +73,24 @@ namespace Peasmod.Gamemodes
                 }
             }
         }
+        
+        /*[HarmonyPatch(typeof(CreateGameOptions), nameof(CreateGameOptions.CoShow))]
+        class SOMERANDOM
+        {
+            public static void Postfix(CreateGameOptions __instance)
+            {
+                Utils.Log("test");
+                //var mapbutton = GameObject.Instantiate(GameObject.Find("2"));
+                if (__instance.Content.active)
+                    Utils.Log("null");
+                else
+                    Utils.Log("not null");
+                void test(GameObject obj)
+                {
+                    
+                }
+            }
+        }*/
 
         //public static SurvCamera camPref;
         //test.transform.localPosition = new Vector3(-2.5f, -2.5f);

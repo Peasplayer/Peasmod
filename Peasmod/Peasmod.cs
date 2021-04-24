@@ -171,7 +171,10 @@ namespace Peasmod
                             break;
                         }
                 }
-                catch {}
+                catch
+                {
+                    Utils.Log("Didn't connect");
+                }
             }
 
             return new DnsRegionInfo(name, name, StringNames.NoTranslation, new[]
