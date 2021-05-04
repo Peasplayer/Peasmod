@@ -1,1 +1,5 @@
-
+{
+  "changelog": "Something has changed",
+  "_version": 210,
+  "version": "2.1.0"
+}
