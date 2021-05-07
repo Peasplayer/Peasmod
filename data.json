@@ -1,5 +1,5 @@
 {
-  "changelog": "[+] Added Support for the newest version\n[+] Added a server to play on\n[+] Added Battle Royale mode\n[+] Fixed some small bugs",
-  "_version": 210,
-  "version": "2.1.0"
+  "changelog": "\n[+] Added Peaspowered again (Yes, it works now)\n[+] Added Custom Server support via config\n[-] Removed matux.fr server",
+  "_version": 211,
+  "version": "2.1.1"
 }
