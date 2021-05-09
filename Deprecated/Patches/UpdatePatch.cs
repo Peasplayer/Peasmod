@@ -35,12 +35,12 @@ namespace Peasmod.Patches
                 string[] settings = __instance.GameSettings.text.Split("\nSection");
                 __instance.GameSettings.text = StringColor.Green + "Peasplayer" + StringColor.Reset + "\n" + settings[0];
                 string mode = "\nGamemode: ";
-                if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.HotPotato))
+                if (Settings.IsGameMode(Settings.GameMode.HotPotato))
                 {
                     mode += "HotPotato";
                     __instance.GameSettings.text += mode;
                 }
-                else if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale))
+                else if (Settings.IsGameMode(Settings.GameMode.BattleRoyale))
                 {
                     mode += "Battle Royale";
                     __instance.GameSettings.text += mode;
@@ -48,45 +48,45 @@ namespace Peasmod.Patches
                 else
                 {
                     string roles = "\nRoles: ";
-                    if (Peasmod.Settings.JesterAmount.GetValue() > 0)
+                    if (Settings.JesterAmount.GetValue() > 0)
                     {
                         if (roles == "\nRoles: ")
-                            roles += Peasmod.Settings.JesterAmount.GetValue() + " Jester";
+                            roles += Settings.JesterAmount.GetValue() + " Jester";
                         else
-                            roles += ", " + Peasmod.Settings.JesterAmount.GetValue() + " Jester"; ;
+                            roles += ", " + Settings.JesterAmount.GetValue() + " Jester"; ;
                     }
-                    if (Peasmod.Settings.DoctorAmount.GetValue() > 0)
+                    if (Settings.DoctorAmount.GetValue() > 0)
                     {
                         if (roles == "\nRoles: ")
-                            roles += Peasmod.Settings.DoctorAmount.GetValue() + " Doctor";
+                            roles += Settings.DoctorAmount.GetValue() + " Doctor";
                         else
-                            roles += ", " + Peasmod.Settings.DoctorAmount.GetValue() + " Doctor"; ;
+                            roles += ", " + Settings.DoctorAmount.GetValue() + " Doctor"; ;
                     }
-                    if (Peasmod.Settings.MayorAmount.GetValue() > 0)
+                    if (Settings.MayorAmount.GetValue() > 0)
                     {
                         if (roles == "\nRoles: ")
-                            roles += Peasmod.Settings.MayorAmount.GetValue() + " Mayor";
+                            roles += Settings.MayorAmount.GetValue() + " Mayor";
                         else
-                            roles += ", " + Peasmod.Settings.MayorAmount.GetValue() + " Mayor"; ;
+                            roles += ", " + Settings.MayorAmount.GetValue() + " Mayor"; ;
                     }
-                    if (Peasmod.Settings.InspectorAmount.GetValue() > 0)
+                    if (Settings.InspectorAmount.GetValue() > 0)
                     {
                         if (roles == "\nRoles: ")
-                            roles += Peasmod.Settings.InspectorAmount.GetValue() + " Inspector";
+                            roles += Settings.InspectorAmount.GetValue() + " Inspector";
                         else
-                            roles += ", " + Peasmod.Settings.InspectorAmount.GetValue() + " Inspector"; ;
+                            roles += ", " + Settings.InspectorAmount.GetValue() + " Inspector"; ;
                     }
-                    if (Peasmod.Settings.SheriffAmount.GetValue() > 0)
+                    if (Settings.SheriffAmount.GetValue() > 0)
                     {
                         if (roles == "\nRoles: ")
-                            roles += Peasmod.Settings.SheriffAmount.GetValue() + " Sheriff";
+                            roles += Settings.SheriffAmount.GetValue() + " Sheriff";
                         else
-                            roles += ", " + Peasmod.Settings.SheriffAmount.GetValue() + " Sheriff"; ;
+                            roles += ", " + Settings.SheriffAmount.GetValue() + " Sheriff"; ;
                     }
                     __instance.GameSettings.text += roles;
                     string special = "\nSpecial: ";
                     var specials = 0;
-                    if (Peasmod.Settings.CrewVenting.GetValue())
+                    if (Settings.CrewVenting.GetValue())
                     {
                         if (special == "\nSpecial: ")
                             special += "Crew-Venting";
@@ -94,7 +94,7 @@ namespace Peasmod.Patches
                             special += ", Crew-Venting";
                         ++specials;
                     }
-                    if (Peasmod.Settings.VentBuilding.GetValue())
+                    if (Settings.VentBuilding.GetValue())
                     {
                         if (special == "\nSpecial: ")
                             special += "Vent-Building";
@@ -102,7 +102,7 @@ namespace Peasmod.Patches
                             special += ", Vent-Building";
                         ++specials;
                     }
-                    if (Peasmod.Settings.BodyDragging.GetValue())
+                    if (Settings.BodyDragging.GetValue())
                     {
                         if (special == "\nSpecial: ")
                             special += "Body-Dragging";
@@ -110,7 +110,7 @@ namespace Peasmod.Patches
                             special += ", Body-Dragging";
                         ++specials;
                     }
-                    if (Peasmod.Settings.Invisibility.GetValue())
+                    if (Settings.Invisibility.GetValue())
                     {
                         if (special == "\nSpecial: ")
                             special += "Invisibility";
@@ -123,7 +123,7 @@ namespace Peasmod.Patches
                             special += ", Invisibility";
                         ++specials;
                     }
-                    if (Peasmod.Settings.FreezeTime.GetValue())
+                    if (Settings.FreezeTime.GetValue())
                     {
                         if (special == "\nSpecial: ")
                             special += "Time-Freezing";
@@ -136,7 +136,7 @@ namespace Peasmod.Patches
                             special += ", Time-Freezing";
                         ++specials;
                     }
-                    if (Peasmod.Settings.Morphing.GetValue())
+                    if (Settings.Morphing.GetValue())
                     {
                         if (special == "\nSpecial: ")
                             special += "Morphing";
@@ -155,7 +155,7 @@ namespace Peasmod.Patches
             #endregion GameSettingsText
             if (!PlayerControl.LocalPlayer) return;
             #region HotPotatoMode
-            if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.HotPotato))
+            if (Settings.IsGameMode(Settings.GameMode.HotPotato))
             {
                 foreach (var player in PlayerControl.AllPlayerControls)
                 {
@@ -229,7 +229,7 @@ namespace Peasmod.Patches
             }
             #endregion HotPotatoMode
             #region BattleRoyaleMode
-            else if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale))
+            else if (Settings.IsGameMode(Settings.GameMode.BattleRoyale))
             {
                 if(Peasmod.GameStarted)
                 {
@@ -321,7 +321,7 @@ namespace Peasmod.Patches
             #endregion SheriffMode
             #region VentBuilding
             CooldownButton.HudUpdate();
-            if(Peasmod.Settings.VentBuilding.GetValue())
+            if(Settings.VentBuilding.GetValue())
             {
                 if (VentBuilding.button != null)
                 {
@@ -540,7 +540,7 @@ namespace Peasmod.Patches
                     MorphingMode.button.killButtonManager.gameObject.active = false;
                 }
                 #endregion MorphingMode
-                if(!Peasmod.Settings.ReportBodys.GetValue() || Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale))
+                if(!Settings.ReportBodys.GetValue() || Settings.IsGameMode(Settings.GameMode.BattleRoyale))
                 {
                     HudManager.Instance.ReportButton.gameObject.SetActive(false);
                 }
@@ -582,7 +582,7 @@ namespace Peasmod.Patches
         static void Prefix(PlayerControl __instance)
         {
             #region BattleRoyle
-            if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale) && Peasmod.GameStarted)
+            if (Settings.IsGameMode(Settings.GameMode.BattleRoyale) && Peasmod.GameStarted)
             {
                 __instance.Data.IsImpostor = !__instance.Data.IsDead;
             } 
@@ -597,7 +597,7 @@ namespace Peasmod.Patches
             }
             #endregion VentBuilding
             #region BodyDragging
-            if(Peasmod.Settings.BodyDragging.GetValue())
+            if(Settings.BodyDragging.GetValue())
             {
                 if (BodyDragging.draggers.Contains(__instance.PlayerId))
                 {
@@ -613,7 +613,7 @@ namespace Peasmod.Patches
     {
         static void Postfix(UseButtonManager __instance)
         {
-            if ((!Peasmod.Settings.Sabotaging.GetValue() || Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale)) && Peasmod.GameStarted)
+            if ((!Settings.Sabotaging.GetValue() || Settings.IsGameMode(Settings.GameMode.BattleRoyale)) && Peasmod.GameStarted)
             {
                 if (__instance.currentTarget == null)
                 {

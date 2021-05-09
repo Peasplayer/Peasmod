@@ -128,7 +128,7 @@ namespace Peasmod.Patches
             }
             #endregion JesterMode
             #region BattleRoyaleMode
-            /*if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale) && BattleRoyaleMode.HasWon)
+            /*if (Settings.IsGameMode(Settings.GameMode.BattleRoyale) && BattleRoyaleMode.HasWon)
             {
                 if (PlayerControl.LocalPlayer.PlayerId == BattleRoyaleMode.Winner.PlayerId)
                 {
@@ -169,7 +169,7 @@ namespace Peasmod.Patches
             }
             #endregion JesterMode
             #region BattleRoyaleMode
-            if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale) && BattleRoyaleMode.HasWon)
+            if(Settings.IsGameMode(Settings.GameMode.BattleRoyale) && BattleRoyaleMode.HasWon)
             {
                 Il2CppSystem.Collections.Generic.List<WinningPlayerData> _winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
                 //_winners.Add(new WinningPlayerData(BattleRoyaleMode.Winner.Data));
@@ -236,7 +236,7 @@ namespace Peasmod.Patches
     {
         public static bool Prefix()
         {
-            if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.HotPotato))
+            if(Settings.IsGameMode(Settings.GameMode.HotPotato))
             {
                 var impostors = 0;
                 var crewmates = 0;
@@ -255,7 +255,7 @@ namespace Peasmod.Patches
                 else
                     return false;
             }
-            else if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale))
+            else if(Settings.IsGameMode(Settings.GameMode.BattleRoyale))
             {   
                 int num = (from x in GameData.Instance.AllPlayers.ToArray() where !x.IsDead && !x.Disconnected select x).ToArray<GameData.PlayerInfo>().Length;
                 bool flag2 = num == 1;
@@ -286,7 +286,7 @@ namespace Peasmod.Patches
     {
         public static bool Prefix(ShipStatus __instance, [HarmonyArgument(0)] GameOverReason reason)
         {
-            if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale) && Peasmod.GameStarted &&
+            if (Settings.IsGameMode(Settings.GameMode.BattleRoyale) && Peasmod.GameStarted &&
                 reason == GameOverReason.HumansByTask)
                 return false;
             return true;

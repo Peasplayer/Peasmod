@@ -52,7 +52,7 @@ namespace Peasmod.Patches
         {
             public static bool Prefix(HudManager __instance)
             {
-                if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.HotPotato) || Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale))
+                if(Settings.IsGameMode(Settings.GameMode.HotPotato) || Settings.IsGameMode(Settings.GameMode.BattleRoyale))
                 {
                     return false;
                 }

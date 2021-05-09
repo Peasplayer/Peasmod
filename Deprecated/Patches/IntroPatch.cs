@@ -12,7 +12,7 @@ namespace Peasmod.Patches
         public static void Prefix(IntroCutscene.Nested_0 __instance)
         {
             #region HotPotatoMode
-            if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.HotPotato))
+            if(Settings.IsGameMode(Settings.GameMode.HotPotato))
             {
                 var yourTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
                 foreach (var player in PlayerControl.AllPlayerControls)
@@ -33,7 +33,7 @@ namespace Peasmod.Patches
         public static void Postfix(IntroCutscene.Nested_0 __instance)
         {
             #region HotPotatoMode
-            if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.HotPotato))
+            if (Settings.IsGameMode(Settings.GameMode.HotPotato))
             {
                 var inst = __instance.__this;
                 inst.Title.text = "HotPotato";
@@ -43,7 +43,7 @@ namespace Peasmod.Patches
             }
             #endregion HotPotatoMode
             #region BatttleRoyaleMode
-            else if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale))
+            else if (Settings.IsGameMode(Settings.GameMode.BattleRoyale))
             {
                 var inst = __instance.__this;
                 inst.Title.text = "Battle Royale";

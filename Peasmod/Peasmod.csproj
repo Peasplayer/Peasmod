@@ -23,28 +23,6 @@
     <ItemGroup>
         <Deobfuscate Include="$(AmongUs)\BepInEx\plugins\Reactor-$(GameVersion).dll" />
 		<Deobfuscate Include="$(AmongUs)\BepInEx\plugins\Essentials-$(GameVersion).dll" />
-		<EmbeddedResource Include="Resources\Buttons\Peasplayer\BuildVent.png" />
-		<EmbeddedResource Include="Resources\Buttons\Gravity\BuildVent.png" />
-        <EmbeddedResource Include="Resources\Buttons\Peasplayer\DragBody.png" />
-		<EmbeddedResource Include="Resources\Buttons\Gravity\DragBody.png" />
-        <EmbeddedResource Include="Resources\Buttons\Peasplayer\DropBody.png" />
-		<EmbeddedResource Include="Resources\Buttons\Gravity\DropBody.png" />
-        <EmbeddedResource Include="Resources\Buttons\Peasplayer\Hide.png" />
-		<EmbeddedResource Include="Resources\Buttons\Gravity\Hide.png" />
-        <EmbeddedResource Include="Resources\Buttons\Peasplayer\Morphing.png" />
-		<EmbeddedResource Include="Resources\Buttons\Gravity\Morphing.png" />
-        <EmbeddedResource Include="Resources\Buttons\Peasplayer\Revive.png" />
-		<EmbeddedResource Include="Resources\Buttons\Gravity\Revive.png" />
-        <EmbeddedResource Include="Resources\Buttons\Peasplayer\TimeFreezing.png" />
-		<EmbeddedResource Include="Resources\Buttons\Gravity\TimeFreezing.png" />
-		<EmbeddedResource Include="Resources\Dot.png" />
-		<EmbeddedResource Include="Resources\Label.png" />
-		<EmbeddedResource Include="Resources\Hats\PeasMask.png" />
-		<EmbeddedResource Include="Resources\Hats\DreamMask.png" />
-		<EmbeddedResource Include="Resources\Hats\KristalCrown.png" />
-		<EmbeddedResource Include="Resources\Kill.png" />
-		<EmbeddedResource Include="Resources\Potato.png" />
-		<EmbeddedResource Include="Resources\Peasmod.png" />
     </ItemGroup>
 
     <ItemGroup>
@@ -57,5 +35,32 @@
 
     <ItemGroup>
 		<Deobfuscate Include="$(AmongUs)\BepInEx\plugins\Essentials-$(GameVersion).dll" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+		<EmbeddedResource Include="Resources\Buttons\Gravity\BuildVent.png" />
+		<EmbeddedResource Include="Resources\Buttons\Gravity\DragBody.png" />
+		<EmbeddedResource Include="Resources\Buttons\Gravity\DropBody.png" />
+		<EmbeddedResource Include="Resources\Buttons\Gravity\Hide.png" />
+		<EmbeddedResource Include="Resources\Buttons\Gravity\Morphing.png" />
+		<EmbeddedResource Include="Resources\Buttons\Gravity\Revive.png" />
+		<EmbeddedResource Include="Resources\Buttons\Gravity\TimeFreezing.png" />
+		<EmbeddedResource Include="Resources\Buttons\Peasplayer\BuildVent.png" />
+		<EmbeddedResource Include="Resources\Buttons\Peasplayer\DragBody.png" />
+		<EmbeddedResource Include="Resources\Buttons\Peasplayer\DropBody.png" />
+		<EmbeddedResource Include="Resources\Buttons\Peasplayer\Hide.png" />
+		<EmbeddedResource Include="Resources\Buttons\Peasplayer\Morphing.png" />
+		<EmbeddedResource Include="Resources\Buttons\Peasplayer\Revive.png" />
+		<EmbeddedResource Include="Resources\Buttons\Peasplayer\TimeFreezing.png" />
+		<EmbeddedResource Include="Resources\Buttons\Credits.png" />
+		<EmbeddedResource Include="Resources\Dot.png" />
+		<EmbeddedResource Include="Resources\Hats\DreamMask.png" />
+		<EmbeddedResource Include="Resources\Hats\KristalCrown.png" />
+		<EmbeddedResource Include="Resources\Hats\PeasMask.png" />
+		<EmbeddedResource Include="Resources\Kill.png" />
+		<EmbeddedResource Include="Resources\Label.png" />
+		<EmbeddedResource Include="Resources\Peasmod.png" />
+		<EmbeddedResource Include="Resources\Potato.png" />
     </ItemGroup>
 </Project>
