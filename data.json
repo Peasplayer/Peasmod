@@ -1,5 +1,5 @@
 {
-  "changelog": "\n[+] Added Peaspowered again (Yes, it works now)\n[+] Added Custom Server support via config\n[-] Removed matux.fr server",
-  "_version": 211,
-  "version": "2.1.1"
+  "changelog": "\n[+] Added Support for Among Us version 2021.5.10s",
+  "_version": 212,
+  "version": "2.1.2"
 }
