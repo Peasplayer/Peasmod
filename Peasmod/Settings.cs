@@ -62,22 +62,37 @@ namespace Peasmod
         private static readonly CustomOptionButton SectionRoles = CustomOption.AddButton("˅ Roles");
 
         public static readonly CustomNumberOption JesterAmount =
-            CustomOption.AddNumber("jesters", "• Jesters", true, 0, 0, 9, 1);
+            CustomOption.AddNumber("jesters", "• Jesters", true, 0, 0, 14, 1);
+        
+        public static readonly CustomNumberOption TrollAmount =
+            CustomOption.AddNumber("trolls", "• Trolls", true, 0, 0, 14, 1);
+        
+        public static readonly CustomNumberOption CaptainAmount =
+            CustomOption.AddNumber("captains", "• Captains", true, 0, 0, 14, 1);
+        
+        public static readonly CustomNumberOption DemonAmount =
+            CustomOption.AddNumber("demons", "• Demons", true, 0, 0, 14, 1);
+        
+        public static readonly CustomNumberOption DemonCooldown =
+            CustomOption.AddNumber("demoncooldown", "╚══ Demon-Ability-Cooldown", true, 10, 2, 60, 2);
+        
+        public static readonly CustomNumberOption DemonDuration =
+            CustomOption.AddNumber("demonduration", "╚══ Demon-Ability-Duration", true, 10, 2, 60, 2);
 
         public static readonly CustomNumberOption DoctorAmount =
-            CustomOption.AddNumber("doctors", "• Doctors", true, 0, 0, 9, 1);
+            CustomOption.AddNumber("doctors", "• Doctors", true, 0, 0, 14, 1);
 
         public static readonly CustomNumberOption DoctorCooldown =
             CustomOption.AddNumber("doctorcooldown", "╚══ Revive-Cooldown", true, 10, 2, 60, 2);
 
         public static readonly CustomNumberOption MayorAmount =
-            CustomOption.AddNumber("mayors", "• Mayors", true, 0, 0, 9, 1);
+            CustomOption.AddNumber("mayors", "• Mayors", true, 0, 0, 14, 1);
 
         public static readonly CustomNumberOption InspectorAmount =
-            CustomOption.AddNumber("inspectors", "• Inspectors", true, 0, 0, 9, 1);
+            CustomOption.AddNumber("inspectors", "• Inspectors", true, 0, 0, 14, 1);
 
         public static readonly CustomNumberOption SheriffAmount =
-            CustomOption.AddNumber("sheriffs", "• Sheriffs", true, 0, 0, 9, 1);
+            CustomOption.AddNumber("sheriffs", "• Sheriffs", true, 0, 0, 14, 1);
 
         public static readonly CustomNumberOption SheriffCooldown =
             CustomOption.AddNumber("sheriffcooldown", "╚══ Shoot-Cooldown", true, 10, 2, 60, 2);
@@ -116,6 +131,11 @@ namespace Peasmod
             Morphing.HudVisible = false;
             MorphingCooldown.HudVisible = false;
             JesterAmount.HudVisible = false;
+            TrollAmount.HudVisible = false;
+            CaptainAmount.HudVisible = false;
+            DemonAmount.HudVisible = false;
+            DemonCooldown.HudVisible = false;
+            DemonDuration.HudVisible = false;
             DoctorAmount.HudVisible = false;
             DoctorCooldown.HudVisible = false;
             MayorAmount.HudVisible = false;
@@ -153,6 +173,11 @@ namespace Peasmod
         public static void SectionRolesListener(bool value)
         {
             JesterAmount.MenuVisible = value;
+            TrollAmount.MenuVisible = value;
+            CaptainAmount.MenuVisible = value;
+            DemonAmount.MenuVisible = value;
+            DemonCooldown.MenuVisible = value;
+            DemonDuration.MenuVisible = value;
             DoctorAmount.MenuVisible = value;
             DoctorCooldown.MenuVisible = value;
             MayorAmount.MenuVisible = value;

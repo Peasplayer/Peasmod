@@ -24,6 +24,3 @@ GAMEMODES:
 * Hide and Seek
 
 ALTES ZEUG!!
-
-Mache OnGameStart und OnUpdate etwas
-Mache RpcSetInfected, IntroCutScene und Exiled automatisch

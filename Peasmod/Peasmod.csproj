@@ -27,13 +27,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Resources\Buttons\Gravity\BuildVent.png" />
-        <EmbeddedResource Include="Resources\Buttons\Gravity\DragBody.png" />
-        <EmbeddedResource Include="Resources\Buttons\Gravity\DropBody.png" />
-        <EmbeddedResource Include="Resources\Buttons\Gravity\Hide.png" />
-        <EmbeddedResource Include="Resources\Buttons\Gravity\Morphing.png" />
-        <EmbeddedResource Include="Resources\Buttons\Gravity\Revive.png" />
-        <EmbeddedResource Include="Resources\Buttons\Gravity\TimeFreezing.png" />
         <EmbeddedResource Include="Resources\Buttons\Peasplayer\BuildVent.png" />
         <EmbeddedResource Include="Resources\Buttons\Peasplayer\DragBody.png" />
         <EmbeddedResource Include="Resources\Buttons\Peasplayer\DropBody.png" />
@@ -42,6 +35,7 @@
         <EmbeddedResource Include="Resources\Buttons\Peasplayer\Revive.png" />
         <EmbeddedResource Include="Resources\Buttons\Peasplayer\TimeFreezing.png" />
         <EmbeddedResource Include="Resources\Buttons\Credits.png" />
+        <EmbeddedResource Include="Resources\Buttons\Button1.png" />
         <EmbeddedResource Include="Resources\Dot.png" />
         <EmbeddedResource Include="Resources\Hats\DreamMask.png" />
         <EmbeddedResource Include="Resources\Hats\KristalCrown.png" />
