@@ -95,6 +95,7 @@ namespace Peasmod
              * Author: DorComando (https://github.com/DorCoMaNdO)
              */
             CustomOption.ShamelessPlug = false;
+            CustomOption.Debug = false;
             #region OptionsHudVisibility
             SectionGeneralListener(false);
             SectionSpecialListener(false);

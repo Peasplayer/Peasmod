@@ -13,11 +13,17 @@ ROLLEN:
 * Traitor: Wenn er alle seine Tasks macht wird er Impostor
 * Summoner: Kann einen rausgevoteten Spieler reviven.
 * Assassin: Impostor geben ihm einmal einen Kill-Auftrag
-* Snitch: Wenn er alle Tasks gemacht hat sieht er die Impostor, ab 2 übrigen Tasks sehen die Impostor ihn
+* Snitch: Wenn er alle Tasks gemacht hat sieht er die Impostor, ab 2 übrigen Tasks sehen die Impostorihn
 * President: Kann jemandem zum Major machen
+* Lookout: Siehe peasmod suggestions
  
 GAMEMODES:
 * Freeze-Tag
 * Zombie
 * Cops and Robbers
+* Hide and Seek
 
+ALTES ZEUG!!
+
+Mache OnGameStart und OnUpdate etwas
+Mache RpcSetInfected, IntroCutScene und Exiled automatisch

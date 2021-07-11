@@ -7,7 +7,7 @@ namespace Peasmod
 {
     enum CustomRpc
     {
-        SetRole = 43
+        
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -17,13 +17,7 @@ namespace Peasmod
         {
             switch (packetId)
             {
-                case (byte)CustomRpc.SetRole:
-                    var player = reader.ReadByte().GetPlayer();
-                    var role = (Roles.Roles.Role) reader.ReadByte();
-                    Utils.Log(player.nameText.text + ": " + role);
-                    player.SetRole(role);
-                    Utils.Log("2: " + player.nameText.text + ": " + player.GetRole());
-                    break;
+                
             }
         }
     }

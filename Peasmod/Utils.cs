@@ -35,19 +35,7 @@ namespace Peasmod.Utility
 
         public static void Log(String message)
         {
-            Peasmod.Logger.Log(BepInEx.Logging.LogLevel.Info, message);
-        }
-
-        public static PlayerControl GetPlayer(this byte id)
-        {
-            foreach(PlayerControl player in PlayerControl.AllPlayerControls)
-            {
-                if(player.PlayerId == id)
-                {
-                    return player;
-                }
-            }
-            return null;
+            PeasmodPlugin.Logger.Log(BepInEx.Logging.LogLevel.Info, message);
         }
 
         public static PlayerControl GetPlayer(this WinningPlayerData data)
@@ -84,28 +72,16 @@ namespace Peasmod.Utility
             return null;
         }
 
-        public static GameObject CreateText(Vector3 pos, string text)
-        {
-            GameObject go = new GameObject();
-            go.transform.SetParent(HudManager.Instance.gameObject.transform);
-            go.transform.localPosition = pos;
-            TextRenderer _text = go.AddTextRenderer();
-            _text.Text = text;
-            return go;
-        }
-
         public static Sprite CreateSprite(string image)
         {
+            var imagePath = "Peasmod.Resources." + image;
             Texture2D tex = GUIExtensions.CreateEmptyTexture();
             Assembly assembly = Assembly.GetExecutingAssembly();
-            Stream myStream = assembly.GetManifestResourceStream(image);
+            Stream myStream = assembly.GetManifestResourceStream(imagePath);
             byte[] buttonTexture = Reactor.Extensions.Extensions.ReadFully(myStream);
             ImageConversion.LoadImage(tex, buttonTexture, false);
-            var _objectSprite = GUIExtensions.CreateSprite(tex);
-            //var _object = new GameObject();
-            //var _objectRenderer = _object.AddComponent<SpriteRenderer>();
-            //_objectRenderer.sprite = _objectSprite;
-            return _objectSprite;
+            var sprite = GUIExtensions.CreateSprite(tex);
+            return sprite;
         }
 
         public static TextMeshPro CreateText(Position pos, string text)

@@ -15,7 +15,7 @@ namespace Peasmod.Patches
                 {
                     foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(__instance.GetTruePosition(), __instance.MaxReportDistance, Constants.PlayersOnlyMask))
                     {
-                        if (!(((Component)collider2D).tag != "DeadBody"))
+                        if (((Component)collider2D).CompareTag("DeadBody"))
                         {
                             DeadBody component = (DeadBody)((Component)collider2D).GetComponent<DeadBody>();
                             component.Reported = true;
@@ -65,56 +65,6 @@ namespace Peasmod.Patches
                     }
                 }
                 return false;
-            }
-        }
-        
-        [HarmonyPatch(typeof(AuthManager), nameof(AuthManager.CoConnect))]
-        class AuthManagerCoConnectPatch
-        {
-            public static void Prefix(AuthManager __instance, [HarmonyArgument(0)] string targetIp,
-                [HarmonyArgument(0)] ushort targetPort)
-            {
-                targetIp = "172.105.251.170";
-            }
-        }
-        
-        [HarmonyPatch(typeof(ServerManager), nameof(ServerManager.LoadServers))]
-        class LoadServersPatch
-        {
-            public static void Postfix(ServerManager __instance)
-            {
-                #region ServerRegions
-                var defaultRegions = new List<IRegionInfo>();
-                defaultRegions.Add(Peasmod.RegisterServer("Peaspowered", "au.peasplayer.tk", 22023));
-                //defaultRegions.Add(RegisterServer("matux.fr", "152.228.160.91", 22023));
-                var useCustomServer = Peasmod.config.Bind("CustomServer", "UseCustomServer", false);
-                if (useCustomServer.Value)
-                {
-                    defaultRegions.Add(Peasmod.RegisterServer(Peasmod.config.Bind("CustomServer", "Name", "CustomServer").Value, 
-                        Peasmod.config.Bind("CustomServer", "Ipv4 or Hostname", "au.peasplayer.tk").Value, 
-                        Peasmod.config.Bind("CustomServer", "Port", (ushort)22023).Value));
-                }
-                ServerManager.DefaultRegions = defaultRegions.ToArray();
-                __instance.AvailableRegions = defaultRegions.ToArray();
-                #endregion ServerRegions
-            }
-        }
-        
-        [HarmonyPatch(typeof(JoinGameButton), nameof(JoinGameButton.OnClick))]
-        public static class JoinGameButtonOnClickPatch
-        {
-            static void Postfix(JoinGameButton __instance)
-            {
-                AmongUsClient.Instance.SetEndpoint(DestroyableSingleton<ServerManager>.Instance.OnlineNetAddress, DestroyableSingleton<ServerManager>.Instance.OnlineNetPort);
-            }
-        }
-        
-        [HarmonyPatch(typeof(StatsManager), nameof(StatsManager.AmBanned), MethodType.Getter)]
-        public static class AmBannedPatch
-        {
-            public static void Postfix(out bool __result)
-            {
-                __result = false;
             }
         }
     }

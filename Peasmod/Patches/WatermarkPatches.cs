@@ -11,31 +11,6 @@ namespace Peasmod.Patches
 {
     public class WatermarkPatches
     {
-        [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
-        public static class PingTrackerPatch
-        {
-            public static void Postfix(PingTracker __instance)
-            {
-                __instance.text.text += "\n"+Peasmod.PluginName+" v"+Peasmod.PluginVersion+ "\n by " + StringColor.Green + Peasmod.PluginAuthor;
-            }
-        }
-
-        [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
-        public static class VersionShowerPatch
-        {
-            static void Postfix(VersionShower __instance)
-            {
-                __instance.text.text += "\nReactor-Framework" + "\n" + Peasmod.PluginName + " v" + Peasmod.PluginVersion + " \nby " + StringColor.Green + Peasmod.PluginAuthor + " " + StringColor.Reset + Peasmod.PluginPage;
-                __instance.transform.position -= new Vector3(0, 0.5f, 0);
-                AccountManager.Instance.accountTab.gameObject.SetActive(false);
-                foreach (var _object in GameObject.FindObjectsOfTypeAll(Il2CppType.Of<GameObject>()))
-                    if (_object.name.Contains("ReactorVersion"))
-                        GameObject.Destroy(_object);
-                //if(UnityEngine.Object.FindObjectOfType<MainMenuManager>() != null && UnityEngine.Object.FindObjectOfType<MainMenuManager>().Announcement != null)
-                //UnityEngine.Object.FindObjectOfType<MainMenuManager>().Announcement.gameObject.SetActive(true);
-            }
-        }
-        
         [HarmonyPatch(typeof(MainMenuManager), "Start")]
         public static class MainMenuManagerStartPatch
         {
@@ -65,39 +40,39 @@ namespace Peasmod.Patches
         {
             public static void Postfix(CreditsScreenPopUp __instance)
             {
-                Utils.Log("1");
                 if(GameObject.Find("AmyText_TMP") != null)
                     GameObject.Find("AmyText_TMP").GetComponent<TextMeshPro>().text = "Peasplayer\nGravity";
-                Utils.Log("2");
                 if(GameObject.Find("ForestText_TMP") != null)
-                    GameObject.Find("ForestText_TMP").GetComponent<TextMeshPro>().text = "Peasplayer";
-                Utils.Log("3");
+                    GameObject.Find("ForestText_TMP").GetComponent<TextMeshPro>().text = "Innersloth\nPeasplayer";
                 if(GameObject.Find("CMText") != null)
                     GameObject.Find("CMText").GetComponent<TextMeshPro>().text = "Game-Creators";
-                Utils.Log("4");
-                if(GameObject.Find("VictoriaText_TMP") != null)
-                    GameObject.Find("VictoriaText_TMP").GetComponent<TextMeshPro>().text = "Innersloth";
-                Utils.Log("5");
-                if(GameObject.Find("PT-BR") != null)
-                    GameObject.Find("PT-BR").SetActive(false);
-                Utils.Log("6");
-                if(GameObject.Find("TwitterIcon") != null)
+                if (Object.FindObjectOfType<AutoScroll>() != null)
+                {
+                    Object.FindObjectOfType<AutoScroll>().transform.localPosition = new Vector3(0, 0, 0);
+                    Object.FindObjectOfType<AutoScroll>().Destroy();
+                }
+                if (Object.FindObjectOfType<HideObjectIfMinor>() != null)
+                {
+                    Object.FindObjectOfType<HideObjectIfMinor>().Destroy();
+                    GameObject.Find("FollowUs").SetActive(true);
+                }
+
+                if (GameObject.Find("TwitterIcon") != null)
+                {
                     GameObject.Find("TwitterIcon").SetActive(false);
-                Utils.Log("7");
+                    //GameObject.Find("TwitterIcon").GetComponent<SpriteRenderer>().sprite =
+                    //    Utils.CreateSprite("GitHub.png");
+                    //GameObject.Find("TwitterIcon").GetComponent<SpriteRenderer>().size /= 45;
+                    //GameObject.Find("TwitterIcon").GetComponent<TwitterLink>().LinkUrl =
+                    //    "https://github.com/Peasplayer";
+                }
                 if(GameObject.Find("FacebookIcon") != null)
                     GameObject.Find("FacebookIcon").SetActive(false);
-                Utils.Log("8");
                 if(GameObject.Find("Discord-Logo-Color") != null)
                     GameObject.Find("Discord-Logo-Color").GetComponent<TwitterLink>().LinkUrl =
                     "https://discord.gg/nQB5EZe";
-                Utils.Log("9");
-                Texture2D tex = GUIExtensions.CreateEmptyTexture();
-                Assembly assembly = Assembly.GetExecutingAssembly();
-                Stream myStream = assembly.GetManifestResourceStream("Peasmod.Resources.Peasmod.png");
-                byte[] buttonTexture = Reactor.Extensions.Extensions.ReadFully(myStream);
-                ImageConversion.LoadImage(tex, buttonTexture, false);
                 if(GameObject.Find("logoImage") != null)
-                    GameObject.Find("logoImage").GetComponent<SpriteRenderer>().sprite = GUIExtensions.CreateSprite(tex);
+                    GameObject.Find("logoImage").GetComponent<SpriteRenderer>().sprite = Utils.CreateSprite("Peasmod.png");
             }
         }
     }
