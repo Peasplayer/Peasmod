@@ -64,7 +64,7 @@ namespace Peasmod.Utility
             {
                 if (collider2D.tag == "DeadBody")
                 {
-                    DeadBody body = (DeadBody)((Component)collider2D).GetComponent<DeadBody>();
+                    DeadBody body = collider2D.GetComponent<DeadBody>();
                     if(id == body.ParentId)
                         return body;
                 }

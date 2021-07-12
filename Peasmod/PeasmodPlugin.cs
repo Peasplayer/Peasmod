@@ -34,8 +34,6 @@ namespace Peasmod
         public static ConfigFile ConfigFile { get; private set; }
         public static readonly Random Random = new Random();
 
-        //public static List<CooldownButton> impostorbuttons = new List<CooldownButton>();
-
         public static bool GameStarted
         {
             get
@@ -51,13 +49,14 @@ namespace Peasmod
             Logger = this.Log;
             ConfigFile = Config;
 
-            Watermark.PingText = $" | {PluginName} v{PluginVersion} {StringColor.Green} by {PluginAuthor}";
+            Watermark.PingText = $" | {PluginName} v{PluginVersion}\n{StringColor.Green} by {PluginAuthor}";
+            Watermark.PingTextOffset = new Vector3(-0.9f, 0f);
             Watermark.VersionText = $" | {PluginName} v{PluginVersion} {StringColor.Green} by {PluginAuthor}";
             Watermark.VersionTextOffset = new Vector3(0f, -0.3f);
             PeasApi.AccountTabOffset = new Vector3(0f, -0.3f);
 
             CustomServerManager.RegisterServer("Peaspowered", "au.peasplayer.tk", 22023);
-            //CustomServerManager.RegisterServer("matux.fr", "152.228.160.91", 22023);
+            CustomServerManager.RegisterServer("matux.fr", "152.228.160.91", 22023);
 
             Settings.Load();
 

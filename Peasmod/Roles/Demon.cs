@@ -19,7 +19,7 @@ namespace Peasmod.Roles
 
         public override string TaskText => "Swap into the afterlife";
 
-        public override Color Color => new Color(255/255f, 46/255f, 0/255f);
+        public override Color Color => new Color(255/255f, 93/255f, 0/255f);
 
         public override int Limit => (int) Settings.DemonAmount.GetValue();
 

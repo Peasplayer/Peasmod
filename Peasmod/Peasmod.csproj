@@ -36,6 +36,13 @@
         <EmbeddedResource Include="Resources\Buttons\Peasplayer\TimeFreezing.png" />
         <EmbeddedResource Include="Resources\Buttons\Credits.png" />
         <EmbeddedResource Include="Resources\Buttons\Button1.png" />
+        <EmbeddedResource Include="Resources\Buttons\CreateVent.png" />
+        <EmbeddedResource Include="Resources\Buttons\DragBody.png" />
+        <EmbeddedResource Include="Resources\Buttons\DropBody.png" />
+        <EmbeddedResource Include="Resources\Buttons\Hide.png" />
+        <EmbeddedResource Include="Resources\Buttons\Morph.png" />
+        <EmbeddedResource Include="Resources\Buttons\Revive.png" />
+        <EmbeddedResource Include="Resources\Buttons\TimeFreezing.png" />
         <EmbeddedResource Include="Resources\Dot.png" />
         <EmbeddedResource Include="Resources\Hats\DreamMask.png" />
         <EmbeddedResource Include="Resources\Hats\KristalCrown.png" />

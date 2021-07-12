@@ -45,9 +45,9 @@ namespace Peasmod.Roles
         }
 
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
-        class PlayerControlExiledPatch
+        class PlayerControlMurderPlayerPatch
         {
-            public static void Postifx(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl victim)
+            public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl victim)
             {
                 if (victim.IsRole<Troll>())
                     new CustomEndReason(victim);
