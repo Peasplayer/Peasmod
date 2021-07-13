@@ -18,7 +18,7 @@ namespace Peasmod.Roles
 
         public override string TaskText => "Keep your crew safe";
 
-        public override Color Color => Palette.LightBlue;
+        public override Color Color => ModdedPalette.CaptainColor;
 
         public override int Limit => (int) Settings.CaptainAmount.GetValue();
 

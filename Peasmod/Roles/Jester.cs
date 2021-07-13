@@ -19,7 +19,7 @@ namespace Peasmod.Roles
 
         public override string TaskText => "Trick the crew into voting you out";
 
-        public override Color Color => new Color(136f / 256f, 31f / 255f, 136f / 255f);
+        public override Color Color => ModdedPalette.JesterColor;
 
         public override int Limit => (int) Settings.JesterAmount.GetValue();
 

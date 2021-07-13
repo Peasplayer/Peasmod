@@ -19,7 +19,7 @@ namespace Peasmod.Roles
 
         public override string TaskText => "Get killed by an impostor";
 
-        public override Color Color => Palette.AcceptedGreen;
+        public override Color Color => ModdedPalette.TrollColor;
 
         public override int Limit => (int) Settings.TrollAmount.GetValue();
 

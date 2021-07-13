@@ -6,7 +6,9 @@ using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Roles;
 using Peasmod.Utility;
+using Reactor;
 using Reactor.Extensions;
+using Reactor.Networking;
 using UnityEngine;
 
 namespace Peasmod.Roles
@@ -22,7 +24,7 @@ namespace Peasmod.Roles
 
         public override string TaskText => "Revive dead crewmates";
 
-        public override Color Color => Color.yellow;
+        public override Color Color => ModdedPalette.DoctorColor;
 
         public override int Limit => (int) Settings.DoctorAmount.GetValue();
 
@@ -49,14 +51,11 @@ namespace Peasmod.Roles
                     }
                     if (_bodys.Count != 0)
                     {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRpc.DoctorAbility, Hazel.SendOption.None, -1);
-                        writer.WritePacked(_bodys[0].ParentId);
-                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        Rpc<DoctorAbilityRpc>.Instance.Send(new DoctorAbilityRpc.Data(_bodys[0].ParentId.GetPlayer()));
 
                         var player = _bodys[0].ParentId.GetPlayer();
                         player.Revive();
                         player.transform.position = _bodys[0].transform.position;
-                        //player.Collider.enabled = true;
                         _bodys[0].gameObject.Destroy();
                     }
                 }, Settings.DoctorCooldown.GetValue(),
@@ -95,6 +94,43 @@ namespace Peasmod.Roles
         public override void OnMeetingUpdate(MeetingHud meeting)
         {
             
+        }
+        
+        [RegisterCustomRpc((uint) CustomRpcCalls.DoctorAbility)]
+        public class DoctorAbilityRpc : PlayerCustomRpc<PeasmodPlugin, DoctorAbilityRpc.Data>
+        {
+            public DoctorAbilityRpc(PeasmodPlugin plugin, uint id) : base(plugin, id)
+            {
+            }
+
+            public readonly struct Data
+            {
+                public readonly PlayerControl Player;
+
+                public Data(PlayerControl player)
+                {
+                    Player = player;
+                }
+            }
+
+            public override RpcLocalHandling LocalHandling => RpcLocalHandling.None;
+
+            public override void Write(MessageWriter writer, Data data)
+            {
+                writer.Write(data.Player.PlayerId);
+            }
+
+            public override Data Read(MessageReader reader)
+            {
+                return new Data(reader.ReadByte().GetPlayer());
+            }
+
+            public override void Handle(PlayerControl innerNetObject, Data data)
+            {
+                data.Player.Revive();
+                data.Player.transform.position = Utils.GetDeadBody(data.Player.PlayerId).transform.position;
+                Utils.GetDeadBody(data.Player.PlayerId).gameObject.Destroy();
+            }
         }
     }
 }

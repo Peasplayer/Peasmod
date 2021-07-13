@@ -27,22 +27,17 @@ namespace Peasmod
         public const string PluginName = "Peasmod";
         public const string PluginAuthor = "Peasplayer#2541";
         public const string PluginVersion = "2.2.0";
-        public const string PluginPage = "peascord.tk";
 
         public Harmony Harmony { get; } = new Harmony(Id);
         public static ManualLogSource Logger { get; private set; }
         public static ConfigFile ConfigFile { get; private set; }
+
         public static readonly Random Random = new Random();
 
-        public static bool GameStarted
-        {
-            get
-            {
-                return GameData.Instance && ShipStatus.Instance && AmongUsClient.Instance &&
-                       (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started ||
-                        AmongUsClient.Instance.GameMode == GameModes.FreePlay);
-            }
-        }
+        public static bool GameStarted =>
+            GameData.Instance && ShipStatus.Instance && AmongUsClient.Instance &&
+            (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started ||
+             AmongUsClient.Instance.GameMode == GameModes.FreePlay);
 
         public override void Load()
         {
