@@ -1,4 +1,5 @@
-﻿using BepInEx.IL2CPP;
+﻿using System.Collections.Generic;
+using BepInEx.IL2CPP;
 using HarmonyLib;
 using Hazel;
 using PeasAPI;

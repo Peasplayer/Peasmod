@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
-using UnhollowerBaseLib;
 using Reactor.Extensions;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Reflection;
 using System.IO;
 using TMPro;
-using Reactor.Unstrip;
 
 namespace Peasmod.Utility
 {
@@ -35,7 +29,7 @@ namespace Peasmod.Utility
 
         public static void Log(String message)
         {
-            PeasmodPlugin.Logger.Log(BepInEx.Logging.LogLevel.Info, message);
+            PeasmodPlugin.Logger.LogInfo(message);
         }
 
         public static PlayerControl GetPlayer(this WinningPlayerData data)

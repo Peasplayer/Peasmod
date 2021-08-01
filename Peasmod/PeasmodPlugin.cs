@@ -9,6 +9,7 @@ using Essentials;
 using Hazel.Udp;
 using PeasAPI;
 using PeasAPI.Components;
+using Peasmod.ApiExtension.Gamemodes;
 using Peasmod.Utility;
 using UnityEngine;
 using Random = System.Random;
@@ -29,7 +30,9 @@ namespace Peasmod
         public const string PluginVersion = "2.2.0";
 
         public Harmony Harmony { get; } = new Harmony(Id);
+        
         public static ManualLogSource Logger { get; private set; }
+        
         public static ConfigFile ConfigFile { get; private set; }
 
         public static readonly Random Random = new Random();
@@ -56,6 +59,7 @@ namespace Peasmod
             Settings.Load();
 
             RegisterCustomRoleAttribute.Register(this);
+            RegisterCustomGameModeAttribute.Register(this);
 
             Harmony.Unpatch(typeof(UdpConnection).GetMethod("HandleSend"), HarmonyPatchType.Prefix, ReactorPlugin.Id);
             Harmony.PatchAll();

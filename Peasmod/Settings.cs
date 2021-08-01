@@ -113,10 +113,10 @@ namespace Peasmod
         public static readonly CustomNumberOption SheriffCooldown =
             CustomOption.AddNumber("sheriffcooldown", "└ Shoot-Cooldown", true, 10, 2, 60, 2);
 
-        public static readonly CustomStringOption Gamemode = CustomOption.AddString("gamemode", "Gamemode", "None", "HotPotato", "Battle Royale");
+        public static readonly CustomStringOption GameModeOption = CustomOption.AddString("gamemode", "GameMode", "None", "Hide and Seek");
 
-        public static readonly CustomNumberOption HotPotatoTimer =
-            CustomOption.AddNumber("hotpotatotimer", "HotPotato-Timer", true, 10, 2, 60, 2);
+        public static readonly CustomNumberOption SeekerCooldown =
+            CustomOption.AddNumber("seekercooldown", "Seeker-Cooldown", true, 10, 2, 60, 2);
 
         public static void Load()
         {
@@ -176,21 +176,17 @@ namespace Peasmod
             SheriffCooldown.MenuVisible = value;
         }
 
-        public enum GameMode
+        public enum GameMode : int
         {
-            Normal = 0,
-            Freeplay = 1,
+            Roles = 0,
+            HideAndSeek = 1,
             HotPotato = 2,
             BattleRoyale = 3
         }
 
         public static bool IsGameMode(GameMode mode)
         {
-            if (mode == GameMode.Freeplay && AmongUsClient.Instance.GameMode == GameModes.FreePlay)
-                return true;
-            if (AmongUsClient.Instance.GameMode == GameModes.FreePlay)
-                return false;
-            if (Gamemode.GetValue() == (int) mode)
+            if (GameModeOption.GetValue() == (int) mode)
                 return true;
             return false;
         }
@@ -219,6 +215,20 @@ namespace Peasmod
 
                 SectionRoles.SetValue(false);
                 SectionRoles.OnValueChanged += (sender, args) => { SectionRolesListener((bool) args.Value); };
+                
+                GameModeOption.OnValueChanged += (sender, args) =>
+                {
+                    PeasApi.EnableRoles = (int)args.Value == (int)GameMode.Roles;
+                };
+            }
+        }
+        
+        [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameJoined))]
+        class AmongUsClientOnGameJoinedPatch
+        {
+            static void Postfix(AmongUsClient __instance)
+            {
+                PeasApi.EnableRoles = GameModeOption.GetValue() == (int)GameMode.Roles;
             }
         }
     }
