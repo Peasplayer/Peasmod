@@ -15,11 +15,9 @@
 
     <ItemGroup>
         <PackageReference Include="Reactor" Version="1.0.0-rc.1" />
-        <PackageReference Include="PeasAPI" Version="1.2.1-ci.10" />
+        <PackageReference Include="PeasAPI" Version="1.2.2-ci.17" />
         <PackageReference Include="Peasplayer.Essentials" Version="0.2.0-dev13" />
         <PackageReference Include="Reactor.MSBuild" Version="0.1.5" PrivateAssets="all" />
-        
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
     </ItemGroup>
     
     <Target Name="Copy" AfterTargets="Build">

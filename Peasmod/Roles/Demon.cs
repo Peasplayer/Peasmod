@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using BepInEx.IL2CPP;
 using HarmonyLib;
 using Hazel;
@@ -43,12 +44,8 @@ namespace Peasmod.Roles
                 {
                     PlayerControl.LocalPlayer.Die(DeathReason.Kill);
                     Rpc<DemonAbilityRpc>.Instance.Send(new DemonAbilityRpc.Data(PlayerControl.LocalPlayer, true));
-                }, Settings.DemonCooldown.GetValue(), Utils.CreateSprite("Buttons.Button1.png"), Vector2.zero, true, 
-                Settings.DemonDuration.GetValue(), () =>
-                {
-                    PlayerControl.LocalPlayer.Revive();
-                    Rpc<DemonAbilityRpc>.Instance.Send(new DemonAbilityRpc.Data(PlayerControl.LocalPlayer, false));
-                }, this);
+                    Coroutines.Start(CoStartDemonAbility(Settings.DemonDuration.GetValue()));
+                }, Settings.DemonCooldown.GetValue(), Utils.CreateSprite("Buttons.Button1.png"), Vector2.zero, false, this);
         }
 
         public override void OnUpdate()
@@ -59,6 +56,19 @@ namespace Peasmod.Roles
         public override void OnMeetingUpdate(MeetingHud meeting)
         {
             
+        }
+
+        private IEnumerator CoStartDemonAbility(float cooldown)
+        {
+            yield return new WaitForSeconds(cooldown);
+            
+            if (PeasApi.GameStarted)
+            {
+                PlayerControl.LocalPlayer.Revive();
+                Rpc<DemonAbilityRpc>.Instance.Send(new DemonAbilityRpc.Data(PlayerControl.LocalPlayer, false));
+            }
+            
+            yield break;
         }
         
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
