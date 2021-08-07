@@ -9,6 +9,7 @@ using Essentials;
 using Hazel.Udp;
 using PeasAPI;
 using PeasAPI.Components;
+using PeasAPI.Managers;
 using Peasmod.ApiExtension.Gamemodes;
 using Peasmod.Utility;
 using UnityEngine;
@@ -47,14 +48,16 @@ namespace Peasmod
             Logger = this.Log;
             ConfigFile = Config;
 
-            Watermark.PingText = $" | {PluginName} v{PluginVersion}\n{StringColor.Green} by {PluginAuthor}";
-            Watermark.PingTextOffset = new Vector3(-0.9f, 0f);
-            Watermark.VersionText = $" | {PluginName} v{PluginVersion} {StringColor.Green} by {PluginAuthor}";
-            Watermark.VersionTextOffset = new Vector3(0f, -0.3f);
+            WatermarkManager.PingText = $" | {PluginName} v{PluginVersion}\n{StringColor.Green} by {PluginAuthor}";
+            WatermarkManager.PingTextOffset = new Vector3(-0.9f, 0f);
+            WatermarkManager.VersionText = $" | {PluginName} v{PluginVersion} {StringColor.Green} by {PluginAuthor}";
+            WatermarkManager.VersionTextOffset = new Vector3(0f, -0.3f);
             PeasApi.AccountTabOffset = new Vector3(0f, -0.3f);
 
             CustomServerManager.RegisterServer("Peaspowered", "au.peasplayer.tk", 22023);
             CustomServerManager.RegisterServer("matux.fr", "152.228.160.91", 22023);
+            
+            UpdateManager.RegisterUpdateListener("https://raw.githubusercontent.com/Peasplayer/Peasmod/dev/Peasmod/Data.json");
 
             Settings.Load();
 
