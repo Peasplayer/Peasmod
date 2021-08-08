@@ -14,42 +14,43 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Reactor" Version="1.0.0-rc.1" />
-        <PackageReference Include="PeasAPI" Version="1.3.0-release" />
-        <PackageReference Include="Peasplayer.Essentials" Version="0.2.0-dev13" />
-        <PackageReference Include="Reactor.MSBuild" Version="0.1.5" PrivateAssets="all" />
+        <PackageReference Include="Reactor" Version="1.0.0-rc.1"/>
+        <PackageReference Include="PeasAPI" Version="1.3.2-release" />
+        <PackageReference Include="Peasplayer.Essentials" Version="0.2.0-dev13"/>
+        <PackageReference Include="Reactor.MSBuild" Version="0.1.5" PrivateAssets="all"/>
     </ItemGroup>
-    
+
     <Target Name="Copy" AfterTargets="Build">
-        <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" Condition="'$(Configuration)' == 'Debug' And '$(AmongUs)' != ''" />
-        <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="$(OutputPath)/final/$(AssemblyName).$(VersionPrefix)$(VersionSuffix).dll" Condition="'$(Configuration)' == 'Release'" />
+        <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" Condition="'$(Configuration)' == 'Debug' And '$(AmongUs)' != ''"/>
+        <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="$(OutputPath)/final/$(AssemblyName).$(VersionPrefix)$(VersionSuffix).dll" Condition="'$(Configuration)' == 'Release'"/>
     </Target>
 
     <ItemGroup>
-        <EmbeddedResource Include="Resources\Buttons\Peasplayer\BuildVent.png" />
-        <EmbeddedResource Include="Resources\Buttons\Peasplayer\DragBody.png" />
-        <EmbeddedResource Include="Resources\Buttons\Peasplayer\DropBody.png" />
-        <EmbeddedResource Include="Resources\Buttons\Peasplayer\Hide.png" />
-        <EmbeddedResource Include="Resources\Buttons\Peasplayer\Morphing.png" />
-        <EmbeddedResource Include="Resources\Buttons\Peasplayer\Revive.png" />
-        <EmbeddedResource Include="Resources\Buttons\Peasplayer\TimeFreezing.png" />
-        <EmbeddedResource Include="Resources\Buttons\Credits.png" />
-        <EmbeddedResource Include="Resources\Buttons\Button1.png" />
-        <EmbeddedResource Include="Resources\Buttons\CreateVent.png" />
-        <EmbeddedResource Include="Resources\Buttons\DragBody.png" />
-        <EmbeddedResource Include="Resources\Buttons\DropBody.png" />
-        <EmbeddedResource Include="Resources\Buttons\Hide.png" />
-        <EmbeddedResource Include="Resources\Buttons\Morph.png" />
-        <EmbeddedResource Include="Resources\Buttons\Revive.png" />
-        <EmbeddedResource Include="Resources\Buttons\TimeFreezing.png" />
-        <EmbeddedResource Include="Resources\Dot.png" />
-        <EmbeddedResource Include="Resources\Hats\DreamMask.png" />
-        <EmbeddedResource Include="Resources\Hats\KristalCrown.png" />
-        <EmbeddedResource Include="Resources\Hats\PeasMask.png" />
-        <EmbeddedResource Include="Resources\Kill.png" />
-        <EmbeddedResource Include="Resources\Label.png" />
-        <EmbeddedResource Include="Resources\Peasmod.png" />
-        <EmbeddedResource Include="Resources\Potato.png" />
-        <EmbeddedResource Include="Resources\GitHub.png" />
+        <EmbeddedResource Include="Resources\Buttons\Peasplayer\BuildVent.png"/>
+        <EmbeddedResource Include="Resources\Buttons\Peasplayer\DragBody.png"/>
+        <EmbeddedResource Include="Resources\Buttons\Peasplayer\DropBody.png"/>
+        <EmbeddedResource Include="Resources\Buttons\Peasplayer\Hide.png"/>
+        <EmbeddedResource Include="Resources\Buttons\Peasplayer\Morphing.png"/>
+        <EmbeddedResource Include="Resources\Buttons\Peasplayer\Revive.png"/>
+        <EmbeddedResource Include="Resources\Buttons\Peasplayer\TimeFreezing.png"/>
+        <EmbeddedResource Include="Resources\Buttons\Credits.png"/>
+        <EmbeddedResource Include="Resources\Buttons\Button1.png"/>
+        <EmbeddedResource Include="Resources\Buttons\CreateVent.png"/>
+        <EmbeddedResource Include="Resources\Buttons\DragBody.png"/>
+        <EmbeddedResource Include="Resources\Buttons\DropBody.png"/>
+        <EmbeddedResource Include="Resources\Buttons\Hide.png"/>
+        <EmbeddedResource Include="Resources\Buttons\Morph.png"/>
+        <EmbeddedResource Include="Resources\Buttons\Revive.png"/>
+        <EmbeddedResource Include="Resources\Buttons\TimeFreezing.png"/>
+        <EmbeddedResource Include="Resources\Buttons\CallMeeting.png"/>
+        <EmbeddedResource Include="Resources\Dot.png"/>
+        <EmbeddedResource Include="Resources\Hats\DreamMask.png"/>
+        <EmbeddedResource Include="Resources\Hats\KristalCrown.png"/>
+        <EmbeddedResource Include="Resources\Hats\PeasMask.png"/>
+        <EmbeddedResource Include="Resources\Kill.png"/>
+        <EmbeddedResource Include="Resources\Label.png"/>
+        <EmbeddedResource Include="Resources\Peasmod.png"/>
+        <EmbeddedResource Include="Resources\Potato.png"/>
+        <EmbeddedResource Include="Resources\GitHub.png"/>
     </ItemGroup>
 </Project>

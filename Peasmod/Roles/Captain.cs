@@ -2,7 +2,6 @@
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Roles;
-using Peasmod.Utility;
 using UnityEngine;
 
 namespace Peasmod.Roles
@@ -36,7 +35,7 @@ namespace Peasmod.Roles
                 {
                     PlayerControl.LocalPlayer.CmdReportDeadBody(null);
                 }, PlayerControl.GameOptions.EmergencyCooldown,
-                Utils.CreateSprite("Buttons.Button1.png"), Vector2.zero, false, this);
+                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CallMeeting.png", 650f), Vector2.zero, false, this, true, "<size=40%>Call", new Vector2(0f, -0.6f));
         }
 
         public override void OnUpdate()
