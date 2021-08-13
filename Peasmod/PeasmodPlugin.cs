@@ -1,4 +1,5 @@
-﻿using BepInEx;
+﻿using System;
+using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using HarmonyLib;
@@ -58,6 +59,10 @@ namespace Peasmod
             CustomServerManager.RegisterServer("matux.fr", "152.228.160.91", 22023);
             
             UpdateManager.RegisterUpdateListener("https://raw.githubusercontent.com/Peasplayer/Peasmod/dev/Peasmod/Data.json");
+            
+            CustomHatManager.RegisterNewHat("DreamMask", "Peasmod.Resources.Hats.DreamMask.png", new Vector2(0f, 0.2f));
+            CustomHatManager.RegisterNewHat("KristalCrown", "Peasmod.Resources.Hats.KristalCrown.png");
+            CustomHatManager.RegisterNewHat("PeasMask", "Peasmod.Resources.Hats.PeasMask.png", new Vector2(0f, 0.2f));
 
             Settings.Load();
 

@@ -114,8 +114,8 @@ namespace Peasmod.Gamemodes
                         aliveCrewmates++;
                 }
             }
-            Utils.Log(aliveCrewmates + " - " + aliveImpostors);
-            if (!(aliveCrewmates == 0 && aliveImpostors > 0))
+            
+            if (!(aliveCrewmates == 1 && aliveImpostors > 0))
                 return false;
             
             return reason != GameOverReason.HumansByTask;
