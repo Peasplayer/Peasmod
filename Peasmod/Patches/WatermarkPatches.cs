@@ -16,22 +16,14 @@ namespace Peasmod.Patches
         {
             public static void Postfix()
             {
-                Texture2D tex = GUIExtensions.CreateEmptyTexture();
-                Assembly assembly = Assembly.GetExecutingAssembly();
-                Stream myStream = assembly.GetManifestResourceStream("Peasmod.Resources.Peasmod.png");
-                byte[] buttonTexture = Reactor.Extensions.Extensions.ReadFully(myStream);
-                ImageConversion.LoadImage(tex, buttonTexture, false);
-                GameObject.Find("bannerLogo_AmongUs").GetComponent<SpriteRenderer>().sprite = GUIExtensions.CreateSprite(tex);
-                GameObject.Find("AmongUsLogo").GetComponent<SpriteRenderer>().sprite = GUIExtensions.CreateSprite(tex);
+                var peasmodLogo = PeasAPI.Utility.CreateSprite("Peasmod.Resources.Peasmod.png");
+                
+                GameObject.Find("bannerLogo_AmongUs").GetComponent<SpriteRenderer>().sprite = peasmodLogo;
+                GameObject.Find("AmongUsLogo").GetComponent<SpriteRenderer>().sprite = peasmodLogo;
                 GameObject.Find("AmongUsLogo").transform.position += new Vector3(0.3f, 0, 0);
-                ImageConversion.LoadImage(tex, buttonTexture, false);
-                Texture2D tex2 = GUIExtensions.CreateEmptyTexture();
-                Assembly assembly2 = Assembly.GetExecutingAssembly();
-                Stream myStream2 = assembly2.GetManifestResourceStream("Peasmod.Resources.Buttons.Credits.png");
-                byte[] buttonTexture2 = Reactor.Extensions.Extensions.ReadFully(myStream2);
-                ImageConversion.LoadImage(tex2, buttonTexture2, false);
+                
                 if(GameObject.Find("CreditsButton") != null)
-                    GameObject.Find("CreditsButton").GetComponent<SpriteRenderer>().sprite = GUIExtensions.CreateSprite(tex2);
+                    GameObject.Find("CreditsButton").GetComponent<SpriteRenderer>().sprite = PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Credits.png");
             }
         }
         

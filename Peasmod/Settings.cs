@@ -113,7 +113,7 @@ namespace Peasmod
         public static readonly CustomNumberOption SheriffCooldown =
             CustomOption.AddNumber("sheriffcooldown", "└ Shoot-Cooldown", true, 10, 2, 60, 2);
 
-        public static readonly CustomStringOption GameModeOption = CustomOption.AddString("gamemode", "GameMode", "None", "Hide and Seek");
+        public static readonly CustomStringOption GameModeOption = CustomOption.AddString("gamemode", "GameMode", "None", "Hide and Seek" ,"BattleRoyale");
 
         public static readonly CustomNumberOption SeekerCooldown =
             CustomOption.AddNumber("seekercooldown", "Seeker-Cooldown", true, 10, 2, 60, 2);
@@ -180,8 +180,8 @@ namespace Peasmod
         {
             Roles = 0,
             HideAndSeek = 1,
-            HotPotato = 2,
-            BattleRoyale = 3
+            BattleRoyale = 2,
+            HotPotato = 3
         }
 
         public static bool IsGameMode(GameMode mode)

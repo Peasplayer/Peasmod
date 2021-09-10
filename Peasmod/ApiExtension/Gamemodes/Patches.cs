@@ -1,4 +1,9 @@
-﻿using HarmonyLib;
+﻿using System;
+using System.Linq;
+using HarmonyLib;
+using Il2CppSystem.Collections.Generic;
+using PeasAPI;
+using UnhollowerBaseLib;
 using UnityEngine;
 
 namespace Peasmod.ApiExtension.Gamemodes
@@ -57,6 +62,57 @@ namespace Peasmod.ApiExtension.Gamemodes
                         return mode.OnKill(__instance, victim);
                 }
                     
+                return true;
+            }
+        }
+        
+        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetInfected))]
+        class PlayerControlSetInfectedPatch
+        {
+            public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] Il2CppStructArray<byte> _infected)
+            {
+                var infected = new List<PlayerControl>();
+                
+                foreach (var id in _infected)
+                {
+                    infected.Add(id.GetPlayer());
+                }
+                
+                foreach (var mode in GameModeManager.Modes)
+                {
+                    if (mode.Enabled)
+                        infected = mode.GetImpostors(infected);
+                }
+                    
+                return true;
+            }
+        }
+        
+        [HarmonyPatch(typeof(UseButtonManager), nameof(UseButtonManager.DoClick))]
+        public static class UseButtonManagerDoClickPatch
+        {
+            public static bool Prefix(UseButtonManager __instance)
+            {
+                if (__instance.isActiveAndEnabled && PeasApi.GameStarted && __instance.currentTarget == null)
+                {
+                    foreach (var mode in GameModeManager.Modes)
+                    {
+                        if (mode.Enabled)
+                        {
+                            HudManager.Instance.ShowMap((Action<MapBehaviour>) (map =>
+                            {
+                                if (!mode.AllowSabotage())
+                                    foreach (MapRoom mapRoom in map.infectedOverlay.rooms.ToArray())
+                                        mapRoom.gameObject.SetActive(false);
+
+                                map.ShowInfectedMap();
+                            }));
+
+                            return false;
+                        }
+                    }
+                }
+
                 return true;
             }
         }

@@ -118,7 +118,7 @@ namespace Peasmod.Gamemodes
             if (!(aliveCrewmates == 1 && aliveImpostors > 0))
                 return false;
             
-            return reason != GameOverReason.HumansByTask;
+            return true;
         }
 
         private static bool IsFroozen = false;

@@ -1,5 +1,7 @@
-﻿using BepInEx.IL2CPP;
+﻿using System.Linq;
+using BepInEx.IL2CPP;
 using Il2CppSystem.Collections.Generic;
+using UnityEngine;
 
 namespace Peasmod.ApiExtension.Gamemodes
 {
@@ -25,7 +27,12 @@ namespace Peasmod.ApiExtension.Gamemodes
 
         public virtual List<PlayerControl> GetIntroTeam()
         {
-            return new List<PlayerControl>();
+            return PlayerControl.AllPlayerControls;
+        }
+        
+        public virtual List<PlayerControl> GetImpostors(List<PlayerControl> originalImpostors)
+        {
+            return originalImpostors;
         }
         
         public virtual void OnUpdate() {}
@@ -43,6 +50,11 @@ namespace Peasmod.ApiExtension.Gamemodes
         public virtual string GetObjective(PlayerControl player)
         {
             return null;
+        }
+        
+        public virtual bool AllowSabotage()
+        {
+            return false;
         }
 
         public virtual bool ShouldGameStop(GameOverReason reason)
