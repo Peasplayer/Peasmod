@@ -15,8 +15,8 @@
 
     <ItemGroup>
         <PackageReference Include="Reactor" Version="1.0.0-rc.1" />
-        <!--<PackageReference Include="PeasAPI" Version="1.3.3-release" />-->
-        <Reference Include="$(AmongUs)\BepInEx\plugins\PeasAPI.dll" />
+        <PackageReference Include="PeasAPI" Version="1.3.4.1-release" />
+        <!--<Reference Include="$(AmongUs)\BepInEx\plugins\PeasAPI.dll" />-->
         <PackageReference Include="Peasplayer.Essentials" Version="0.2.0-dev13" />
         <PackageReference Include="Reactor.MSBuild" Version="0.1.5" PrivateAssets="all" />
     </ItemGroup>
