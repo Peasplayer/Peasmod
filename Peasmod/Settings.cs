@@ -105,7 +105,7 @@ namespace Peasmod
             CustomOption.AddNumber("inspectors", $"• {ModdedPalette.InspectorColor.GetTextColor()}Inspectors{StringColor.Reset}", true, 0, 0, 14, 1);
 
         public static readonly CustomNumberOption MayorAmount =
-            CustomOption.AddNumber("mayors", "• Mayors", true, 0, 0, 14, 1);
+            CustomOption.AddNumber("mayors", $"• {ModdedPalette.MayorColor.GetTextColor()}Mayors{StringColor.Reset}", true, 0, 0, 14, 1);
 
         public static readonly CustomNumberOption SheriffAmount =
             CustomOption.AddNumber("sheriffs", "• Sheriffs", true, 0, 0, 14, 1);

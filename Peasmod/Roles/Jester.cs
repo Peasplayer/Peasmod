@@ -45,7 +45,7 @@ namespace Peasmod.Roles
         }
 
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Exiled))]
-        class PlayerControlExiledPatch
+        public static class PlayerControlExiledPatch
         {
             public static void Prefix(PlayerControl __instance)
             {
