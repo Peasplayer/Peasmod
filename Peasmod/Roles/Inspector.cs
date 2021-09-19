@@ -1,13 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BepInEx.IL2CPP;
-using Hazel;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.Roles;
 using Peasmod.Utility;
-using Reactor;
-using Reactor.Networking;
 using UnityEngine;
 
 namespace Peasmod.Roles
@@ -37,94 +34,69 @@ namespace Peasmod.Roles
 
         public override void OnGameStart()
         {
+            Dots.Clear();
+            if (PlayerControl.LocalPlayer.IsRole<Inspector>())
+            {
+                foreach (var player in GameData.Instance.AllPlayers)
+                    Dots.Add(player.PlayerId, new Dictionary<GameObject, float>());
+            }
         }
 
-        private static float _timer = 0f;
-        private static readonly float _maxTimer = 0.125f;
-        public static Dictionary<GameObject, float> Dots = new Dictionary<GameObject, float>();
+        private static float _timer;
+        private static readonly float MaxTimer = 0.125f;
+        private static readonly Dictionary<byte, Dictionary<GameObject, float>> Dots = new ();
 
         public override void OnUpdate()
         {
-            if (_timer < 0f)
-            {
-                if (!PlayerControl.LocalPlayer.Data.IsDead)
-                {
-                    Rpc<InspectorAbilityRpc>.Instance.Send(new InspectorAbilityRpc.Data(PlayerControl.LocalPlayer));
-                }
-
-                _timer = _maxTimer;
-            }
-            else
-                _timer -= Time.deltaTime;
-
             for (int i = 0; i < Dots.Count; i++)
             {
-                var dot = Dots.ElementAt(i).Key;
-                var time = Dots.ElementAt(i).Value;
-                if (time + 2f <= Time.time)
+                var player = Dots.ElementAt(i).Key.GetPlayer();
+                if (player == null)
+                    continue;
+                
+                var dots = Dots.ElementAt(i).Value;
+                
+                if (_timer < 0f)
                 {
-                    Color color = dot.GetComponent<SpriteRenderer>().material.color;
-                    color.a -= 0.2f;
-                    dot.GetComponent<SpriteRenderer>().material.color = color;
-                    if (color.a <= 0f)
-                        Dots.Remove(dot);
-                    else
+                    if (!player.Data.IsDead && !player.Data.Disconnected)
                     {
-                        time += 2f;
-                        Dots.Remove(dot);
-                        Dots.Add(dot, time);
+                        if (PlayerControl.LocalPlayer.IsRole<Inspector>())
+                        {
+                            var dot = new GameObject();
+                            var renderer = dot.AddComponent<SpriteRenderer>();
+                            renderer.sprite = Utils.CreateSprite("Dot.png");
+                            dot.transform.localPosition = new Vector3(player.GetTruePosition().x, player.GetTruePosition().y, player.transform.position.z);
+                            dot.GetComponent<SpriteRenderer>().material.color = Utils.ColorIdToColor(player.Data.ColorId);
+                            dots.Add(dot, Time.time);
+                        }
+                    }
+
+                    _timer = MaxTimer;
+                }
+                else
+                    _timer -= Time.deltaTime;
+
+                for (int j = 0; j < dots.Count; j++)
+                {
+                    var dot = dots.ElementAt(j).Key;
+                    var time = dots.ElementAt(j).Value;
+                    if (time + 2f <= Time.time)
+                    {
+                        Color color = dot.GetComponent<SpriteRenderer>().material.color;
+                        color.a -= 0.2f;
+                        dot.GetComponent<SpriteRenderer>().material.color = color;
+                        if (color.a <= 0f)
+                            dots.Remove(dot);
+                        else
+                        {
+                            time += 2f;
+                            dots.Remove(dot);
+                            dots.Add(dot, time);
+                        }
                     }
                 }
-            }
-        }
 
-        public override void OnMeetingUpdate(MeetingHud meeting)
-        {
-        }
-        
-        [RegisterCustomRpc((uint) CustomRpcCalls.InspectorAbility)]
-        public class InspectorAbilityRpc : PlayerCustomRpc<PeasmodPlugin, InspectorAbilityRpc.Data>
-        {
-            public InspectorAbilityRpc(PeasmodPlugin plugin, uint id) : base(plugin, id)
-            {
-            }
-
-            public readonly struct Data
-            {
-                public readonly PlayerControl Player;
-
-                public Data(PlayerControl player)
-                {
-                    Player = player;
-                }
-            }
-
-            public override RpcLocalHandling LocalHandling => RpcLocalHandling.None;
-
-            public override void Write(MessageWriter writer, Data data)
-            {
-                writer.Write(data.Player.PlayerId);
-            }
-
-            public override Data Read(MessageReader reader)
-            {
-                return new Data(reader.ReadByte().GetPlayer());
-            }
-
-            public override void Handle(PlayerControl innerNetObject, Data data)
-            {
-                if(data.Player.PlayerId != PlayerControl.LocalPlayer.PlayerId && !PlayerControl.LocalPlayer.Data.IsDead)
-                {
-                    if (PlayerControl.LocalPlayer.IsRole<Inspector>())
-                    {
-                        var dot = new GameObject();
-                        var renderer = dot.AddComponent<SpriteRenderer>();
-                        renderer.sprite = Utils.CreateSprite("Dot.png");
-                        dot.transform.localPosition = new Vector3(data.Player.GetTruePosition().x, data.Player.GetTruePosition().y, data.Player.transform.position.z);
-                        dot.GetComponent<SpriteRenderer>().material.color = Utils.ColorIdToColor(data.Player.Data.ColorId);
-                        Dots.Add(dot, Time.time);
-                    }
-                }
+                Dots[player.PlayerId] = dots;
             }
         }
     }
