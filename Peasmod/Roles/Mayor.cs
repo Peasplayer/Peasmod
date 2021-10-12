@@ -24,7 +24,7 @@ namespace Peasmod.Roles
 
         public override Color Color => ModdedPalette.MayorColor;
 
-        public override int Limit => (int) Settings.MayorAmount.GetValue();
+        public override int Limit => (int) Settings.MayorAmount.Value;
 
         public override Team Team => Team.Crewmate;
 

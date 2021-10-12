@@ -21,7 +21,7 @@ namespace Peasmod.Roles
 
         public override Color Color => ModdedPalette.TrollColor;
 
-        public override int Limit => (int) Settings.TrollAmount.GetValue();
+        public override int Limit => (int) Settings.TrollAmount.Value;
 
         public override Team Team => Team.Alone;
 

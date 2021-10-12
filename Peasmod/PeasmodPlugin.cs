@@ -1,12 +1,10 @@
-﻿using System;
-using BepInEx;
+﻿using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using HarmonyLib;
 using InnerNet;
 using Reactor;
 using BepInEx.Logging;
-using Essentials;
 using Hazel.Udp;
 using PeasAPI;
 using PeasAPI.Components;
@@ -21,7 +19,6 @@ namespace Peasmod
     [BepInPlugin(Id)]
     [BepInProcess("Among Us.exe")]
     [BepInDependency(ReactorPlugin.Id)]
-    [BepInDependency(EssentialsPlugin.Id)]
     [BepInDependency(PeasApi.Id)]
     public class PeasmodPlugin : BasePlugin
     {
@@ -29,7 +26,7 @@ namespace Peasmod
 
         public const string PluginName = "Peasmod";
         public const string PluginAuthor = "Peasplayer#2541";
-        public const string PluginVersion = "2.2.0";
+        public const string PluginVersion = "3.0.0";
 
         public Harmony Harmony { get; } = new Harmony(Id);
         
@@ -49,10 +46,8 @@ namespace Peasmod
             Logger = this.Log;
             ConfigFile = Config;
 
-            WatermarkManager.PingText = $" | {PluginName} v{PluginVersion}\n{StringColor.Green} by {PluginAuthor}";
-            WatermarkManager.PingTextOffset = new Vector3(-0.9f, 0f);
-            WatermarkManager.VersionText = $" | {PluginName} v{PluginVersion} {StringColor.Green} by {PluginAuthor}";
-            WatermarkManager.VersionTextOffset = new Vector3(0f, -0.3f);
+            WatermarkManager.AddWatermark($" | {PluginName} v{PluginVersion} {StringColor.Green} by {PluginAuthor}", $" | {PluginName} v{PluginVersion}\n{StringColor.Green} by {PluginAuthor}", 
+                new Vector3(0f, -0.3f), new Vector3(-0.9f, 0f));
             PeasApi.AccountTabOffset = new Vector3(0f, -0.3f);
 
             CustomServerManager.RegisterServer("Peaspowered", "au.peasplayer.tk", 22023);

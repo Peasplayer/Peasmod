@@ -21,7 +21,7 @@ namespace Peasmod.Roles
 
         public override Color Color => ModdedPalette.JesterColor;
 
-        public override int Limit => (int) Settings.JesterAmount.GetValue();
+        public override int Limit => (int) Settings.JesterAmount.Value;
 
         public override Team Team => Team.Alone;
 

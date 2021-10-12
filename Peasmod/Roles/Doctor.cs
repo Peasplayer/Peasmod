@@ -26,7 +26,7 @@ namespace Peasmod.Roles
 
         public override Color Color => ModdedPalette.DoctorColor;
 
-        public override int Limit => (int) Settings.DoctorAmount.GetValue();
+        public override int Limit => (int) Settings.DoctorAmount.Value;
 
         public override Team Team => Team.Crewmate;
 
@@ -34,11 +34,11 @@ namespace Peasmod.Roles
 
         public override bool HasToDoTasks => true;
 
-        public RoleButton Button;
+        public CustomButton Button;
 
         public override void OnGameStart()
         {
-            Button = new RoleButton(() =>
+            Button = CustomButton.AddRoleButton(() =>
                 {
                     List<DeadBody> _bodys = new List<DeadBody>();
                     foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(), PlayerControl.LocalPlayer.MaxReportDistance - 2f, Constants.PlayersOnlyMask))
@@ -58,7 +58,7 @@ namespace Peasmod.Roles
                         player.transform.position = _bodys[0].transform.position;
                         _bodys[0].gameObject.Destroy();
                     }
-                }, Settings.DoctorCooldown.GetValue(),
+                }, Settings.DoctorCooldown.Value,
                 Utils.CreateSprite("Buttons.Revive.png"), Vector2.zero, false, this);
         }
 
@@ -80,12 +80,12 @@ namespace Peasmod.Roles
                     if (bodys.Count == 0)
                     {
                         Button.KillButtonManager.renderer.color = Palette.DisabledClear;
-                        Button.enabled = false;
+                        Button.Enabled = false;
                     }
                     else
                     {
                         Button.KillButtonManager.renderer.color = Palette.EnabledColor;
-                        Button.enabled = true;
+                        Button.Enabled = true;
                     }
                 }
             }

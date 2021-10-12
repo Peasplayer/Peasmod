@@ -11,7 +11,7 @@ namespace Peasmod.Patches
         {
             static void Prefix(PlayerControl __instance)
             {   
-                if(!Settings.ReportBodys.GetValue() || Settings.IsGameMode(Settings.GameMode.BattleRoyale) || Settings.IsGameMode(Settings.GameMode.HotPotato))
+                if(!Settings.ReportBodys.Value || Settings.IsGameMode(Settings.GameMode.BattleRoyale) || Settings.IsGameMode(Settings.GameMode.HotPotato))
                 {
                     foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(__instance.GetTruePosition(), __instance.MaxReportDistance, Constants.PlayersOnlyMask))
                     {
@@ -33,7 +33,7 @@ namespace Peasmod.Patches
             public static bool Prefix(Vent __instance, ref float __result, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
             {   
                 float distance = float.MaxValue;
-                if (!__instance.enabled || !Settings.Venting.GetValue())
+                if (!__instance.enabled || !Settings.Venting.Value)
                 {
                     canUse = false;
                     couldUse = false;
@@ -50,7 +50,7 @@ namespace Peasmod.Patches
                 }
                 else
                 {
-                    if (Settings.CrewVenting.GetValue())
+                    if (Settings.CrewVenting.Value)
                     {
                         couldUse = !localPlayer.Data.IsDead;
                         canUse = couldUse;

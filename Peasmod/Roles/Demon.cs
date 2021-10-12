@@ -28,7 +28,7 @@ namespace Peasmod.Roles
 
         public override Color Color => ModdedPalette.DemonColor;
 
-        public override int Limit => (int) Settings.DemonAmount.GetValue();
+        public override int Limit => (int) Settings.DemonAmount.Value;
 
         public override Team Team => Team.Crewmate;
 
@@ -36,26 +36,16 @@ namespace Peasmod.Roles
 
         public override bool HasToDoTasks => true;
 
-        public static RoleButton Button;
+        public static CustomButton Button;
 
         public override void OnGameStart()
         {
-            Button = new RoleButton(() =>
+            Button = CustomButton.AddRoleButton(() =>
                 {
                     PlayerControl.LocalPlayer.Die(DeathReason.Kill);
                     Rpc<DemonAbilityRpc>.Instance.Send(new DemonAbilityRpc.Data(PlayerControl.LocalPlayer, true));
-                    Coroutines.Start(CoStartDemonAbility(Settings.DemonDuration.GetValue()));
-                }, Settings.DemonCooldown.GetValue(), Utils.CreateSprite("Buttons.Button1.png"), Vector2.zero, false, this);
-        }
-
-        public override void OnUpdate()
-        {
-            
-        }
-
-        public override void OnMeetingUpdate(MeetingHud meeting)
-        {
-            
+                    Coroutines.Start(CoStartDemonAbility(Settings.DemonDuration.Value));
+                }, Settings.DemonCooldown.Value, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.SwapAfterlife.png", 650f), Vector2.zero, false, this, "<size=40%>Swap");
         }
 
         private IEnumerator CoStartDemonAbility(float cooldown)

@@ -6,10 +6,10 @@ ROLLEN:
 * Clone: Kann sich klonen
 * Sabotage: Crewmates kriegen mehr tasks
 * Engineer: Kann Sabotage fixen
-* Demon: Kann sich in einen Geist verwandeln
+* [CHECK] Demon: Kann sich in einen Geist verwandeln 
 * Helper: Kann anderen bei Tasks helfen
 * Zombie: Kann Leute infizieren, muss alle infizieren
-* Captain: Kann jederzeit Meeting callen
+* [CHECK] Captain: Kann jederzeit Meeting callen
 * Traitor: Wenn er alle seine Tasks macht wird er Impostor
 * Summoner: Kann einen rausgevoteten Spieler reviven.
 * Assassin: Impostor geben ihm einmal einen Kill-Auftrag

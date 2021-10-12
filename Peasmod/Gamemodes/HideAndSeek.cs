@@ -51,7 +51,7 @@ namespace Peasmod.Gamemodes
                 PlayerControl.LocalPlayer.MyPhysics.ResetMoveState();
                 PlayerControl.LocalPlayer.MyPhysics.body.velocity = Vector2.zero;
                 if (!CoRoutineStarted)
-                    Reactor.Coroutines.Start(SeekerCooldown(Settings.SeekerCooldown.GetValue()));
+                    Reactor.Coroutines.Start(SeekerCooldown(Settings.SeekerCooldown.Value));
             }
         }
 

@@ -19,7 +19,7 @@ namespace Peasmod.Roles
 
         public override Color Color => ModdedPalette.CaptainColor;
 
-        public override int Limit => (int) Settings.CaptainAmount.GetValue();
+        public override int Limit => (int) Settings.CaptainAmount.Value;
 
         public override Team Team => Team.Crewmate;
 
@@ -27,15 +27,15 @@ namespace Peasmod.Roles
 
         public override bool HasToDoTasks => true;
 
-        public RoleButton Button;
+        public CustomButton Button;
 
         public override void OnGameStart()
         {
-            Button = new RoleButton(() =>
+            Button = CustomButton.AddRoleButton(() =>
                 {
                     PlayerControl.LocalPlayer.CmdReportDeadBody(null);
                 }, PlayerControl.GameOptions.EmergencyCooldown,
-                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CallMeeting.png", 650f), Vector2.zero, false, this, true, "<size=40%>Call", new Vector2(0f, -0.6f));
+                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CallMeeting.png", 650f), Vector2.zero, false, this, "<size=40%>Call", new Vector2(0f, -0.6f));
         }
 
         public override void OnUpdate()
