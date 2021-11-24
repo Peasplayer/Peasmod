@@ -23,7 +23,7 @@ namespace Peasmod.ApiExtension.Gamemodes
         
         public virtual void OnGameStart() {}
         
-        public virtual void OnIntro(IntroCutscene._CoBegin_d__14 scene) {}
+        public virtual void OnIntro(IntroCutscene._CoBegin_d__18 scene) {}
 
         public virtual List<PlayerControl> GetIntroTeam()
         {

@@ -2,7 +2,7 @@
 using System.Reflection;
 using BepInEx.IL2CPP;
 using HarmonyLib;
-using PeasAPI.Roles;
+using Reactor;
 
 namespace Peasmod.ApiExtension.Gamemodes
 {
@@ -30,6 +30,11 @@ namespace Peasmod.ApiExtension.Gamemodes
                     Activator.CreateInstance(type, plugin);
                 }
             }
+        }
+
+        public static void Load()
+        {
+            ChainloaderHooks.PluginLoad += plugin => Register(plugin.GetType().Assembly, plugin);
         }
     }
 }

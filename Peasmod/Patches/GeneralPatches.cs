@@ -13,15 +13,10 @@ namespace Peasmod.Patches
             {   
                 if(!Settings.ReportBodys.Value || Settings.IsGameMode(Settings.GameMode.BattleRoyale) || Settings.IsGameMode(Settings.GameMode.HotPotato))
                 {
-                    foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(__instance.GetTruePosition(), __instance.MaxReportDistance, Constants.PlayersOnlyMask))
+                    foreach (var body in Object.FindObjectsOfType<DeadBody>())
                     {
-                        if (((Component)collider2D).CompareTag("DeadBody"))
-                        {
-                            DeadBody component = (DeadBody)((Component)collider2D).GetComponent<DeadBody>();
-                            component.Reported = true;
-                            DestroyableSingleton<ReportButtonManager>.Instance.renderer.color = Palette.DisabledClear;
-                            DestroyableSingleton<ReportButtonManager>.Instance.renderer.material.SetFloat("_Desat", 1f);
-                        }
+                        body.Reported = true;
+                        DestroyableSingleton<ReportButton>.Instance.SetActive(false);
                     }
                 }
             }
@@ -40,7 +35,7 @@ namespace Peasmod.Patches
                     return false;
                 }
                 PlayerControl localPlayer = pc.Object;
-                if(localPlayer.Data.IsImpostor)
+                if(localPlayer.Data.Role.IsImpostor)
                 {
                     couldUse = !localPlayer.Data.IsDead;
                     canUse = couldUse;
@@ -65,6 +60,15 @@ namespace Peasmod.Patches
                     }
                 }
                 return false;
+            }
+        }
+        
+        [HarmonyPatch(typeof(StatsManager), nameof(StatsManager.AmBanned), MethodType.Getter)]
+        public static class AmBannedPatch
+        {
+            public static void Postfix(out bool __result)
+            {
+                __result = false;
             }
         }
     }

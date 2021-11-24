@@ -52,7 +52,7 @@ namespace Peasmod.Roles
         {
             yield return new WaitForSeconds(cooldown);
             
-            if (PeasApi.GameStarted)
+            if (PeasAPI.PeasAPI.GameStarted)
             {
                 PlayerControl.LocalPlayer.Revive();
                 Rpc<DemonAbilityRpc>.Instance.Send(new DemonAbilityRpc.Data(PlayerControl.LocalPlayer, false));

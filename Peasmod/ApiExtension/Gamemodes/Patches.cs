@@ -66,12 +66,13 @@ namespace Peasmod.ApiExtension.Gamemodes
             }
         }
         
-        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetInfected))]
+        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetRole))]
         class PlayerControlSetInfectedPatch
         {
-            public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] Il2CppStructArray<byte> _infected)
+            public static bool Prefix(PlayerControl __instance)
             {
-                var infected = new List<PlayerControl>();
+                PeasAPI.PeasAPI.Logger.LogInfo("PlayerControl.SetRole");
+                /*var infected = new List<PlayerControl>();
                 
                 foreach (var id in _infected)
                 {
@@ -83,17 +84,17 @@ namespace Peasmod.ApiExtension.Gamemodes
                     if (mode.Enabled)
                         infected = mode.GetImpostors(infected);
                 }
-                    
+                */
                 return true;
             }
         }
         
-        [HarmonyPatch(typeof(UseButtonManager), nameof(UseButtonManager.DoClick))]
+        [HarmonyPatch(typeof(SabotageButton), nameof(SabotageButton.DoClick))]
         public static class UseButtonManagerDoClickPatch
         {
-            public static bool Prefix(UseButtonManager __instance)
+            public static bool Prefix(SabotageButton __instance)
             {
-                if (__instance.isActiveAndEnabled && PeasApi.GameStarted && __instance.currentTarget == null)
+                if (__instance.isActiveAndEnabled && PeasAPI.PeasAPI.GameStarted)
                 {
                     foreach (var mode in GameModeManager.Modes)
                     {
@@ -105,7 +106,7 @@ namespace Peasmod.ApiExtension.Gamemodes
                                     foreach (MapRoom mapRoom in map.infectedOverlay.rooms.ToArray())
                                         mapRoom.gameObject.SetActive(false);
 
-                                map.ShowInfectedMap();
+                                map.ShowSabotageMap();
                             }));
 
                             return false;
@@ -132,10 +133,10 @@ namespace Peasmod.ApiExtension.Gamemodes
             }
         }
         
-        [HarmonyPatch(typeof(PlayerControl._CoSetTasks_d__83), nameof(PlayerControl._CoSetTasks_d__83.MoveNext))]
+        [HarmonyPatch(typeof(PlayerControl._CoSetTasks_d__102), nameof(PlayerControl._CoSetTasks_d__102.MoveNext))]
         public static class PlayerControlSetTasks
         {
-            public static void Postfix(PlayerControl._CoSetTasks_d__83 __instance)
+            public static void Postfix(PlayerControl._CoSetTasks_d__102 __instance)
             {
                 if (__instance == null)
                     return;
@@ -144,13 +145,16 @@ namespace Peasmod.ApiExtension.Gamemodes
                 {
                     if (mode.Enabled)
                     {
+                        PeasAPI.PeasAPI.Logger.LogInfo("1");
                         var player = __instance.__4__this;
                         
                         if (!mode.HasToDoTasks)
                             player.ClearTasks();
                         
+                        PeasAPI.PeasAPI.Logger.LogInfo("2");
                         if (mode.GetObjective(player) != null)
                         {
+                            PeasAPI.PeasAPI.Logger.LogInfo("3");
                             var task = new GameObject(mode.Name + "Objective").AddComponent<ImportantTextTask>();
                             task.transform.SetParent(player.transform, false);
                             task.Text = $"</color>{mode.Name}\n</color>{mode.GetObjective(player)}</color>";
@@ -161,10 +165,10 @@ namespace Peasmod.ApiExtension.Gamemodes
             }
         }
         
-        [HarmonyPatch(typeof(IntroCutscene._CoBegin_d__14), nameof(IntroCutscene._CoBegin_d__14.MoveNext))]
+        [HarmonyPatch(typeof(IntroCutscene._CoBegin_d__18), nameof(IntroCutscene._CoBegin_d__18.MoveNext))]
         class IntroCutsceneMoveNextPatch
         {
-            public static void Prefix(IntroCutscene._CoBegin_d__14 __instance)
+            public static void Prefix(IntroCutscene._CoBegin_d__18 __instance)
             {
                 foreach (var mode in GameModeManager.Modes)
                 {
@@ -173,7 +177,7 @@ namespace Peasmod.ApiExtension.Gamemodes
                 }
             }
             
-            public static void Postfix(IntroCutscene._CoBegin_d__14 __instance)
+            public static void Postfix(IntroCutscene._CoBegin_d__18 __instance)
             {
                 foreach (var mode in GameModeManager.Modes)
                 {

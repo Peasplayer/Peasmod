@@ -66,7 +66,7 @@ namespace Peasmod.Roles
         {
             if (Button != null)
             {
-                if (Button.KillButtonManager.renderer != null)
+                if (Button.KillButtonManager.graphic != null)
                 {
                     List<DeadBody> bodys = new List<DeadBody>();
                     foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(), PlayerControl.LocalPlayer.MaxReportDistance - 2f, Constants.PlayersOnlyMask))
@@ -79,12 +79,12 @@ namespace Peasmod.Roles
                     }
                     if (bodys.Count == 0)
                     {
-                        Button.KillButtonManager.renderer.color = Palette.DisabledClear;
+                        Button.KillButtonManager.graphic.color = Palette.DisabledClear;
                         Button.Enabled = false;
                     }
                     else
                     {
-                        Button.KillButtonManager.renderer.color = Palette.EnabledColor;
+                        Button.KillButtonManager.graphic.color = Palette.EnabledColor;
                         Button.Enabled = true;
                     }
                 }

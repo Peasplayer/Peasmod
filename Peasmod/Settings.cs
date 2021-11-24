@@ -41,7 +41,7 @@ namespace Peasmod
             new CustomToggleOption("ventbuilding", $"• {Palette.ImpostorRed.GetTextColor()}Vent-Building{StringColor.Reset}",  false);
 
         public static readonly CustomNumberOption VentBuildingCooldown =
-            new CustomNumberOption("ventbuildingcooldown", $"└ {Palette.ImpostorRed.GetTextColor()}Vent-Building-Cooldown{StringColor.Reset}", 7, 2, 30, 1);
+            new CustomNumberOption("ventbuildingcooldown", $"└ {Palette.ImpostorRed.GetTextColor()}Vent-Building-Cooldown{StringColor.Reset}", 7, 30, 2, 1, NumberSuffixes.Seconds);
 
         public static readonly CustomToggleOption BodyDragging =
             new CustomToggleOption("bodydragging", $"• {Palette.ImpostorRed.GetTextColor()}Body-Dragging{StringColor.Reset}", false);
@@ -50,25 +50,25 @@ namespace Peasmod
             new CustomToggleOption("invisibility", $"• {Palette.ImpostorRed.GetTextColor()}Invisibility{StringColor.Reset}", false);
 
         public static readonly CustomNumberOption InvisibilityCooldown =
-            new CustomNumberOption("invisibilitycooldown", $"└ {Palette.ImpostorRed.GetTextColor()}Invisibility-Cooldown{StringColor.Reset}", 20, 2, 60, 2);
+            new CustomNumberOption("invisibilitycooldown", $"└ {Palette.ImpostorRed.GetTextColor()}Invisibility-Cooldown{StringColor.Reset}", 20, 60, 2, 2, NumberSuffixes.Seconds);
 
         public static readonly CustomNumberOption InvisibilityDuration =
-            new CustomNumberOption("invisibilityduration", $"└ {Palette.ImpostorRed.GetTextColor()}Invisibility-Duration{StringColor.Reset}", 10, 2, 30, 1);
+            new CustomNumberOption("invisibilityduration", $"└ {Palette.ImpostorRed.GetTextColor()}Invisibility-Duration{StringColor.Reset}", 10, 30, 2, 1, NumberSuffixes.Seconds);
 
         public static readonly CustomToggleOption FreezeTime =
             new CustomToggleOption("freeze", $"• {Palette.ImpostorRed.GetTextColor()}Time-Freezing{StringColor.Reset}", false);
 
         public static readonly CustomNumberOption FreezeTimeCooldown =
-            new CustomNumberOption("freezecooldown", $"└ {Palette.ImpostorRed.GetTextColor()}Time-Freezing-Cooldown{StringColor.Reset}", 20, 2, 60, 2);
+            new CustomNumberOption("freezecooldown", $"└ {Palette.ImpostorRed.GetTextColor()}Time-Freezing-Cooldown{StringColor.Reset}", 20, 60, 2, 2, NumberSuffixes.Seconds);
 
         public static readonly CustomNumberOption FreezeTimeDuration =
-            new CustomNumberOption("freezeduration", $"└ {Palette.ImpostorRed.GetTextColor()}Time-Freezing-Duration{StringColor.Reset}", 10, 2, 30, 1);
+            new CustomNumberOption("freezeduration", $"└ {Palette.ImpostorRed.GetTextColor()}Time-Freezing-Duration{StringColor.Reset}", 10, 30, 2, 1, NumberSuffixes.Seconds);
 
         public static readonly CustomToggleOption Morphing =
             new CustomToggleOption("morphing", $"• {Palette.ImpostorRed.GetTextColor()}Morphing{StringColor.Reset}", false);
 
         public static readonly CustomNumberOption MorphingCooldown =
-            new CustomNumberOption("morphingcooldown", $"└ {Palette.ImpostorRed.GetTextColor()}Morphing-Cooldown{StringColor.Reset}", 20, 2, 60, 2);
+            new CustomNumberOption("morphingcooldown", $"└ {Palette.ImpostorRed.GetTextColor()}Morphing-Cooldown{StringColor.Reset}", 20, 60, 2, 2, NumberSuffixes.Seconds);
 
         public static readonly CustomToggleOption SectionRoles = new CustomToggleOption("Roles", "˅ Roles", false);
         
@@ -76,54 +76,48 @@ namespace Peasmod
             new CustomOptionHeader($"{StringColor.Reset}Roles");
 
         public static readonly CustomNumberOption JesterAmount =
-            new CustomNumberOption("jesters", $"• {ModdedPalette.JesterColor.GetTextColor()}Jesters{StringColor.Reset}", 0, 14, 1, 0);
+            new CustomNumberOption("jesters", $"• {ModdedPalette.JesterColor.GetTextColor()}Jesters{StringColor.Reset}", 0, 14, 1, 0, NumberSuffixes.None);
         
         public static readonly CustomNumberOption TrollAmount =
-            new CustomNumberOption("trolls", $"• {ModdedPalette.TrollColor.GetTextColor()}Trolls{StringColor.Reset}", 0, 14, 1, 0);
+            new CustomNumberOption("trolls", $"• {ModdedPalette.TrollColor.GetTextColor()}Trolls{StringColor.Reset}", 0, 14, 1, 0, NumberSuffixes.None);
         
         public static readonly CustomNumberOption CaptainAmount =
-            new CustomNumberOption("captains", $"• {ModdedPalette.CaptainColor.GetTextColor()}Captains{StringColor.Reset}", 0, 14, 1, 0);
+            new CustomNumberOption("captains", $"• {ModdedPalette.CaptainColor.GetTextColor()}Captains{StringColor.Reset}", 0, 14, 1, 0, NumberSuffixes.None);
         
         public static readonly CustomNumberOption DemonAmount =
-            new CustomNumberOption("demons", $"• {ModdedPalette.DemonColor.GetTextColor()}Demons{StringColor.Reset}", 0, 14, 1, 0);
+            new CustomNumberOption("demons", $"• {ModdedPalette.DemonColor.GetTextColor()}Demons{StringColor.Reset}", 0, 14, 1, 0, NumberSuffixes.None);
         
         public static readonly CustomNumberOption DemonCooldown =
-            new CustomNumberOption("demoncooldown", "└ Demon-Ability-Cooldown", 10, 2, 60, 2);
+            new CustomNumberOption("demoncooldown", "└ Demon-Ability-Cooldown", 10, 60, 2, 2, NumberSuffixes.Seconds);
         
         public static readonly CustomNumberOption DemonDuration =
-            new CustomNumberOption("demonduration", "└ Demon-Ability-Duration", 10, 2, 60, 2);
+            new CustomNumberOption("demonduration", "└ Demon-Ability-Duration", 10, 60, 2, 2, NumberSuffixes.Seconds);
 
         public static readonly CustomNumberOption DoctorAmount =
-            new CustomNumberOption("doctors", $"• {ModdedPalette.DoctorColor.GetTextColor()}Doctors{StringColor.Reset}", 0, 14, 1, 0);
+            new CustomNumberOption("doctors", $"• {ModdedPalette.DoctorColor.GetTextColor()}Doctors{StringColor.Reset}", 0, 14, 1, 0, NumberSuffixes.None);
 
         public static readonly CustomNumberOption DoctorCooldown =
-            new CustomNumberOption("doctorcooldown", "└ Revive-Cooldown", 10, 2, 60, 2);
+            new CustomNumberOption("doctorcooldown", "└ Revive-Cooldown", 10, 60, 2, 2, NumberSuffixes.Seconds);
 
         public static readonly CustomNumberOption InspectorAmount =
-            new CustomNumberOption("inspectors", $"• {ModdedPalette.InspectorColor.GetTextColor()}Inspectors{StringColor.Reset}", 0, 0, 14, 1);
+            new CustomNumberOption("inspectors", $"• {ModdedPalette.InspectorColor.GetTextColor()}Inspectors{StringColor.Reset}", 0, 0, 14, 1, NumberSuffixes.None);
 
         public static readonly CustomNumberOption MayorAmount =
-            new CustomNumberOption("mayors", $"• {ModdedPalette.MayorColor.GetTextColor()}Mayors{StringColor.Reset}", 0, 14, 1, 0);
+            new CustomNumberOption("mayors", $"• {ModdedPalette.MayorColor.GetTextColor()}Mayors{StringColor.Reset}", 0, 14, 1, 0, NumberSuffixes.None);
 
         public static readonly CustomNumberOption SheriffAmount =
-            new CustomNumberOption("sheriffs", "• Sheriffs", 0, 14, 1, 0);
+            new CustomNumberOption("sheriffs", "• Sheriffs", 0, 14, 1, 0, NumberSuffixes.None);
 
         public static readonly CustomNumberOption SheriffCooldown =
-            new CustomNumberOption("sheriffcooldown", "└ Shoot-Cooldown", 10, 2, 60, 2);
+            new CustomNumberOption("sheriffcooldown", "└ Shoot-Cooldown", 10, 60, 2, 2, NumberSuffixes.Seconds);
 
-        public static readonly CustomStringOption GameModeOption = new CustomStringOption("gamemode", "GameMode", "None", "Hide and Seek" ,"BattleRoyale");
+        public static readonly CustomStringOption GameModeOption = new CustomStringOption("gamemode", "GameMode", "None", "Hide and Seek", "BattleRoyale");
 
         public static readonly CustomNumberOption SeekerCooldown =
-            new CustomNumberOption("seekercooldown", "Seeker-Cooldown", 10, 2, 60, 2);
+            new CustomNumberOption("seekercooldown", "Seeker-Cooldown", 10, 60, 2, 2, NumberSuffixes.Seconds);
 
         public static void Load()
         {
-            /*
-             * I disabled the credits in game. I provide credit here and on my repository. If there is any problem with the author of this library feel free to contact me via email: peasplayer@peasplayer.tk
-             * Essentials: https://github.com/DorCoMaNdO/Reactor-Essentials
-             * Author: DorComando (https://github.com/DorCoMaNdO)
-             */
-            
             SectionGeneralListener(false);
             SectionSpecialListener(false);
             SectionRolesListener(false);
@@ -134,10 +128,6 @@ namespace Peasmod
             SectionGeneral.HudVisible = false;
             SectionSpecial.HudVisible = false;
             SectionRoles.HudVisible = false;
-            /*foreach (var option in OptionManager.CustomOptions)
-            {
-                PeasApi.Logger.LogInfo($"");
-            }*/
         }
         
         public static void SectionGeneralListener(bool value)
@@ -203,7 +193,7 @@ namespace Peasmod
             }
         }
 
-        [HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.OnEnable))]
+        [HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.Start))]
         public static class GameSettingMenuPatch
         {
             static void Prefix(GameSettingMenu __instance)
@@ -221,7 +211,7 @@ namespace Peasmod
                 
                 GameModeOption.OnValueChanged += (args) =>
                 {
-                    PeasApi.EnableRoles = args.NewValue == (int)GameMode.Roles;
+                    PeasAPI.PeasAPI.EnableRoles = args.NewValue == (int)GameMode.Roles;
                 };
             }
         }
@@ -231,9 +221,7 @@ namespace Peasmod
         {
             static void Postfix(AmongUsClient __instance)
             {
-                PeasApi.EnableRoles = GameModeOption.Value == (int)GameMode.Roles;
-                
-                
+                PeasAPI.PeasAPI.EnableRoles = GameModeOption.Value == (int)GameMode.Roles;
             }
         }
     }

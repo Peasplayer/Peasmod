@@ -28,20 +28,20 @@ namespace Peasmod.Gamemodes
             
         }
 
-        public override void OnIntro(IntroCutscene._CoBegin_d__14 _scene)
+        public override void OnIntro(IntroCutscene._CoBegin_d__18 _scene)
         {
             var scene = _scene.__4__this;
             
-            scene.Title.text = "Hider";
-            if (PlayerControl.LocalPlayer.Data.IsImpostor)
-                scene.Title.text = "Seeker";
+            scene.RoleText.text = "Hider";
+            if (PlayerControl.LocalPlayer.Data.Role.IsImpostor)
+                scene.RoleText.text = "Seeker";
             
             scene.ImpostorText.gameObject.SetActive(true);
             scene.ImpostorText.text = "This is the Seeker:";
-            if (PlayerControl.LocalPlayer.Data.IsImpostor)
+            if (PlayerControl.LocalPlayer.Data.Role.IsImpostor)
                 scene.ImpostorText.text = "Find everyone";
             
-            if (PlayerControl.LocalPlayer.Data.IsImpostor)
+            if (PlayerControl.LocalPlayer.Data.Role.IsImpostor)
             {
                 HudManager.Instance.TaskStuff.SetActive(true);
                 
@@ -59,7 +59,7 @@ namespace Peasmod.Gamemodes
         {
             var team = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
             
-            foreach (var hider in RoleManager.Impostors)
+            foreach (var hider in PeasAPI.Roles.RoleManager.Impostors)
             {
                 team.Add(hider.GetPlayer());
             }
@@ -69,7 +69,7 @@ namespace Peasmod.Gamemodes
 
         public override void OnUpdate()
         {
-            if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.Data != null && PlayerControl.LocalPlayer.Data.IsImpostor)
+            if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.Data != null && PlayerControl.LocalPlayer.Data.Role.IsImpostor)
                 HudManager.Instance.KillButton.SetCoolDown(0f, 1f);
             
             if (IsFroozen)
@@ -94,7 +94,7 @@ namespace Peasmod.Gamemodes
 
         public override string GetObjective(PlayerControl player)
         {
-            if (player.Data.IsImpostor)
+            if (player.Data.Role.IsImpostor)
                 return "Find every Crewmate";
             return "Hide from the Seekers";
         }
@@ -108,7 +108,7 @@ namespace Peasmod.Gamemodes
             {
                 if (!player.Data.IsDead && !player.Data.Disconnected)
                 {
-                    if (player.Data.IsImpostor)
+                    if (player.Data.Role.IsImpostor)
                         aliveImpostors++;
                     else
                         aliveCrewmates++;
@@ -142,14 +142,14 @@ namespace Peasmod.Gamemodes
             {
                 foreach (var mode in GameModeManager.Modes)
                 {
-                    if (mode.Enabled && mode.Name == $"{StringColor.Orange}Hide and Seek" && player.IsImpostor)
+                    if (mode.Enabled && mode.Name == $"{StringColor.Orange}Hide and Seek" && player.Role.IsImpostor)
                     {
                         if (player == null || player.IsDead)
                         {
                             __result = __instance.MaxLightRadius;
                         }
                         
-                        if (player.IsImpostor)
+                        if (player.Role.IsImpostor)
                         {
                             __result = __instance.MaxLightRadius * 0.5f;
                         }
