@@ -34,8 +34,8 @@ namespace Peasmod.Roles
             Button = CustomButton.AddRoleButton(() =>
                 {
                     PlayerControl.LocalPlayer.CmdReportDeadBody(null);
-                }, PlayerControl.GameOptions.EmergencyCooldown,
-                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CallMeeting.png", 650f), Vector2.zero, false, this, "<size=40%>Call", new Vector2(0f, -0.6f));
+                }, Settings.CaptainCooldown.Value,
+                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CallMeeting.png", 650f), Vector2.zero, false, this, "<size=40%>Call");
         }
 
         public override void OnUpdate()

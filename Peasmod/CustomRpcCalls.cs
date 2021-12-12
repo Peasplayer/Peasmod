@@ -2,7 +2,12 @@
 {
     enum CustomRpcCalls
     {
-        DemonAbility = 50,
-        DoctorAbility = 51
+        DemonAbility = 0,
+        DoctorAbility = 1,
+        CreateVent = 2,
+        GoInvisible = 3,
+        DragBody = 4,
+        Freeze = 5,
+        StartHideAndSeek = 6
     }
 }

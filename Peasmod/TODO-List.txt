@@ -13,7 +13,7 @@ ROLLEN:
 * Traitor: Wenn er alle seine Tasks macht wird er Impostor
 * Summoner: Kann einen rausgevoteten Spieler reviven.
 * Assassin: Impostor geben ihm einmal einen Kill-Auftrag
-* Snitch: Wenn er alle Tasks gemacht hat sieht er die Impostor, ab 2 übrigen Tasks sehen die Impostorihn
+* Snitch: Wenn er alle Tasks gemacht hat sieht er die Impostor, ab 2 übrigen Tasks sehen die Impostor ihn
 * President: Kann jemandem zum Major machen
 * Lookout: Siehe peasmod suggestions
  

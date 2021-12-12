@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Reflection;
 using HarmonyLib;
-using Peasmod.Utility;
 using Reactor.Extensions;
 using TMPro;
 using UnhollowerRuntimeLib;
@@ -64,7 +63,7 @@ namespace Peasmod.Patches
                     GameObject.Find("Discord-Logo-Color").GetComponent<TwitterLink>().LinkUrl =
                     "https://discord.gg/nQB5EZe";
                 if(GameObject.Find("logoImage") != null)
-                    GameObject.Find("logoImage").GetComponent<SpriteRenderer>().sprite = Utils.CreateSprite("Peasmod.png");
+                    GameObject.Find("logoImage").GetComponent<SpriteRenderer>().sprite = PeasAPI.Utility.CreateSprite("Peasmod.Resources.Peasmod.png");
             }
         }
     }

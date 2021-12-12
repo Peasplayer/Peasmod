@@ -4,7 +4,6 @@ using BepInEx.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.Roles;
-using Peasmod.Utility;
 using UnityEngine;
 
 namespace Peasmod.Roles
@@ -64,9 +63,9 @@ namespace Peasmod.Roles
                         {
                             var dot = new GameObject();
                             var renderer = dot.AddComponent<SpriteRenderer>();
-                            renderer.sprite = Utils.CreateSprite("Dot.png");
+                            renderer.sprite = PeasAPI.Utility.CreateSprite("Peasmod.Resources.Dot.png");
                             dot.transform.localPosition = new Vector3(player.GetTruePosition().x, player.GetTruePosition().y, player.transform.position.z);
-                            dot.GetComponent<SpriteRenderer>().material.color = Utils.ColorIdToColor(player.Data.DefaultOutfit.ColorId);
+                            dot.GetComponent<SpriteRenderer>().material.color = Palette.PlayerColors[player.Data.DefaultOutfit.ColorId];
                             dots.Add(dot, Time.time);
                         }
                     }

@@ -1,4 +1,5 @@
 ﻿using BepInEx.IL2CPP;
+using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.Roles;
 using UnityEngine;
@@ -31,6 +32,41 @@ namespace Peasmod.Roles
         public override bool CanKill(PlayerControl victim = null)
         {
             return true;
+        }
+
+        public override PlayerControl FindClosestTarget(PlayerControl from, bool protecting)
+        {
+            PlayerControl result = null;
+            float num = GameOptionsData.KillDistances[Mathf.Clamp(PlayerControl.GameOptions.KillDistance, 0, 2)];
+            if (!ShipStatus.Instance)
+            {
+                return null;
+            }
+            Vector2 truePosition = from.GetTruePosition();
+            foreach (var playerInfo in GameData.Instance.AllPlayers)
+            {
+                if (!playerInfo.Disconnected && playerInfo.PlayerId != from.PlayerId && !playerInfo.IsDead && !playerInfo.Object.inVent)
+                {
+                    PlayerControl @object = playerInfo.Object;
+                    if (@object && @object.Collider.enabled)
+                    {
+                        Vector2 vector = @object.GetTruePosition() - truePosition;
+                        float magnitude = vector.magnitude;
+                        if (magnitude <= num && !PhysicsHelpers.AnyNonTriggersBetween(truePosition, vector.normalized, magnitude, Constants.ShipAndObjectsMask))
+                        {
+                            result = @object;
+                            num = magnitude;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        public override void OnKill(PlayerControl victim)
+        {
+            if (!victim.Data.Role.IsImpostor && !victim.IsLocal())
+                PlayerControl.LocalPlayer.RpcMurderPlayer(PlayerControl.LocalPlayer);
         }
     }
 }

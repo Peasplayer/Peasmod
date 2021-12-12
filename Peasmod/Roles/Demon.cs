@@ -7,7 +7,6 @@ using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Roles;
-using Peasmod.Utility;
 using Reactor;
 using Reactor.Extensions;
 using Reactor.Networking;
@@ -42,7 +41,9 @@ namespace Peasmod.Roles
         {
             Button = CustomButton.AddRoleButton(() =>
                 {
-                    PlayerControl.LocalPlayer.Die(DeathReason.Kill);
+                    PlayerControl.LocalPlayer.Die(DeathReason.Disconnect);
+                    PlayerControl.LocalPlayer.gameObject.layer = LayerMask.NameToLayer("Players");
+                    HudManager.Instance.ShadowQuad.gameObject.SetActive(false);
                     Rpc<DemonAbilityRpc>.Instance.Send(new DemonAbilityRpc.Data(PlayerControl.LocalPlayer, true));
                     Coroutines.Start(CoStartDemonAbility(Settings.DemonDuration.Value));
                 }, Settings.DemonCooldown.Value, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.SwapAfterlife.png", 650f), Vector2.zero, false, this, "<size=40%>Swap");
@@ -55,10 +56,9 @@ namespace Peasmod.Roles
             if (PeasAPI.PeasAPI.GameStarted)
             {
                 PlayerControl.LocalPlayer.Revive();
+                HudManager.Instance.ShadowQuad.gameObject.SetActive(true);
                 Rpc<DemonAbilityRpc>.Instance.Send(new DemonAbilityRpc.Data(PlayerControl.LocalPlayer, false));
             }
-            
-            yield break;
         }
         
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
@@ -66,7 +66,7 @@ namespace Peasmod.Roles
         {
             public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl victim)
             {
-                if (victim.IsRole<Demon>() && victim.PlayerId == PlayerControl.LocalPlayer.PlayerId && Button != null)
+                if (victim.IsRole<Demon>() && victim.IsLocal() && Button != null)
                 {
                     Button.KillButtonManager.Destroy();
                     Button = null;

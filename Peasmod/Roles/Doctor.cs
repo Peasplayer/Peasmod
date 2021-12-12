@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using BepInEx.IL2CPP;
 using Hazel;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Roles;
-using Peasmod.Utility;
 using Reactor;
 using Reactor.Extensions;
 using Reactor.Networking;
@@ -14,9 +14,11 @@ using UnityEngine;
 namespace Peasmod.Roles
 {
     [RegisterCustomRole]
-    public class Doctor: BaseRole
+    public class Doctor : BaseRole
     {
-        public Doctor(BasePlugin plugin) : base(plugin) { }
+        public Doctor(BasePlugin plugin) : base(plugin)
+        {
+        }
 
         public override string Name => "Doctor";
 
@@ -26,7 +28,7 @@ namespace Peasmod.Roles
 
         public override Color Color => ModdedPalette.DoctorColor;
 
-        public override int Limit => (int) Settings.DoctorAmount.Value;
+        public override int Limit => (int)Settings.DoctorAmount.Value;
 
         public override Team Team => Team.Crewmate;
 
@@ -40,15 +42,12 @@ namespace Peasmod.Roles
         {
             Button = CustomButton.AddRoleButton(() =>
                 {
-                    List<DeadBody> _bodys = new List<DeadBody>();
-                    foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(), PlayerControl.LocalPlayer.MaxReportDistance - 2f, Constants.PlayersOnlyMask))
-                    {
-                        if (collider2D.tag == "DeadBody")
-                        {
-                            DeadBody body = (DeadBody)((Component)collider2D).GetComponent<DeadBody>();
-                            _bodys.Add(body);
-                        }
-                    }
+                    List<DeadBody> _bodys = Physics2D
+                        .OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(),
+                            PlayerControl.LocalPlayer.MaxReportDistance - 2f, Constants.PlayersOnlyMask)
+                        .Where(collider => collider.CompareTag("DeadBody")).ToList().ConvertAll(
+                            collider => collider.GetComponent<DeadBody>());
+
                     if (_bodys.Count != 0)
                     {
                         Rpc<DoctorAbilityRpc>.Instance.Send(new DoctorAbilityRpc.Data(_bodys[0].ParentId.GetPlayer()));
@@ -59,7 +58,7 @@ namespace Peasmod.Roles
                         _bodys[0].gameObject.Destroy();
                     }
                 }, Settings.DoctorCooldown.Value,
-                Utils.CreateSprite("Buttons.Revive.png"), Vector2.zero, false, this);
+                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Revive.png", 803f), Vector2.zero, false, this, "<size=40%>Revive");
         }
 
         public override void OnUpdate()
@@ -68,24 +67,21 @@ namespace Peasmod.Roles
             {
                 if (Button.KillButtonManager.graphic != null)
                 {
-                    List<DeadBody> bodys = new List<DeadBody>();
-                    foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(), PlayerControl.LocalPlayer.MaxReportDistance - 2f, Constants.PlayersOnlyMask))
-                    {
-                        if (collider2D.tag == "DeadBody")
-                        {
-                            DeadBody body = collider2D.GetComponent<DeadBody>();
-                            bodys.Add(body);
-                        }
-                    }
+                    List<DeadBody> bodys = Physics2D
+                        .OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(),
+                            PlayerControl.LocalPlayer.MaxReportDistance - 2f, Constants.PlayersOnlyMask)
+                        .Where(collider => collider.CompareTag("DeadBody")).ToList().ConvertAll(
+                            collider => collider.GetComponent<DeadBody>());
+
                     if (bodys.Count == 0)
                     {
                         Button.KillButtonManager.graphic.color = Palette.DisabledClear;
-                        Button.Enabled = false;
+                        Button.Usable = false;
                     }
                     else
                     {
                         Button.KillButtonManager.graphic.color = Palette.EnabledColor;
-                        Button.Enabled = true;
+                        Button.Usable = true;
                     }
                 }
             }
@@ -93,10 +89,9 @@ namespace Peasmod.Roles
 
         public override void OnMeetingUpdate(MeetingHud meeting)
         {
-            
         }
-        
-        [RegisterCustomRpc((uint) CustomRpcCalls.DoctorAbility)]
+
+        [RegisterCustomRpc((uint)CustomRpcCalls.DoctorAbility)]
         public class DoctorAbilityRpc : PlayerCustomRpc<PeasmodPlugin, DoctorAbilityRpc.Data>
         {
             public DoctorAbilityRpc(PeasmodPlugin plugin, uint id) : base(plugin, id)
@@ -128,8 +123,8 @@ namespace Peasmod.Roles
             public override void Handle(PlayerControl innerNetObject, Data data)
             {
                 data.Player.Revive();
-                data.Player.transform.position = Utils.GetDeadBody(data.Player.PlayerId).transform.position;
-                Utils.GetDeadBody(data.Player.PlayerId).gameObject.Destroy();
+                data.Player.transform.position = Object.FindObjectsOfType<DeadBody>().Where(body => body.ParentId == data.Player.PlayerId).ToList()[0].transform.position;
+                Object.FindObjectsOfType<DeadBody>().Where(body => body.ParentId == data.Player.PlayerId).ToList()[0].gameObject.Destroy();
             }
         }
     }

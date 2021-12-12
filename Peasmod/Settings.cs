@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using PeasAPI;
 using PeasAPI.Options;
-using Peasmod.Utility;
 using UnhollowerBaseLib;
 using UnityEngine;
 
@@ -10,124 +9,176 @@ namespace Peasmod
     public static class Settings
     {
         /*
-         * This are the unicode symboles I used to have. I keep them here if I will need them again.
+         * This are the unicode symboles I used to have. I keep them here in case I need them again.
          * •; └; └──
          */
         
         public static CustomOptionHeader Header =
-            new CustomOptionHeader(StringColor.Green + "\nPeasmod" + StringColor.Reset);
+            new CustomOptionHeader(PeasAPI.Utility.StringColor.Green + "\nPeasmod" + PeasAPI.Utility.StringColor.Reset);
 
-        public static readonly CustomToggleOption SectionGeneral = new CustomToggleOption("general", "˅ General", false);
+        public static readonly CustomOptionButton SectionGeneral = new CustomOptionButton("general", "˅ General", false);
         
         public static CustomOptionHeader GeneralHeader = new CustomOptionHeader("General");
         
-        public static readonly CustomToggleOption Venting = new CustomToggleOption("venting", $"• {Palette.CrewmateBlue.GetTextColor()}Venting{StringColor.Reset}", true);
+        public static readonly CustomToggleOption Venting = new CustomToggleOption("venting", $"• {Palette.CrewmateBlue.GetTextColor()}Venting{PeasAPI.Utility.StringColor.Reset}", true);
 
         public static readonly CustomToggleOption ReportBodys =
-            new CustomToggleOption("reporting", $"• {Palette.CrewmateBlue.GetTextColor()}Body-Reporting{StringColor.Reset}", true);
+            new CustomToggleOption("reporting", $"• {Palette.CrewmateBlue.GetTextColor()}Body-Reporting{PeasAPI.Utility.StringColor.Reset}", true);
 
         public static readonly CustomToggleOption Sabotaging =
-            new CustomToggleOption("sabotaging", $"• {Palette.CrewmateBlue.GetTextColor()}Sabotaging{StringColor.Reset}", true);
-
-        public static readonly CustomToggleOption SectionSpecial = new CustomToggleOption("special", "˅ Special", false);
-        
-        public static CustomOptionHeader SpecialHeader =
-            new CustomOptionHeader($"{StringColor.Reset}Special");
+            new CustomToggleOption("sabotaging", $"• {Palette.CrewmateBlue.GetTextColor()}Sabotaging{PeasAPI.Utility.StringColor.Reset}", true);
 
         public static readonly CustomToggleOption CrewVenting =
-            new CustomToggleOption("crewventing", $"• {Palette.ImpostorRed.GetTextColor()}Crew-Venting{StringColor.Reset}", false);
+            new CustomToggleOption("crewventing", $"• {Palette.CrewmateBlue.GetTextColor()}Crew-Venting{PeasAPI.Utility.StringColor.Reset}", false);
 
-        public static readonly CustomToggleOption VentBuilding =
-            new CustomToggleOption("ventbuilding", $"• {Palette.ImpostorRed.GetTextColor()}Vent-Building{StringColor.Reset}",  false);
-
-        public static readonly CustomNumberOption VentBuildingCooldown =
-            new CustomNumberOption("ventbuildingcooldown", $"└ {Palette.ImpostorRed.GetTextColor()}Vent-Building-Cooldown{StringColor.Reset}", 7, 30, 2, 1, NumberSuffixes.Seconds);
-
-        public static readonly CustomToggleOption BodyDragging =
-            new CustomToggleOption("bodydragging", $"• {Palette.ImpostorRed.GetTextColor()}Body-Dragging{StringColor.Reset}", false);
-
-        public static readonly CustomToggleOption Invisibility =
-            new CustomToggleOption("invisibility", $"• {Palette.ImpostorRed.GetTextColor()}Invisibility{StringColor.Reset}", false);
-
-        public static readonly CustomNumberOption InvisibilityCooldown =
-            new CustomNumberOption("invisibilitycooldown", $"└ {Palette.ImpostorRed.GetTextColor()}Invisibility-Cooldown{StringColor.Reset}", 20, 60, 2, 2, NumberSuffixes.Seconds);
-
-        public static readonly CustomNumberOption InvisibilityDuration =
-            new CustomNumberOption("invisibilityduration", $"└ {Palette.ImpostorRed.GetTextColor()}Invisibility-Duration{StringColor.Reset}", 10, 30, 2, 1, NumberSuffixes.Seconds);
-
-        public static readonly CustomToggleOption FreezeTime =
-            new CustomToggleOption("freeze", $"• {Palette.ImpostorRed.GetTextColor()}Time-Freezing{StringColor.Reset}", false);
-
-        public static readonly CustomNumberOption FreezeTimeCooldown =
-            new CustomNumberOption("freezecooldown", $"└ {Palette.ImpostorRed.GetTextColor()}Time-Freezing-Cooldown{StringColor.Reset}", 20, 60, 2, 2, NumberSuffixes.Seconds);
-
-        public static readonly CustomNumberOption FreezeTimeDuration =
-            new CustomNumberOption("freezeduration", $"└ {Palette.ImpostorRed.GetTextColor()}Time-Freezing-Duration{StringColor.Reset}", 10, 30, 2, 1, NumberSuffixes.Seconds);
-
-        public static readonly CustomToggleOption Morphing =
-            new CustomToggleOption("morphing", $"• {Palette.ImpostorRed.GetTextColor()}Morphing{StringColor.Reset}", false);
-
-        public static readonly CustomNumberOption MorphingCooldown =
-            new CustomNumberOption("morphingcooldown", $"└ {Palette.ImpostorRed.GetTextColor()}Morphing-Cooldown{StringColor.Reset}", 20, 60, 2, 2, NumberSuffixes.Seconds);
-
-        public static readonly CustomToggleOption SectionRoles = new CustomToggleOption("Roles", "˅ Roles", false);
+        public static readonly CustomOptionButton SectionNeutralRoles = new CustomOptionButton("NeutralRoles", "˅ Neutral Roles", false);
         
-        public static CustomOptionHeader RolesHeader =
-            new CustomOptionHeader($"{StringColor.Reset}Roles");
+        public static CustomOptionHeader NeutralRolesHeader =
+            new CustomOptionHeader($"{PeasAPI.Utility.StringColor.Reset}Neutral Roles");
 
         public static readonly CustomNumberOption JesterAmount =
-            new CustomNumberOption("jesters", $"• {ModdedPalette.JesterColor.GetTextColor()}Jesters{StringColor.Reset}", 0, 14, 1, 0, NumberSuffixes.None);
+            new CustomNumberOption("jesters", $"• {ModdedPalette.JesterColor.GetTextColor()}Jesters{PeasAPI.Utility.StringColor.Reset}", 0, 14, 1, 0, NumberSuffixes.None);
         
         public static readonly CustomNumberOption TrollAmount =
-            new CustomNumberOption("trolls", $"• {ModdedPalette.TrollColor.GetTextColor()}Trolls{StringColor.Reset}", 0, 14, 1, 0, NumberSuffixes.None);
+            new CustomNumberOption("trolls", $"• {ModdedPalette.TrollColor.GetTextColor()}Trolls{PeasAPI.Utility.StringColor.Reset}", 0, 14, 1, 0, NumberSuffixes.None);
+        
+        public static readonly CustomOptionButton SectionCrewmateRoles = new CustomOptionButton("CrewmateRoles", "˅ Crewmate Roles", false);
+        
+        public static CustomOptionHeader CrewmateRolesHeader =
+            new CustomOptionHeader($"{PeasAPI.Utility.StringColor.Reset}Crewmate Roles");
         
         public static readonly CustomNumberOption CaptainAmount =
-            new CustomNumberOption("captains", $"• {ModdedPalette.CaptainColor.GetTextColor()}Captains{StringColor.Reset}", 0, 14, 1, 0, NumberSuffixes.None);
+            new CustomNumberOption("captains", $"• {ModdedPalette.CaptainColor.GetTextColor()}Captains{PeasAPI.Utility.StringColor.Reset}", 0, 14, 1, 0, NumberSuffixes.None);
+        
+        public static readonly CustomNumberOption CaptainCooldown =
+            new CustomNumberOption("captaincooldown", "└ Call-Cooldown", 10, 60, 1, 20, NumberSuffixes.Seconds);
         
         public static readonly CustomNumberOption DemonAmount =
-            new CustomNumberOption("demons", $"• {ModdedPalette.DemonColor.GetTextColor()}Demons{StringColor.Reset}", 0, 14, 1, 0, NumberSuffixes.None);
+            new CustomNumberOption("demons", $"• {ModdedPalette.DemonColor.GetTextColor()}Demons{PeasAPI.Utility.StringColor.Reset}", 0, 14, 1, 0, NumberSuffixes.None);
         
         public static readonly CustomNumberOption DemonCooldown =
-            new CustomNumberOption("demoncooldown", "└ Demon-Ability-Cooldown", 10, 60, 2, 2, NumberSuffixes.Seconds);
+            new CustomNumberOption("demoncooldown", "└ Demon-Ability-Cooldown", 10, 60, 1, 20, NumberSuffixes.Seconds);
         
         public static readonly CustomNumberOption DemonDuration =
-            new CustomNumberOption("demonduration", "└ Demon-Ability-Duration", 10, 60, 2, 2, NumberSuffixes.Seconds);
+            new CustomNumberOption("demonduration", "└ Demon-Ability-Duration", 10, 60, 1, 10, NumberSuffixes.Seconds);
 
         public static readonly CustomNumberOption DoctorAmount =
-            new CustomNumberOption("doctors", $"• {ModdedPalette.DoctorColor.GetTextColor()}Doctors{StringColor.Reset}", 0, 14, 1, 0, NumberSuffixes.None);
+            new CustomNumberOption("doctors", $"• {ModdedPalette.DoctorColor.GetTextColor()}Doctors{PeasAPI.Utility.StringColor.Reset}", 0, 14, 1, 0, NumberSuffixes.None);
 
         public static readonly CustomNumberOption DoctorCooldown =
-            new CustomNumberOption("doctorcooldown", "└ Revive-Cooldown", 10, 60, 2, 2, NumberSuffixes.Seconds);
+            new CustomNumberOption("doctorcooldown", "└ Revive-Cooldown", 10, 60, 1, 20, NumberSuffixes.Seconds);
 
         public static readonly CustomNumberOption InspectorAmount =
-            new CustomNumberOption("inspectors", $"• {ModdedPalette.InspectorColor.GetTextColor()}Inspectors{StringColor.Reset}", 0, 0, 14, 1, NumberSuffixes.None);
+            new CustomNumberOption("inspectors", $"• {ModdedPalette.InspectorColor.GetTextColor()}Inspectors{PeasAPI.Utility.StringColor.Reset}", 0, 14, 1, 0, NumberSuffixes.None);
 
         public static readonly CustomNumberOption MayorAmount =
-            new CustomNumberOption("mayors", $"• {ModdedPalette.MayorColor.GetTextColor()}Mayors{StringColor.Reset}", 0, 14, 1, 0, NumberSuffixes.None);
+            new CustomNumberOption("mayors", $"• {ModdedPalette.MayorColor.GetTextColor()}Mayors{PeasAPI.Utility.StringColor.Reset}", 0, 14, 1, 0, NumberSuffixes.None);
 
         public static readonly CustomNumberOption SheriffAmount =
-            new CustomNumberOption("sheriffs", "• Sheriffs", 0, 14, 1, 0, NumberSuffixes.None);
+            new CustomNumberOption("sheriffs", $"• {ModdedPalette.SheriffColor.GetTextColor()}Sheriffs{PeasAPI.Utility.StringColor.Reset}", 0, 14, 1, 0, NumberSuffixes.None);
 
         public static readonly CustomNumberOption SheriffCooldown =
-            new CustomNumberOption("sheriffcooldown", "└ Shoot-Cooldown", 10, 60, 2, 2, NumberSuffixes.Seconds);
+            new CustomNumberOption("sheriffcooldown", "└ Shoot-Cooldown", 10, 60, 1, 20, NumberSuffixes.Seconds);
+        
+        public static readonly CustomOptionButton SectionImpostorRoles = new CustomOptionButton("ImpostorRoles", "˅ Impostor Roles", false);
+        
+        public static CustomOptionHeader ImpostorRolesHeader =
+            new CustomOptionHeader($"{PeasAPI.Utility.StringColor.Reset}Impostor Roles");
+        
+        public static readonly CustomNumberOption JanitorAmount = new CustomNumberOption("janitors",
+            $"• {Palette.ImpostorRed.GetTextColor()}Janitors{PeasAPI.Utility.StringColor.Reset}", 0, 3, 1, 0, NumberSuffixes.None);
+        
+        public static readonly CustomNumberOption JanitorCooldown =
+            new CustomNumberOption("janitorcooldown", "└ Clean-Body-Cooldown", 10, 120, 1, 40, NumberSuffixes.Seconds);
+        
+        public static readonly CustomToggleOption JanitorCanKill =
+            new CustomToggleOption("janitorcankill", "└ Can Kill", true);
+        
+        public static readonly CustomNumberOption BuilderAmount = new CustomNumberOption("builders",
+            $"• {Palette.ImpostorRed.GetTextColor()}Builders{PeasAPI.Utility.StringColor.Reset}", 0, 3, 1, 0, NumberSuffixes.None);
+        
+        public static readonly CustomNumberOption VentBuildingCooldown =
+            new CustomNumberOption("ventbuildingcooldown", $"└ Vent-Building-Cooldown{PeasAPI.Utility.StringColor.Reset}", 10, 30, 1, 10, NumberSuffixes.Seconds);
+        
+        public static readonly CustomNumberOption NinjaAmount = new CustomNumberOption("ninjas",
+            $"• {Palette.ImpostorRed.GetTextColor()}Ninjas{PeasAPI.Utility.StringColor.Reset}", 0, 3, 1, 0, NumberSuffixes.None);
+        
+        public static readonly CustomNumberOption InvisibilityCooldown =
+            new CustomNumberOption("invisibilitycooldown", $"└ Invisibility-Cooldown{PeasAPI.Utility.StringColor.Reset}", 20, 60, 1, 20, NumberSuffixes.Seconds);
 
-        public static readonly CustomStringOption GameModeOption = new CustomStringOption("gamemode", "GameMode", "None", "Hide and Seek", "BattleRoyale");
+        public static readonly CustomNumberOption InvisibilityDuration =
+            new CustomNumberOption("invisibilityduration", $"└ Invisibility-Duration{PeasAPI.Utility.StringColor.Reset}", 10, 30, 1, 10, NumberSuffixes.Seconds);
+
+        public static readonly CustomNumberOption UndertakerAmount = new CustomNumberOption("undertakers",
+            $"• {Palette.ImpostorRed.GetTextColor()}Undertakers{PeasAPI.Utility.StringColor.Reset}", 0, 3, 1, 0, NumberSuffixes.None);
+        
+        public static readonly CustomNumberOption GlaciaterAmount = new CustomNumberOption("Glaciaters",
+            $"• {Palette.ImpostorRed.GetTextColor()}Glaciaters{PeasAPI.Utility.StringColor.Reset}", 0, 3, 1, 0, NumberSuffixes.None);
+
+        public static readonly CustomNumberOption FreezeCooldown =
+            new CustomNumberOption("freezecooldown", $"└ {Palette.ImpostorRed.GetTextColor()}Freezing-Cooldown{PeasAPI.Utility.StringColor.Reset}", 20, 60, 1, 20, NumberSuffixes.Seconds);
+
+        public static readonly CustomNumberOption FreezeDuration =
+            new CustomNumberOption("freezeduration", $"└ {Palette.ImpostorRed.GetTextColor()}Freezing-Duration{PeasAPI.Utility.StringColor.Reset}", 10, 30, 1, 10, NumberSuffixes.Seconds);
+
+        public static readonly CustomOptionButton SectionModes = new CustomOptionButton("ModeSettings", "˅ GameModes", false);
+
+        public static CustomOptionHeader ModesHeader =
+            new CustomOptionHeader($"{PeasAPI.Utility.StringColor.Reset}GameModes");
+        
+        public static CustomOptionHeader HideAndSeek =
+            new CustomOptionHeader($"{PeasAPI.Utility.StringColor.Reset}Hide and Seek");
 
         public static readonly CustomNumberOption SeekerCooldown =
-            new CustomNumberOption("seekercooldown", "Seeker-Cooldown", 10, 60, 2, 2, NumberSuffixes.Seconds);
+            new CustomNumberOption("seekercooldown", "• Seeker-Cooldown", 10, 60, 1, 10, NumberSuffixes.Seconds);
+        
+        public static readonly CustomNumberOption SeekerDuration =
+            new CustomNumberOption("seekerduration", "└ Seeking-Duration", 30, 300, 1, 120, NumberSuffixes.Seconds);
+
+        public static readonly CustomToggleOption SeekerVenting =
+            new CustomToggleOption("seekerventing", "└ Can Seeker Vent", false);
+        
+        public static CustomOptionHeader GodImpostor =
+            new CustomOptionHeader($"{PeasAPI.Utility.StringColor.Reset}God Impostor");
+        
+        public static readonly CustomToggleOption VentBuilding =
+            new CustomToggleOption("ventbuilding", $"• Vent-Building{PeasAPI.Utility.StringColor.Reset}",  false);
+
+        public static readonly CustomToggleOption BodyDragging =
+            new CustomToggleOption("bodydragging", $"• Body-Dragging{PeasAPI.Utility.StringColor.Reset}", false);
+
+        public static readonly CustomToggleOption Invisibility =
+            new CustomToggleOption("invisibility", $"• Invisibility{PeasAPI.Utility.StringColor.Reset}", false);
+        
+        public static readonly CustomToggleOption Freeze =
+            new CustomToggleOption("freeze", $"• Freezing{PeasAPI.Utility.StringColor.Reset}", false);
+
+        public static readonly CustomToggleOption Morphing =
+            new CustomToggleOption("morphing", $"• Morphing{PeasAPI.Utility.StringColor.Reset}", false);
+
+        public static readonly CustomNumberOption MorphingCooldown =
+            new CustomNumberOption("morphingcooldown", $"└ Morphing-Cooldown{PeasAPI.Utility.StringColor.Reset}", 20, 60, 1, 20, NumberSuffixes.Seconds);
 
         public static void Load()
         {
             SectionGeneralListener(false);
-            SectionSpecialListener(false);
-            SectionRolesListener(false);
+            SectionNeutralRolesListener(false);
+            SectionCrewmateRolesListener(false);
+            SectionImpostorRolesListener(false);
+            SectionModesListener(false);
             
             GeneralHeader.MenuVisible = false;
-            SpecialHeader.MenuVisible = false;
-            RolesHeader.MenuVisible = false;
+            NeutralRolesHeader.MenuVisible = false;
+            CrewmateRolesHeader.MenuVisible = false;
+            ImpostorRolesHeader.MenuVisible = false;
+            ModesHeader.MenuVisible = false;
             SectionGeneral.HudVisible = false;
-            SectionSpecial.HudVisible = false;
-            SectionRoles.HudVisible = false;
+            SectionNeutralRoles.HudVisible = false;
+            SectionCrewmateRoles.HudVisible = false;
+            SectionImpostorRoles.HudVisible = false;
+            SectionModes.HudVisible = false;
+            HideAndSeek.HudVisible = false;
+            GodImpostor.HudVisible = false;
         }
         
         public static void SectionGeneralListener(bool value)
@@ -135,29 +186,19 @@ namespace Peasmod
             Venting.MenuVisible = value;
             ReportBodys.MenuVisible = value;
             Sabotaging.MenuVisible = value;
-        }
-
-        public static void SectionSpecialListener(bool value)
-        {
             CrewVenting.MenuVisible = value;
-            VentBuilding.MenuVisible = value;
-            VentBuildingCooldown.MenuVisible = value;
-            BodyDragging.MenuVisible = value;
-            Invisibility.MenuVisible = value;
-            InvisibilityCooldown.MenuVisible = value;
-            InvisibilityDuration.MenuVisible = value;
-            FreezeTime.MenuVisible = value;
-            FreezeTimeCooldown.MenuVisible = value;
-            FreezeTimeDuration.MenuVisible = value;
-            Morphing.MenuVisible = value;
-            MorphingCooldown.MenuVisible = value;
         }
 
-        public static void SectionRolesListener(bool value)
+        public static void SectionNeutralRolesListener(bool value)
         {
             JesterAmount.MenuVisible = value;
             TrollAmount.MenuVisible = value;
+        }
+        
+        public static void SectionCrewmateRolesListener(bool value)
+        {
             CaptainAmount.MenuVisible = value;
+            CaptainCooldown.MenuVisible = value;
             DemonAmount.MenuVisible = value;
             DemonCooldown.MenuVisible = value;
             DemonDuration.MenuVisible = value;
@@ -168,29 +209,36 @@ namespace Peasmod
             SheriffAmount.MenuVisible = value;
             SheriffCooldown.MenuVisible = value;
         }
-
-        public enum GameMode : int
+        
+        public static void SectionImpostorRolesListener(bool value)
         {
-            Roles = 0,
-            HideAndSeek = 1,
-            BattleRoyale = 2,
-            HotPotato = 3
+            JanitorAmount.MenuVisible = value;
+            JanitorCooldown.MenuVisible = value;
+            JanitorCanKill.MenuVisible = value;
+            BuilderAmount.MenuVisible = value;
+            VentBuildingCooldown.MenuVisible = value;
+            NinjaAmount.MenuVisible = value;
+            InvisibilityCooldown.MenuVisible = value;
+            InvisibilityDuration.MenuVisible = value;
+            UndertakerAmount.MenuVisible = value;
+            GlaciaterAmount.MenuVisible = value;
+            FreezeCooldown.MenuVisible = value;
+            FreezeDuration.MenuVisible = value;
         }
-
-        public static bool IsGameMode(GameMode mode)
+        
+        public static void SectionModesListener(bool value)
         {
-            if (GameModeOption.Value == (int) mode)
-                return true;
-            return false;
-        }
-
-        [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Update))]
-        class GameOptionsMenuUpdate
-        {
-            static void Postfix(ref GameOptionsMenu __instance)
-            {
-                //__instance.GetComponentInParent<Scroller>().YBounds.max = 21.5f;
-            }
+            HideAndSeek.MenuVisible = value;
+            SeekerCooldown.MenuVisible = value;
+            SeekerDuration.MenuVisible = value;
+            SeekerVenting.MenuVisible = value;
+            GodImpostor.MenuVisible = value;
+            VentBuilding.MenuVisible = value;
+            BodyDragging.MenuVisible = value;
+            Invisibility.MenuVisible = value;
+            Freeze.MenuVisible = value;
+            Morphing.MenuVisible = value;
+            MorphingCooldown.MenuVisible = value;
         }
 
         [HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.Start))]
@@ -200,28 +248,15 @@ namespace Peasmod
             {
                 __instance.HideForOnline = new Il2CppReferenceArray<Transform>(0);
 
-                SectionGeneral.OnValueChanged += (args) => { SectionGeneralListener(args.NewValue); };
-                SectionGeneral.SetValue(false);
+                SectionGeneral.OnValueChanged += args => { SectionGeneralListener(args.NewValue); };
 
-                SectionSpecial.OnValueChanged += (args) => { SectionSpecialListener(args.NewValue); };
-                SectionSpecial.SetValue(false);
-
-                SectionRoles.OnValueChanged += (args) => { SectionRolesListener(args.NewValue); };
-                SectionRoles.SetValue(false);
+                SectionNeutralRoles.OnValueChanged += args => { SectionNeutralRolesListener(args.NewValue); };
                 
-                GameModeOption.OnValueChanged += (args) =>
-                {
-                    PeasAPI.PeasAPI.EnableRoles = args.NewValue == (int)GameMode.Roles;
-                };
-            }
-        }
-        
-        [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameJoined))]
-        class AmongUsClientOnGameJoinedPatch
-        {
-            static void Postfix(AmongUsClient __instance)
-            {
-                PeasAPI.PeasAPI.EnableRoles = GameModeOption.Value == (int)GameMode.Roles;
+                SectionCrewmateRoles.OnValueChanged += args => { SectionCrewmateRolesListener(args.NewValue); };
+                
+                SectionImpostorRoles.OnValueChanged += args => { SectionImpostorRolesListener(args.NewValue); };
+                
+                SectionModes.OnValueChanged += args => { SectionModesListener(args.NewValue); };
             }
         }
     }
