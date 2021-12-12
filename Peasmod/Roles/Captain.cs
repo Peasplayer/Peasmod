@@ -12,20 +12,13 @@ namespace Peasmod.Roles
         public Captain(BasePlugin plugin) : base(plugin) { }
 
         public override string Name => "Captain";
-
         public override string Description => "Keep your crew safe";
-
         public override string TaskText => "Keep your crew safe";
-
         public override Color Color => ModdedPalette.CaptainColor;
-
-        public override int Limit => (int) Settings.CaptainAmount.Value;
-
-        public override Team Team => Team.Crewmate;
-
         public override Visibility Visibility => Visibility.NoOne;
-
+        public override Team Team => Team.Crewmate;
         public override bool HasToDoTasks => true;
+        public override int Limit => (int) Settings.CaptainAmount.Value;
 
         public CustomButton Button;
 
@@ -36,16 +29,6 @@ namespace Peasmod.Roles
                     PlayerControl.LocalPlayer.CmdReportDeadBody(null);
                 }, Settings.CaptainCooldown.Value,
                 PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CallMeeting.png", 650f), Vector2.zero, false, this, "<size=40%>Call");
-        }
-
-        public override void OnUpdate()
-        {
-            
-        }
-
-        public override void OnMeetingUpdate(MeetingHud meeting)
-        {
-            
         }
     }
 }

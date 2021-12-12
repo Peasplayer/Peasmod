@@ -16,6 +16,7 @@ namespace Peasmod.Roles
     {
         public Ninja(BasePlugin plugin) : base(plugin)
         {
+            Instance = this;
         }
 
         public override string Name => "Ninja";
@@ -30,17 +31,19 @@ namespace Peasmod.Roles
         public override bool CanKill(PlayerControl victim = null) => !victim || victim.Data.Role.IsImpostor;
         public override bool CanSabotage(SystemTypes? sabotage) => true;
 
+        public static Ninja Instance;
+        
         public CustomButton Button;
-        private static List<byte> _invisiblePlayers = new List<byte>();
+        private List<byte> _invisiblePlayers = new List<byte>();
 
         public override void OnGameStart()
         {
             _invisiblePlayers.Clear();
             Button = CustomButton.AddRoleButton(
-                () => { RpcGoInvisible(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer, true); },
+                () => { RpcGoInvisible(PlayerControl.LocalPlayer, true); },
                 Settings.InvisibilityCooldown.Value, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png", 794f),
                 Vector2.zero, false, this, Settings.InvisibilityDuration.Value,
-                () => { RpcGoInvisible(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer, false); }, "<size=40%>Hide");
+                () => { RpcGoInvisible(PlayerControl.LocalPlayer, false); }, "<size=40%>Hide");
         }
 
         public override void OnGameStop()
@@ -52,26 +55,26 @@ namespace Peasmod.Roles
         }
 
         [MethodRpc((uint)CustomRpcCalls.GoInvisible, LocalHandling = RpcLocalHandling.Before)]
-        public static void RpcGoInvisible(PlayerControl player, PlayerControl target, bool enable)
+        public static void RpcGoInvisible(PlayerControl sender, bool enable)
         {
-            if (target.IsLocal())
+            if (sender.IsLocal())
             {
-                _invisiblePlayers.Add(target.PlayerId);
-                target.myRend.color =
-                    target.myRend.color.SetAlpha(enable ? 0.5f : 1f);
-                target.SetHatAndVisorAlpha(enable ? 0.5f : 1f);
-                target.MyPhysics.Skin.layer.color =
-                    target.MyPhysics.Skin.layer.color.SetAlpha(enable ? 0.5f : 1f);
+                Instance._invisiblePlayers.Add(sender.PlayerId);
+                sender.myRend.color =
+                    sender.myRend.color.SetAlpha(enable ? 0.5f : 1f);
+                sender.SetHatAndVisorAlpha(enable ? 0.5f : 1f);
+                sender.MyPhysics.Skin.layer.color =
+                    sender.MyPhysics.Skin.layer.color.SetAlpha(enable ? 0.5f : 1f);
             }
             else
             {
-                _invisiblePlayers.Remove(target.PlayerId);
-                target.Visible = !enable;
+                Instance._invisiblePlayers.Remove(sender.PlayerId);
+                sender.Visible = !enable;
             }
         }
 
         [HarmonyPatch]
-        public static class Patches
+        private static class Patches
         {
             [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Revive))]
             [HarmonyPrefix]

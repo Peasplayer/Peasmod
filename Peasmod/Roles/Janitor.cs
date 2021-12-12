@@ -25,23 +25,13 @@ namespace Peasmod.Roles
         public override bool HasToDoTasks => false;
         public override int Limit => (int)Settings.JanitorAmount.Value;
         public override bool CanVent => true;
+        public override bool CanKill(PlayerControl victim = null) => !victim || victim.Data.Role.IsImpostor;
+        public override bool CanSabotage(SystemTypes? sabotage) => true;
 
         public static Janitor Instance;
         public CustomButton Button;
         public GameObject TargetBody;
-
-        public override bool CanKill(PlayerControl victim = null)
-        {
-            if (victim == null)
-                return true;
-            return !victim.Data.Role.IsImpostor;
-        }
-
-        public override bool CanSabotage(SystemTypes? sabotage)
-        {
-            return true;
-        }
-
+        
         public override void OnGameStart()
         {
             Button = CustomButton.AddRoleButton(() =>

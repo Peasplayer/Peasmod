@@ -1,70 +1,107 @@
-﻿using System.IO;
-using System.Reflection;
+﻿using System;
+using System.Diagnostics;
+using System.Text;
 using HarmonyLib;
+using PeasAPI;
 using Reactor.Extensions;
 using TMPro;
-using UnhollowerRuntimeLib;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 namespace Peasmod.Patches
 {
-    public class WatermarkPatches
+    [HarmonyPatch]
+    public static class WatermarkPatches
     {
-        [HarmonyPatch(typeof(MainMenuManager), "Start")]
-        public static class MainMenuManagerStartPatch
+        [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
+        [HarmonyPostfix]
+        public static void PeasmodLogoPatch()
         {
-            public static void Postfix()
+            var peasmodLogo = Utility.CreateSprite("Peasmod.Resources.Peasmod.png");
+                
+            GameObject.Find("bannerLogo_AmongUs").GetComponent<SpriteRenderer>().sprite = peasmodLogo;
+            GameObject.Find("AmongUsLogo").GetComponent<SpriteRenderer>().sprite = peasmodLogo;
+            GameObject.Find("AmongUsLogo").transform.position += new Vector3(0.3f, 0, 0);
+
+            if (GameObject.Find("CreditsButton") != null)
             {
-                var peasmodLogo = PeasAPI.Utility.CreateSprite("Peasmod.Resources.Peasmod.png");
-                
-                GameObject.Find("bannerLogo_AmongUs").GetComponent<SpriteRenderer>().sprite = peasmodLogo;
-                GameObject.Find("AmongUsLogo").GetComponent<SpriteRenderer>().sprite = peasmodLogo;
-                GameObject.Find("AmongUsLogo").transform.position += new Vector3(0.3f, 0, 0);
-                
-                if(GameObject.Find("CreditsButton") != null)
-                    GameObject.Find("CreditsButton").GetComponent<SpriteRenderer>().sprite = PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Credits.png");
+                var creditButton = Object.Instantiate(GameObject.Find("CreditsButton"), GameObject.Find("CreditsButton").transform.parent);
+                creditButton.GetComponent<SpriteRenderer>().sprite = Utility.CreateSprite("Peasmod.Resources.Buttons.Credits.png", 95f);
+                var button = creditButton.GetComponent<PassiveButton>();
+                button.OnClick = new Button.ButtonClickedEvent();
+                button.OnClick.AddListener((UnityAction) openPopUp);
+
+                void openPopUp()
+                {
+                    var stringBuilder = new StringBuilder();
+                    stringBuilder.AppendLine($"{Utility.StringColor.Green}Peasmod{Utility.StringColor.Reset}");
+                    stringBuilder.AppendLine("Developed by:");
+                    stringBuilder.AppendLine("@Peasplayer#2541");
+                    stringBuilder.AppendLine("Art by:");
+                    stringBuilder.AppendLine("@C.A 100 PRO PLAYER#4147 & @Sam.#0006");
+                    stringBuilder.AppendLine("");
+                    stringBuilder.AppendLine($"{Utility.StringColor.Red}PeasAPI{Utility.StringColor.Reset}");
+                    stringBuilder.AppendLine("Developed by:");
+                    stringBuilder.AppendLine("@Peasplayer#2541");
+                    stringBuilder.AppendLine("@Plix#7013");
+                    stringBuilder.AppendLine("@Pandapip1#8943");
+                    var popup = GeneratePopUp();
+                    popup.Show(stringBuilder.ToString());
+                    popup.TextAreaTMP.transform.SetY(0.25f);
+                }
             }
         }
-        
-        [HarmonyPatch(typeof(CreditsScreenPopUp), nameof(CreditsScreenPopUp.OnEnable))]
-        public static class CreditScreenPatch
-        {
-            public static void Postfix(CreditsScreenPopUp __instance)
-            {
-                if(GameObject.Find("AmyText_TMP") != null)
-                    GameObject.Find("AmyText_TMP").GetComponent<TextMeshPro>().text = "Peasplayer\nGravity";
-                if(GameObject.Find("ForestText_TMP") != null)
-                    GameObject.Find("ForestText_TMP").GetComponent<TextMeshPro>().text = "Innersloth\nPeasplayer";
-                if(GameObject.Find("CMText") != null)
-                    GameObject.Find("CMText").GetComponent<TextMeshPro>().text = "Game-Creators";
-                if (Object.FindObjectOfType<AutoScroll>() != null)
-                {
-                    Object.FindObjectOfType<AutoScroll>().transform.localPosition = new Vector3(0, 0, 0);
-                    Object.FindObjectOfType<AutoScroll>().Destroy();
-                }
-                if (Object.FindObjectOfType<HideObjectIfMinor>() != null)
-                {
-                    Object.FindObjectOfType<HideObjectIfMinor>().Destroy();
-                    GameObject.Find("FollowUs").SetActive(true);
-                }
 
-                if (GameObject.Find("TwitterIcon") != null)
-                {
-                    GameObject.Find("TwitterIcon").SetActive(false);
-                    //GameObject.Find("TwitterIcon").GetComponent<SpriteRenderer>().sprite =
-                    //    Utils.CreateSprite("GitHub.png");
-                    //GameObject.Find("TwitterIcon").GetComponent<SpriteRenderer>().size /= 45;
-                    //GameObject.Find("TwitterIcon").GetComponent<TwitterLink>().LinkUrl =
-                    //    "https://github.com/Peasplayer";
-                }
-                if(GameObject.Find("FacebookIcon") != null)
-                    GameObject.Find("FacebookIcon").SetActive(false);
-                if(GameObject.Find("Discord-Logo-Color") != null)
-                    GameObject.Find("Discord-Logo-Color").GetComponent<TwitterLink>().LinkUrl =
-                    "https://discord.gg/nQB5EZe";
-                if(GameObject.Find("logoImage") != null)
-                    GameObject.Find("logoImage").GetComponent<SpriteRenderer>().sprite = PeasAPI.Utility.CreateSprite("Peasmod.Resources.Peasmod.png");
-            }
+        private static GenericPopup _popup;
+        
+        private static GenericPopup GeneratePopUp()
+        {
+            if (_popup == null)
+                _popup = Object.Instantiate(DiscordManager.Instance.discordPopup, DiscordManager.Instance.discordPopup.transform.parent);
+            _popup.transform.localScale = Vector3.one * 2f;
+            
+            var transform = CreateButton("discord", "Discord", new Vector3(-1.7f, -0.75f));
+            var transform2 = CreateButton("github", "GitHub", new Vector3(0f, -0.75f));
+            CreateButton("close", "Close", new Vector3(1.7f, -0.75f));
+            
+            var component = transform.GetComponent<PassiveButton>();
+            component.OnClick.RemoveAllListeners();
+            component.OnClick.AddListener((Action) delegate
+            {
+                Process.Start("https://discord.gg/nQB5EZe");
+            });
+            
+            component = transform2.GetComponent<PassiveButton>();
+            component.OnClick.RemoveAllListeners();
+            component.OnClick.AddListener((Action) delegate
+            {
+                Process.Start("https://github.com/Peasplayer/Peasmod");
+            });
+            
+            return _popup;
+        }
+
+        private static Transform CreateButton(string name, string text, Vector3 offset)
+        {
+            var find = _popup.transform.FindChild(name);
+            if (find) return find;
+            
+            var template = _popup.transform.FindChild("ExitGame");
+            template.GetComponentInChildren<TextTranslatorTMP>().Destroy();
+            template.gameObject.SetActive(false);
+            
+            var button = Object.Instantiate(template, _popup.transform).DontDestroy();
+            var transform = button.transform;
+            
+            button.gameObject.name = name;
+            transform.position += offset;
+            transform.localScale /= 2f;
+            
+            button.GetComponentInChildren<TextMeshPro>().text = text;
+            button.gameObject.SetActive(true);
+            return button;
         }
     }
 }

@@ -2,15 +2,11 @@
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using HarmonyLib;
-using InnerNet;
 using Reactor;
 using BepInEx.Logging;
 using PeasAPI;
 using PeasAPI.Managers;
-using Peasmod.Roles;
-using Peasmod.Roles.GameModes;
 using UnityEngine;
-using Random = System.Random;
 
 namespace Peasmod
 {
@@ -18,7 +14,6 @@ namespace Peasmod
     [BepInProcess("Among Us.exe")]
     [BepInDependency(ReactorPlugin.Id)]
     [BepInDependency(PeasAPI.PeasAPI.Id)]
-    [HarmonyPatch]
     public class PeasmodPlugin : BasePlugin
     {
         public const string Id = "tk.peasplayer.peasmod";
@@ -33,16 +28,9 @@ namespace Peasmod
         
         public static ConfigFile ConfigFile { get; private set; }
 
-        public static readonly Random Random = new Random();
-
-        public static bool GameStarted =>
-            GameData.Instance && ShipStatus.Instance && AmongUsClient.Instance &&
-            (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started ||
-             AmongUsClient.Instance.GameMode == global::GameModes.FreePlay);
-
         public override void Load()
         {
-            Logger = this.Log;
+            Logger = Log;
             ConfigFile = Config;
 
             WatermarkManager.AddWatermark($" | {PluginName} v{PluginVersion} {PeasAPI.Utility.StringColor.Green} by {PluginAuthor}", $" | {PluginName} v{PluginVersion}\n{PeasAPI.Utility.StringColor.Green} by {PluginAuthor}", 

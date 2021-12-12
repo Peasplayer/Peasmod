@@ -11,25 +11,20 @@ namespace Peasmod.Roles
     [RegisterCustomRole]
     public class Inspector : BaseRole
     {
-        public Inspector(BasePlugin plugin) : base(plugin)
-        {
-        }
+        public Inspector(BasePlugin plugin) : base(plugin) { }
 
         public override string Name => "Inspector";
-
         public override string Description => "Find the Impostor";
-
         public override string TaskText => "Find the Impostor by his footprints";
-
         public override Color Color => ModdedPalette.InspectorColor;
-
+        public override Visibility Visibility => Visibility.NoOne;
+        public override Team Team => Team.Crewmate;
+        public override bool HasToDoTasks => true;
         public override int Limit => (int) Settings.InspectorAmount.Value;
 
-        public override Team Team => Team.Crewmate;
-
-        public override Visibility Visibility => Visibility.NoOne;
-
-        public override bool HasToDoTasks => true;
+        private float _timer;
+        private readonly float MaxTimer = 0.125f;
+        private readonly Dictionary<byte, Dictionary<GameObject, float>> Dots = new ();
 
         public override void OnGameStart()
         {
@@ -40,10 +35,6 @@ namespace Peasmod.Roles
                     Dots.Add(player.PlayerId, new Dictionary<GameObject, float>());
             }
         }
-
-        private static float _timer;
-        private static readonly float MaxTimer = 0.125f;
-        private static readonly Dictionary<byte, Dictionary<GameObject, float>> Dots = new ();
 
         public override void OnUpdate()
         {

@@ -12,25 +12,16 @@ namespace Peasmod.Roles
     [RegisterCustomRole]
     public class Mayor : BaseRole
     {
-        public Mayor(BasePlugin plugin) : base(plugin)
-        {
-        }
+        public Mayor(BasePlugin plugin) : base(plugin) { }
 
         public override string Name => "Mayor";
-
         public override string Description => "Your vote counts twice";
-
         public override string TaskText => "Your vote counts twice. Use it wisely!";
-
         public override Color Color => ModdedPalette.MayorColor;
-
-        public override int Limit => (int) Settings.MayorAmount.Value;
-
-        public override Team Team => Team.Crewmate;
-
         public override Visibility Visibility => Visibility.NoOne;
-
+        public override Team Team => Team.Crewmate;
         public override bool HasToDoTasks => true;
+        public override int Limit => (int) Settings.MayorAmount.Value;
 
         private static Dictionary<byte, int> CalculateVotes(MeetingHud __instance)
         {

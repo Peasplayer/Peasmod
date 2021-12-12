@@ -14,35 +14,13 @@ namespace Peasmod.Roles
         public Jester(BasePlugin plugin) : base(plugin) { }
 
         public override string Name => "Jester";
-
         public override string Description => "Trick the crew";
-
         public override string TaskText => "Trick the crew into voting you out";
-
         public override Color Color => ModdedPalette.JesterColor;
-
-        public override int Limit => (int) Settings.JesterAmount.Value;
-
-        public override Team Team => Team.Alone;
-
         public override Visibility Visibility => Visibility.NoOne;
-
+        public override Team Team => Team.Alone;
         public override bool HasToDoTasks => false;
-
-        public override void OnGameStart()
-        {
-            
-        }
-
-        public override void OnUpdate()
-        {
-            
-        }
-
-        public override void OnMeetingUpdate(MeetingHud meeting)
-        {
-            
-        }
+        public override int Limit => (int) Settings.JesterAmount.Value;
 
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Exiled))]
         public static class PlayerControlExiledPatch

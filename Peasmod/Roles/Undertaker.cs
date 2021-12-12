@@ -48,14 +48,14 @@ namespace Peasmod.Roles
                     CarryingBody = false;
                     Button.SetImage(PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f));
                     Button.Text = "<size=40%>Drag";
-                    RpcDragBody(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer, false, byte.MaxValue);
+                    RpcDragBody(PlayerControl.LocalPlayer, false, byte.MaxValue);
                 }
                 else
                 {
                     CarryingBody = true;
                     Button.SetImage(PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.DropBody.png", 803f));
                     Button.Text = "<size=40%>Drop";
-                    RpcDragBody(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer, true, TargetBody.GetComponent<DeadBody>().ParentId);
+                    RpcDragBody(PlayerControl.LocalPlayer, true, TargetBody.GetComponent<DeadBody>().ParentId);
                 }
             }, 0f, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f), Vector2.zero, false, this, "<size=40%>Drag");
         }
@@ -79,7 +79,7 @@ namespace Peasmod.Roles
                         {
                             CarryingBody = false;
                             Button.SetImage(PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png"));
-                            RpcDragBody(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer, false, byte.MaxValue);
+                            RpcDragBody(PlayerControl.LocalPlayer, false, byte.MaxValue);
                         }
                         continue;
                     }
@@ -127,20 +127,20 @@ namespace Peasmod.Roles
         }
 
         [MethodRpc((uint) CustomRpcCalls.DragBody, LocalHandling = RpcLocalHandling.Before)]
-        public static void RpcDragBody(PlayerControl sender, PlayerControl player, bool enable, byte bodyId)
+        public static void RpcDragBody(PlayerControl sender, bool enable, byte bodyId)
         {
             if (enable)
             {
                 var body = Object.FindObjectsOfType<DeadBody>().First(body => body.ParentId == bodyId);
                 if (body == null)
                     return;
-                MoveBody(player, bodyId);
-                Instance.CarriedBodys.Add(player.PlayerId, body.ParentId);
+                MoveBody(sender, bodyId);
+                Instance.CarriedBodys.Add(sender.PlayerId, body.ParentId);
             }
             else
             {
-                if (Instance.CarriedBodys.ContainsKey(player.PlayerId))
-                    Instance.CarriedBodys.Remove(player.PlayerId);
+                if (Instance.CarriedBodys.ContainsKey(sender.PlayerId))
+                    Instance.CarriedBodys.Remove(sender.PlayerId);
             }
         }
     }

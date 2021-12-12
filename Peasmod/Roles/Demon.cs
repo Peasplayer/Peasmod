@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using BepInEx.IL2CPP;
 using HarmonyLib;
 using Hazel;
@@ -10,6 +9,7 @@ using PeasAPI.Roles;
 using Reactor;
 using Reactor.Extensions;
 using Reactor.Networking;
+using Reactor.Networking.MethodRpc;
 using UnityEngine;
 
 namespace Peasmod.Roles
@@ -20,20 +20,13 @@ namespace Peasmod.Roles
         public Demon(BasePlugin plugin) : base(plugin) { }
 
         public override string Name => "Demon";
-
         public override string Description => "Swap into the afterlife";
-
         public override string TaskText => "Swap into the afterlife";
-
         public override Color Color => ModdedPalette.DemonColor;
-
-        public override int Limit => (int) Settings.DemonAmount.Value;
-
-        public override Team Team => Team.Crewmate;
-
         public override Visibility Visibility => Visibility.NoOne;
-
+        public override Team Team => Team.Crewmate;
         public override bool HasToDoTasks => true;
+        public override int Limit => (int) Settings.DemonAmount.Value;
 
         public static CustomButton Button;
 
@@ -44,7 +37,7 @@ namespace Peasmod.Roles
                     PlayerControl.LocalPlayer.Die(DeathReason.Disconnect);
                     PlayerControl.LocalPlayer.gameObject.layer = LayerMask.NameToLayer("Players");
                     HudManager.Instance.ShadowQuad.gameObject.SetActive(false);
-                    Rpc<DemonAbilityRpc>.Instance.Send(new DemonAbilityRpc.Data(PlayerControl.LocalPlayer, true));
+                    RpcDemonAbility(PlayerControl.LocalPlayer, true);
                     Coroutines.Start(CoStartDemonAbility(Settings.DemonDuration.Value));
                 }, Settings.DemonCooldown.Value, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.SwapAfterlife.png", 650f), Vector2.zero, false, this, "<size=40%>Swap");
         }
@@ -57,7 +50,7 @@ namespace Peasmod.Roles
             {
                 PlayerControl.LocalPlayer.Revive();
                 HudManager.Instance.ShadowQuad.gameObject.SetActive(true);
-                Rpc<DemonAbilityRpc>.Instance.Send(new DemonAbilityRpc.Data(PlayerControl.LocalPlayer, false));
+                RpcDemonAbility(PlayerControl.LocalPlayer, false);
             }
         }
         
@@ -73,49 +66,17 @@ namespace Peasmod.Roles
                 }
             }
         }
-        
-        [RegisterCustomRpc((uint) CustomRpcCalls.DemonAbility)]
-        public class DemonAbilityRpc : PlayerCustomRpc<PeasmodPlugin, DemonAbilityRpc.Data>
+
+        [MethodRpc((uint) CustomRpcCalls.DemonAbility)]
+        public static void RpcDemonAbility(PlayerControl sender, bool deathOrRevive)
         {
-            public DemonAbilityRpc(PeasmodPlugin plugin, uint id) : base(plugin, id)
+            if (deathOrRevive)
             {
+                sender.Die(DeathReason.Kill);
             }
-
-            public readonly struct Data
+            else
             {
-                public readonly PlayerControl Player;
-                public readonly bool DeathOrRevive;
-
-                public Data(PlayerControl player, bool deathOrRevive)
-                {
-                    Player = player;
-                    DeathOrRevive = deathOrRevive;
-                }
-            }
-
-            public override RpcLocalHandling LocalHandling => RpcLocalHandling.None;
-
-            public override void Write(MessageWriter writer, Data data)
-            {
-                writer.Write(data.Player.PlayerId);
-                writer.Write(data.DeathOrRevive);
-            }
-
-            public override Data Read(MessageReader reader)
-            {
-                return new Data(reader.ReadByte().GetPlayer(), reader.ReadBoolean());
-            }
-
-            public override void Handle(PlayerControl innerNetObject, Data data)
-            {
-                if (data.DeathOrRevive)
-                {
-                    data.Player.Die(DeathReason.Kill);
-                }
-                else
-                {
-                    data.Player.Revive();
-                }
+                sender.Revive();
             }
         }
     }

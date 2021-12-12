@@ -2,7 +2,7 @@
 
 namespace Peasmod
 {
-    public class ModdedPalette
+    public static class ModdedPalette
     {
         public static Color CaptainColor = Palette.LightBlue;
         public static Color DemonColor = new Color(255 / 255f, 93 / 255f, 0 / 255f);
