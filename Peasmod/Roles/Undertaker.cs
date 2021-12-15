@@ -20,8 +20,8 @@ namespace Peasmod.Roles
         }
 
         public override string Name => "Undertaker";
-        public override string Description => "Take dead bodys away";
-        public override string TaskText => "Take dead bodys away";
+        public override string Description => "Take dead bodies away";
+        public override string TaskText => "Take dead bodies away";
         public override Color Color => Palette.ImpostorRed;
         public override Visibility Visibility => Visibility.Impostor;
         public override Team Team => Team.Impostor;

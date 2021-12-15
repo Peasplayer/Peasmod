@@ -11,8 +11,10 @@ namespace Peasmod.Patches
         private static void ManageButtons(PlayerControl __instance)
         {
             var player = PlayerControl.LocalPlayer;
+            if (player == null || player.Data == null || player.Data.Role == null)
+                return;
 
-            if (Settings.CrewVenting.Value && !player.Data.Role.IsImpostor && PeasAPI.PeasAPI.GameStarted &&
+            if (Settings.CrewVenting.Value && player.Data.Role && !player.Data.Role.IsImpostor && PeasAPI.PeasAPI.GameStarted &&
                 !MeetingHud.Instance)
             {
                 HudManager.Instance.ImpostorVentButton.gameObject.SetActive(true);
