@@ -26,5 +26,7 @@ namespace Peasmod.GameModes
             typeof(Roles.GameModes.GodImpostor), typeof(Captain), typeof(Demon), typeof(Doctor), typeof(Inspector),
             typeof(Jester), typeof(Mayor), typeof(Sheriff), typeof(Troll)
         };
+
+        public override bool AllowSabotage(SystemTypes? sabotage) => true;
     }
 }

@@ -8,6 +8,7 @@
         GoInvisible,
         DragBody,
         Freeze,
+        CleanBody,
         StartHideAndSeek
     }
 }

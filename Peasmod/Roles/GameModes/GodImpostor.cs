@@ -8,6 +8,7 @@ using PeasAPI.Managers;
 using PeasAPI.Roles;
 using Reactor.Networking;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Peasmod.Roles.GameModes
 {
@@ -25,7 +26,7 @@ namespace Peasmod.Roles.GameModes
         public override Color Color => Palette.ImpostorRed;
         public override Visibility Visibility => Visibility.Impostor;
         public override Team Team => Team.Impostor;
-        public override bool HasToDoTasks => false;
+        public override bool HasToDoTasks => true;
         public override Type[] GameModeWhitelist { get; } = { typeof(Peasmod.GameModes.GodImpostor) };
         public override int Limit => 1;
         public override bool CanVent => true;
@@ -53,7 +54,11 @@ namespace Peasmod.Roles.GameModes
             MorphButton.Enabled = MorphButton.Visible = Settings.Morphing.Value;
 
             VentBuildButton = CustomButton.AddRoleButton(
-                () => { Rpc<Builder.RpcCreateVent>.Instance.Send(PlayerControl.LocalPlayer.transform.position); },
+                () =>
+                {
+                    var pos = PlayerControl.LocalPlayer.transform.position;
+                    Builder.RpcCreateVent(PlayerControl.LocalPlayer, pos.x, pos.y, pos.z);
+                },
                 Settings.VentBuildingCooldown.Value,
                 PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png", 552f), Vector2.zero, false,
                 this, "<size=40%>Build");
@@ -97,6 +102,15 @@ namespace Peasmod.Roles.GameModes
 
         public override void OnUpdate()
         {
+            if (VentBuildButton == null)
+                return;
+            if (Object.FindObjectOfType<Vent>() == null)
+                return;
+            var vent = Object.FindObjectOfType<Vent>().gameObject;
+            var ventSize = Vector2.Scale(vent.GetComponent<BoxCollider2D>().size, vent.transform.localScale) * 0.75f;
+            var hits = Physics2D.OverlapBoxAll(PlayerControl.LocalPlayer.transform.position, ventSize, 0).Where(c => (c.name.Contains("Vent") || !c.isTrigger) && c.gameObject.layer != 8 && c.gameObject.layer != 5).ToArray();
+            VentBuildButton.Usable = hits.Length == 0;
+            
             if (DragBodyButton == null)
                 return;
 

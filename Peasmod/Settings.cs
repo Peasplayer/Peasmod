@@ -149,12 +149,12 @@ namespace Peasmod
 
         public static readonly CustomNumberOption FreezeCooldown =
             new CustomNumberOption("freezecooldown",
-                $"└ {Palette.ImpostorRed.GetTextColor()}Freezing-Cooldown{Utility.StringColor.Reset}", 20, 60, 1, 20,
+                $"└ Freezing-Cooldown", 20, 60, 1, 20,
                 NumberSuffixes.Seconds);
 
         public static readonly CustomNumberOption FreezeDuration =
             new CustomNumberOption("freezeduration",
-                $"└ {Palette.ImpostorRed.GetTextColor()}Freezing-Duration{Utility.StringColor.Reset}", 10, 30, 1, 10,
+                $"└ Freezing-Duration", 10, 30, 1, 10,
                 NumberSuffixes.Seconds);
 
         public static readonly CustomOptionButton SectionModes =

@@ -1,4 +1,7 @@
-﻿using HarmonyLib;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using HarmonyLib;
 using UnityEngine;
 
 namespace Peasmod.Patches
@@ -14,7 +17,8 @@ namespace Peasmod.Patches
             if (player == null || player.Data == null || player.Data.Role == null)
                 return;
 
-            if (Settings.CrewVenting.Value && player.Data.Role && !player.Data.Role.IsImpostor && PeasAPI.PeasAPI.GameStarted &&
+            if (Settings.CrewVenting.Value && player.Data.Role && !player.Data.Role.IsImpostor &&
+                PeasAPI.PeasAPI.GameStarted &&
                 !MeetingHud.Instance)
             {
                 HudManager.Instance.ImpostorVentButton.gameObject.SetActive(true);
@@ -24,15 +28,40 @@ namespace Peasmod.Patches
                     HudManager.Instance.ImpostorVentButton.SetDisabled();
             }
 
-            if (!Settings.Venting.Value && player.Data.Role.IsImpostor && PeasAPI.PeasAPI.GameStarted &&
-                !MeetingHud.Instance)
+            if (!Settings.Venting.Value && player.Data.Role.IsImpostor && PeasAPI.PeasAPI.GameStarted)
                 HudManager.Instance.ImpostorVentButton.gameObject.SetActive(false);
 
-            if (!Settings.Sabotaging.Value && PeasAPI.PeasAPI.GameStarted && !MeetingHud.Instance)
+            if (!Settings.Sabotaging.Value && PeasAPI.PeasAPI.GameStarted)
                 HudManager.Instance.SabotageButton.gameObject.SetActive(false);
 
-            if (!Settings.ReportBodys.Value && PeasAPI.PeasAPI.GameStarted && !MeetingHud.Instance)
+            if (!Settings.ReportBodys.Value && PeasAPI.PeasAPI.GameStarted)
+            {
                 HudManager.Instance.ReportButton.gameObject.SetActive(false);
+                Physics2D.OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(),
+                        PlayerControl.LocalPlayer.MaxReportDistance + 2f, Constants.PlayersOnlyMask)
+                    .Where(collider => collider.CompareTag("DeadBody"))
+                    .Do(collider => collider.GetComponent<DeadBody>().Reported = true);
+            }
+        }
+
+        [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.ShowSabotageMap))]
+        [HarmonyPrefix]
+        public static bool DisableSabotagesPatch(MapBehaviour __instance)
+        {
+            if (PeasAPI.PeasAPI.GameStarted && !Settings.Sabotaging.Value)
+            {
+                HudManager.Instance.ShowMap((Action<MapBehaviour>)(map =>
+                {
+                    foreach (MapRoom mapRoom in map.infectedOverlay.rooms.ToArray())
+                    {
+                        mapRoom.gameObject.SetActive(false);
+                    }
+                }));
+
+                //return false;
+            }
+
+            return true;
         }
 
         [HarmonyPatch(typeof(Vent), nameof(Vent.CanUse))]

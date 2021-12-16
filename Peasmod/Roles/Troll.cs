@@ -23,7 +23,7 @@ namespace Peasmod.Roles
 
         public override void OnKill(PlayerControl victim)
         {
-            if (victim.IsRole<Troll>())
+            if (victim.IsRole<Troll>() && victim.IsLocal())
                 new CustomEndReason(victim);
         }
     }

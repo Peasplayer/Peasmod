@@ -25,7 +25,7 @@ namespace Peasmod.Roles
         public override Color Color => Palette.ImpostorRed;
         public override Visibility Visibility => Visibility.Impostor;
         public override Team Team => Team.Impostor;
-        public override bool HasToDoTasks => false;
+        public override bool HasToDoTasks => true;
         public override int Limit => (int)Settings.NinjaAmount.Value;
         public override bool CanVent => true;
         public override bool CanKill(PlayerControl victim = null) => !victim || victim.Data.Role.IsImpostor;
@@ -46,20 +46,36 @@ namespace Peasmod.Roles
                 () => { RpcGoInvisible(PlayerControl.LocalPlayer, false); }, "<size=40%>Hide");
         }
 
-        public override void OnGameStop()
+        public override void OnUpdate()
         {
-            /*for (int i = 0; i < _invisiblePlayers.Count; i++)
+            foreach (var _player in _invisiblePlayers)
             {
-                RpcGoInvisible(PlayerControl.LocalPlayer, _invisiblePlayers[i].GetPlayer(), false);
-            }*/
+                var player = _player.GetPlayer();
+                if (player.IsLocal())
+                {
+                    player.myRend.color =
+                        player.myRend.color.SetAlpha(0.5f);
+                    player.SetHatAndVisorAlpha(0.5f);
+                    player.MyPhysics.Skin.layer.color =
+                        player.MyPhysics.Skin.layer.color.SetAlpha(0.5f);
+                }
+                else
+                {
+                    player.Visible = false;
+                }
+            }
         }
 
         [MethodRpc((uint)CustomRpcCalls.GoInvisible, LocalHandling = RpcLocalHandling.Before)]
         public static void RpcGoInvisible(PlayerControl sender, bool enable)
         {
+            if (enable)
+                Instance._invisiblePlayers.Add(sender.PlayerId);
+            else 
+                Instance._invisiblePlayers.Remove(sender.PlayerId);
+            
             if (sender.IsLocal())
             {
-                Instance._invisiblePlayers.Add(sender.PlayerId);
                 sender.myRend.color =
                     sender.myRend.color.SetAlpha(enable ? 0.5f : 1f);
                 sender.SetHatAndVisorAlpha(enable ? 0.5f : 1f);
@@ -68,7 +84,6 @@ namespace Peasmod.Roles
             }
             else
             {
-                Instance._invisiblePlayers.Remove(sender.PlayerId);
                 sender.Visible = !enable;
             }
         }

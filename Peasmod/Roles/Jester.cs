@@ -27,7 +27,7 @@ namespace Peasmod.Roles
         {
             public static void Prefix(PlayerControl __instance)
             {
-                if (__instance.IsRole<Jester>())
+                if (__instance.IsRole<Jester>() && __instance.IsLocal())
                     new CustomEndReason(__instance);
             }
         }

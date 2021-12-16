@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using BepInEx.IL2CPP;
 using Hazel;
+using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Roles;
@@ -24,20 +25,35 @@ namespace Peasmod.Roles
         public override Color Color => Palette.ImpostorRed;
         public override Visibility Visibility => Visibility.Impostor;
         public override Team Team => Team.Impostor;
-        public override bool HasToDoTasks => false;
+        public override bool HasToDoTasks => true;
         public override int Limit => (int) Settings.BuilderAmount.Value;
         public override bool CanVent => true;
         public override bool CanKill(PlayerControl victim = null) => !victim || victim.Data.Role.IsImpostor;
-        public override bool CanSabotage(SystemTypes? sabotage) => true;
+        public override bool CanSabotage(SystemTypes? sabotage) => false;
 
         public CustomButton Button;
+        public Vector2 VentSize;
         
         public override void OnGameStart()
         {
             Button = CustomButton.AddRoleButton(() =>
             {
-                Rpc<RpcCreateVent>.Instance.Send(PlayerControl.LocalPlayer.transform.position);
+                var pos = PlayerControl.LocalPlayer.transform.position;
+                RpcCreateVent(PlayerControl.LocalPlayer, pos.x, pos.y, pos.z);
             }, Settings.VentBuildingCooldown.Value, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png", 552f), Vector2.zero, false, this, "<size=40%>Build");
+        }
+
+        public override void OnUpdate()
+        {
+            if (PlayerControl.LocalPlayer.IsRole(this))
+            {
+                if (Object.FindObjectOfType<Vent>() == null)
+                    return;
+                var vent = Object.FindObjectOfType<Vent>().gameObject;
+                var ventSize = Vector2.Scale(vent.GetComponent<BoxCollider2D>().size, vent.transform.localScale) * 0.75f;
+                var hits = Physics2D.OverlapBoxAll(PlayerControl.LocalPlayer.transform.position, ventSize, 0).Where(c => (c.name.Contains("Vent") || !c.isTrigger) && c.gameObject.layer != 8 && c.gameObject.layer != 5).ToArray();
+                Button.Usable = hits.Length == 0;
+            }
         }
 
         private static int _lastVent = int.MaxValue;
@@ -68,31 +84,10 @@ namespace Peasmod.Roles
             _lastVent = vent.Id;
         }
 
-        [RegisterCustomRpc((uint) CustomRpcCalls.CreateVent)]
-        public class RpcCreateVent : PlayerCustomRpc<PeasmodPlugin, Vector3>
+        [MethodRpc((uint) CustomRpcCalls.CreateVent)]
+        public static void RpcCreateVent(PlayerControl sender, float x, float y, float z)
         {
-            public RpcCreateVent(PeasmodPlugin plugin, uint id) : base(plugin, id)
-            {
-            }
-
-            public override RpcLocalHandling LocalHandling => RpcLocalHandling.Before;
-            
-            public override void Write(MessageWriter writer, Vector3 data)
-            {
-                writer.Write(data.x);
-                writer.Write(data.y);
-                writer.Write(data.z);
-            }
-
-            public override Vector3 Read(MessageReader reader)
-            {
-                return new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-            }
-
-            public override void Handle(PlayerControl innerNetObject, Vector3 data)
-            {
-                CreateVent(data);
-            }
+            CreateVent(new Vector3(x, y, z));
         }
     }
 }

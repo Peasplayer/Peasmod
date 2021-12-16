@@ -6,6 +6,7 @@ using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Roles;
 using Reactor.Extensions;
+using Reactor.Networking.MethodRpc;
 using UnityEngine;
 
 namespace Peasmod.Roles
@@ -75,6 +76,7 @@ namespace Peasmod.Roles
             }
         }
 
+        [MethodRpc((uint) CustomRpcCalls.DoctorAbility)]
         public static void RpcRevive(PlayerControl sender)
         {
             sender.Revive();

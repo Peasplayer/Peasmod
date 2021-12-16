@@ -4,6 +4,7 @@ using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Roles;
 using Reactor.Extensions;
+using Reactor.Networking.MethodRpc;
 using UnityEngine;
 
 namespace Peasmod.Roles
@@ -22,7 +23,7 @@ namespace Peasmod.Roles
         public override Color Color => Palette.ImpostorRed;
         public override Visibility Visibility => Visibility.Impostor;
         public override Team Team => Team.Impostor;
-        public override bool HasToDoTasks => false;
+        public override bool HasToDoTasks => true;
         public override int Limit => (int)Settings.JanitorAmount.Value;
         public override bool CanVent => true;
         public override bool CanKill(PlayerControl victim = null) => !victim || victim.Data.Role.IsImpostor;
@@ -58,6 +59,7 @@ namespace Peasmod.Roles
             }
         }
 
+        [MethodRpc((uint) CustomRpcCalls.CleanBody)]
         public static void RpcCleanBody(PlayerControl sender, byte bodyId)
         {
             Object.FindObjectsOfType<DeadBody>().Where(_body => _body.ParentId == bodyId).ToList()[0].gameObject.Destroy();
