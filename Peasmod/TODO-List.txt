@@ -1,0 +1,26 @@
+TODO-Liste:
+
+ROLLEN:
+* Security-Guard: Kann jemanden beschützen, Admin/Security öffnen
+* Seher: Kann einen Crewmate revealen
+* Clone: Kann sich klonen
+* Sabotage: Crewmates kriegen mehr tasks
+* Engineer: Kann Sabotage fixen
+* [CHECK] Demon: Kann sich in einen Geist verwandeln 
+* Helper: Kann anderen bei Tasks helfen
+* Zombie: Kann Leute infizieren, muss alle infizieren
+* [CHECK] Captain: Kann jederzeit Meeting callen
+* Traitor: Wenn er alle seine Tasks macht wird er Impostor
+* Summoner: Kann einen rausgevoteten Spieler reviven.
+* Assassin: Impostor geben ihm einmal einen Kill-Auftrag
+* Snitch: Wenn er alle Tasks gemacht hat sieht er die Impostor, ab 2 übrigen Tasks sehen die Impostor ihn
+* President: Kann jemandem zum Major machen
+* Lookout: Siehe peasmod suggestions
+ 
+GAMEMODES:
+* Freeze-Tag
+* Zombie
+* Cops and Robbers
+* Hide and Seek
+
+ALTES ZEUG!!

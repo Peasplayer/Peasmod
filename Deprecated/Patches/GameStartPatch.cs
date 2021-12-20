@@ -18,7 +18,7 @@ namespace Peasmod.Patches
         static void Prefix(ShipStatus __instance)
         {
             #region VentBuilding
-            if ((Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.None) && Peasmod.Settings.VentBuilding.GetValue()) || Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.HotPotato))
+            if ((Settings.IsGameMode(Settings.GameMode.None) && Settings.VentBuilding.GetValue()) || Settings.IsGameMode(Settings.GameMode.HotPotato))
             {
                 var vents = GameObject.FindObjectsOfType<Vent>();
                 bool first = true;
@@ -41,7 +41,7 @@ namespace Peasmod.Patches
             BodyDragging.bodys.Clear();
             #endregion BodyDragging
             #region EngineerMode
-            /*if(Peasmod.Settings.engineeramount.GetValue() != 0)
+            /*if(Settings.engineeramount.GetValue() != 0)
             {
                 var cams = GameObject.FindObjectsOfType<SurvCamera>();
                 bool first = true;
@@ -73,11 +73,11 @@ namespace Peasmod.Patches
             var buttonTextures = Peasmod.Instance.Config.Bind("Settings", "ButtonTextures", true, "If set to true the textures that Peasplayer made will be used. Else the textures of Gravity will be used.");
             var resource = buttonTextures.Value ? "Peasmod.Resources.Buttons.Peasplayer" : "Peasmod.Resources.Buttons.Gravity";
             
-            if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.HotPotato))
+            if(Settings.IsGameMode(Settings.GameMode.HotPotato))
             {
                 HotPotatoMode.button = new CooldownButton(HotPotatoMode.OnClick, 1f, "Peasmod.Resources.Kill.png", 200f, new Vector2(0f, 0.3f), CooldownButton.Category.OnlyImpostor, HudManager.Instance);
                 HotPotatoMode.timer = Utils.CreateText(new Vector3(-5.25f, -2.5f), "Timer");
-                HotPotatoMode.TimeTillDeath = Peasmod.Settings.HotPotatoTimer.GetValue();
+                HotPotatoMode.TimeTillDeath = Settings.HotPotatoTimer.GetValue();
                 HotPotatoMode.Timer = HotPotatoMode.TimeTillDeath;
                 foreach (var player in PlayerControl.AllPlayerControls)
                 {
@@ -92,7 +92,7 @@ namespace Peasmod.Patches
                         player.RemoveTask(task);
                 }
             }
-            else if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale))
+            else if(Settings.IsGameMode(Settings.GameMode.BattleRoyale))
             {
                 foreach (var player in PlayerControl.AllPlayerControls)
                 {
@@ -112,7 +112,7 @@ namespace Peasmod.Patches
                 //HudManager.Instance.UseButton.gameObject.SetActive(false);
                 //BattleRoyaleMode.button = new CooldownButton(BattleRoyaleMode.OnClick, 5f, "Peasmod.Resources.Kill.png", 200f, Vector2.zero, CooldownButton.Category.Everyone, HudManager.Instance);
             }
-            /*else if (false)//Peasmod.Settings.thanos.GetValue())
+            /*else if (false)//Settings.thanos.GetValue())
             {
                 foreach (var thanos in ThanosMode.Thanos)
                 {
@@ -132,32 +132,32 @@ namespace Peasmod.Patches
                 Peasmod.impostorbuttons.Clear();
                 InvisibilityMode.invisplayers.Clear();
                 Utils.Log(resource);
-                if (Peasmod.Settings.VentBuilding.GetValue())
+                if (Settings.VentBuilding.GetValue())
                 {
-                    VentBuilding.button = new CooldownButton(VentBuilding.OnClicked, Peasmod.Settings.VentBuildingCooldown.GetValue(), resource + ".BuildVent.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance);
+                    VentBuilding.button = new CooldownButton(VentBuilding.OnClicked, Settings.VentBuildingCooldown.GetValue(), resource + ".BuildVent.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance);
                     Peasmod.impostorbuttons.Add(VentBuilding.button);
                 }
-                if (Peasmod.Settings.BodyDragging.GetValue())
+                if (Settings.BodyDragging.GetValue())
                 {
                     BodyDragging.button = new CooldownButton(BodyDragging.OnClicked, 0.5f, resource + ".DragBody.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance);
                     BodyDragging.button.PositionOffset = new Vector2(0f, 1.2f * Peasmod.impostorbuttons.Count);
                     Peasmod.impostorbuttons.Add(BodyDragging.button);
                 }
-                if (Peasmod.Settings.Invisibility.GetValue())
+                if (Settings.Invisibility.GetValue())
                 {
-                    InvisibilityMode.button = new CooldownButton(InvisibilityMode.OnClicked, Peasmod.Settings.InvisibilityCooldown.GetValue(), resource + ".Hide.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance, Peasmod.Settings.InvisibilityDuration.GetValue(), InvisibilityMode.OnEnded);
+                    InvisibilityMode.button = new CooldownButton(InvisibilityMode.OnClicked, Settings.InvisibilityCooldown.GetValue(), resource + ".Hide.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance, Settings.InvisibilityDuration.GetValue(), InvisibilityMode.OnEnded);
                     InvisibilityMode.button.PositionOffset = new Vector2(0f, 1.2f * Peasmod.impostorbuttons.Count);
                     Peasmod.impostorbuttons.Add(InvisibilityMode.button);
                 }
-                if (Peasmod.Settings.FreezeTime.GetValue())
+                if (Settings.FreezeTime.GetValue())
                 {
-                    TimeFreezing.button = new CooldownButton(TimeFreezing.OnClick, Peasmod.Settings.FreezeTimeCooldown.GetValue(), resource + ".TimeFreezing.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance, Peasmod.Settings.FreezeTimeDuration.GetValue(), TimeFreezing.OnEnded);
+                    TimeFreezing.button = new CooldownButton(TimeFreezing.OnClick, Settings.FreezeTimeCooldown.GetValue(), resource + ".TimeFreezing.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance, Settings.FreezeTimeDuration.GetValue(), TimeFreezing.OnEnded);
                     TimeFreezing.button.PositionOffset = new Vector2(0f + (Peasmod.impostorbuttons.Count / 3 * 1.3f), 1.2f * (Peasmod.impostorbuttons.Count - (Peasmod.impostorbuttons.Count / 3 * 3)));
                     Peasmod.impostorbuttons.Add(TimeFreezing.button);
                 }
-                if (Peasmod.Settings.Morphing.GetValue())
+                if (Settings.Morphing.GetValue())
                 {
-                    MorphingMode.button = new CooldownButton(MorphingMode.OnClick, Peasmod.Settings.MorphingCooldown.GetValue(), resource + ".Morphing.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance);
+                    MorphingMode.button = new CooldownButton(MorphingMode.OnClick, Settings.MorphingCooldown.GetValue(), resource + ".Morphing.png", 200f, Vector2.zero, CooldownButton.Category.OnlyImpostor, HudManager.Instance);
                     MorphingMode.button.PositionOffset = new Vector2(0f + (Peasmod.impostorbuttons.Count / 3 * 1.3f), 1.2f * (Peasmod.impostorbuttons.Count - (Peasmod.impostorbuttons.Count / 3 * 3)));
                     Peasmod.impostorbuttons.Add(MorphingMode.button);
                 }
@@ -166,16 +166,16 @@ namespace Peasmod.Patches
             JesterMode.HandleTasks();
             #endregion JesterMode
             #region DoctorMode
-            if (Peasmod.Settings.DoctorAmount.GetValue() >= 1)
-                DoctorMode.button = new CooldownButton(DoctorMode.OnClicked, Peasmod.Settings.DoctorCooldown.GetValue(), resource + ".Revive.png", 200f, Vector2.zero, CooldownButton.Category.OnlyDoctor, HudManager.Instance);
+            if (Settings.DoctorAmount.GetValue() >= 1)
+                DoctorMode.button = new CooldownButton(DoctorMode.OnClicked, Settings.DoctorCooldown.GetValue(), resource + ".Revive.png", 200f, Vector2.zero, CooldownButton.Category.OnlyDoctor, HudManager.Instance);
             #endregion DoctorMode
             #region SheriffMode
-            if (Peasmod.Settings.SheriffAmount.GetValue() >= 1)
+            if (Settings.SheriffAmount.GetValue() >= 1)
             {
                 SheriffMode.CurrentTarget = null;
                 if (SheriffMode.button != null)
                     SheriffMode.button.killButtonManager.CurrentTarget = null;
-                SheriffMode.button = new CooldownButton(SheriffMode.OnClicked, Peasmod.Settings.SheriffCooldown.GetValue(), "Peasmod.Resources.Kill.png", 200f, Vector2.zero, CooldownButton.Category.OnlySheriff, HudManager.Instance);
+                SheriffMode.button = new CooldownButton(SheriffMode.OnClicked, Settings.SheriffCooldown.GetValue(), "Peasmod.Resources.Kill.png", 200f, Vector2.zero, CooldownButton.Category.OnlySheriff, HudManager.Instance);
             }
             #endregion SheriffMode
             if (TestingStuff.testing)

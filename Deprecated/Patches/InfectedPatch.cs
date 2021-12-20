@@ -16,11 +16,11 @@ namespace Peasmod.Patches
         public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] Il2CppReferenceArray<GameData.PlayerInfo> impostors)
         {
             if (PlayerControl.AllPlayerControls.Count == 1) return true;
-            if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.HotPotato))
+            if (Settings.IsGameMode(Settings.GameMode.HotPotato))
             {
                 return true;
             }
-            else if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale))
+            else if(Settings.IsGameMode(Settings.GameMode.BattleRoyale))
             {
                 byte[] array = (from x in PlayerControl.AllPlayerControls.ToArray() select x.PlayerId).ToArray<byte>();
                 bool amClient = AmongUsClient.Instance.AmClient;
@@ -48,13 +48,13 @@ namespace Peasmod.Patches
         public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] Il2CppReferenceArray<GameData.PlayerInfo> impostors)
         {
             if (PlayerControl.AllPlayerControls.Count == 1) return;
-            if(Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.None))
+            if(Settings.IsGameMode(Settings.GameMode.None))
             {
                 #region JesterMode
                 JesterMode.Winner = null;
                 JesterMode.JesterWon = false;
                 JesterMode.Jesters.Clear();
-                for (int i = 1; i <= Peasmod.Settings.JesterAmount.GetValue() && Peasmod.crewmates.Count >= 1; i++)
+                for (int i = 1; i <= Settings.JesterAmount.GetValue() && Peasmod.crewmates.Count >= 1; i++)
                 {
                     var jester = Peasmod.crewmates[Peasmod.random.Next(0, Peasmod.crewmates.Count)];
                     jester.RpcSetRole(Role.Jester);
@@ -63,7 +63,7 @@ namespace Peasmod.Patches
                 #endregion JesterMode
                 #region DoctorMode
                 DoctorMode.Doctors.Clear();
-                for (int i = 1; i <= Peasmod.Settings.DoctorAmount.GetValue() && Peasmod.crewmates.Count >= 1; i++)
+                for (int i = 1; i <= Settings.DoctorAmount.GetValue() && Peasmod.crewmates.Count >= 1; i++)
                 {
                     var doctor = Peasmod.crewmates[Peasmod.random.Next(0, Peasmod.crewmates.Count)];
                     doctor.RpcSetRole(Role.Doctor);
@@ -72,7 +72,7 @@ namespace Peasmod.Patches
                 #endregion DoctorMode
                 #region MayorMode
                 MayorMode.Mayors.Clear();
-                for (int i = 1; i <= Peasmod.Settings.MayorAmount.GetValue() && Peasmod.crewmates.Count >= 1; i++)
+                for (int i = 1; i <= Settings.MayorAmount.GetValue() && Peasmod.crewmates.Count >= 1; i++)
                 {
                     var mayor = Peasmod.crewmates[Peasmod.random.Next(0, Peasmod.crewmates.Count)];
                     mayor.RpcSetRole(Role.Mayor);
@@ -81,7 +81,7 @@ namespace Peasmod.Patches
                 #endregion MayorMode
                 #region InspectorMode
                 InspectorMode.Inspectors.Clear();
-                for (int i = 1; i <= Peasmod.Settings.InspectorAmount.GetValue() && Peasmod.crewmates.Count >= 1; i++)
+                for (int i = 1; i <= Settings.InspectorAmount.GetValue() && Peasmod.crewmates.Count >= 1; i++)
                 {
                     var inspector = Peasmod.crewmates[Peasmod.random.Next(0, Peasmod.crewmates.Count)];
                     inspector.RpcSetRole(Role.Inspector);
@@ -90,7 +90,7 @@ namespace Peasmod.Patches
                 #endregion InspectorMode
                 #region SheriffMode
                 SheriffMode.Sheriffs.Clear();
-                for (int i = 1; i <= Peasmod.Settings.SheriffAmount.GetValue() && Peasmod.crewmates.Count >= 1; i++)
+                for (int i = 1; i <= Settings.SheriffAmount.GetValue() && Peasmod.crewmates.Count >= 1; i++)
                 {
                     var sheriff = Peasmod.crewmates[Peasmod.random.Next(0, Peasmod.crewmates.Count)];
                     sheriff.RpcSetRole(Role.Sheriff);
@@ -106,7 +106,7 @@ namespace Peasmod.Patches
                 }*/
                 #endregion ThanosMode
             }
-            else if (Peasmod.Settings.IsGameMode(Peasmod.Settings.GameMode.BattleRoyale))
+            else if (Settings.IsGameMode(Settings.GameMode.BattleRoyale))
             {
                 /*Il2CppReferenceArray<GameData.PlayerInfo> _impostors = new GameData.PlayerInfo[PlayerControl.AllPlayerControls._size + 1];
                 int i = 0;

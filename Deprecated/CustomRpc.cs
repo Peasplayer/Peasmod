@@ -4,9 +4,10 @@ using System.Text;
 using UnhollowerBaseLib;
 using HarmonyLib;
 using Hazel;
+using Peasmod.Roles;
+using Peasmod.Utility;
 using Reactor.Extensions;
 using UnityEngine;
-using Peasmod.Utility;
 using Peasmod.Patches;
 using Peasmod.Gamemodes;
 
@@ -42,10 +43,10 @@ namespace Peasmod
         {
             switch (packetId)
             {
-
                 case (byte)CustomRpc.SetRole:
                     var player = Utils.GetPlayer(reader.ReadByte());
-                    Role role = (Role)reader.ReadByte();
+                    Utils.Log("Jester: " + player.nameText.text);
+                    Roles.Roles.Role role = (Roles.Roles.Role)reader.ReadByte();
                     player.SetRole(role);
                     break;
                 case (byte)CustomRpc.CreateVent:
@@ -202,10 +203,6 @@ namespace Peasmod
                     break;
                 case (byte)CustomRpc.VictoryRoyale:
                    var  winner = Utils.GetPlayer(reader.ReadByte());
-                    /*BattleRoyaleMode.Winner = player;
-                    BattleRoyaleMode.HasWon = true;
-
-                    Patches.PlayerControlWinPatch.HandleWinRpc();*/
                     foreach (var _player in PlayerControl.AllPlayerControls)
                     {
                         if (_player.PlayerId != winner.PlayerId)
