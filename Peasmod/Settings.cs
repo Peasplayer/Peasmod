@@ -156,6 +156,12 @@ namespace Peasmod
             new CustomNumberOption("freezeduration",
                 $"└ Freezing-Duration", 10, 30, 1, 10,
                 NumberSuffixes.Seconds);
+        
+        public static readonly CustomNumberOption MentalistAmount = new CustomNumberOption("mentalists", "• " + Palette.ImpostorRed.GetTextColor() + "Mentalists<color=#ffffffff>", 0f, 3f, 1f, 0f, NumberSuffixes.None);
+
+        public static readonly CustomNumberOption ControlCooldown = new CustomNumberOption("controlcooldown", "└ Controlling-Cooldown", 20f, 60f, 1f, 20f, NumberSuffixes.Seconds);
+
+        public static readonly CustomNumberOption ControlDuration = new CustomNumberOption("controlduration", "└ Controlling-Duration", 10f, 30f, 1f, 10f, NumberSuffixes.Seconds);
 
         public static readonly CustomOptionButton SectionModes =
             new CustomOptionButton("ModeSettings", "˅ GameModes", false);

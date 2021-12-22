@@ -46,7 +46,7 @@ namespace Peasmod.Roles.GameModes
             MorphButton = CustomButton.AddRoleButton(
                 () =>
                 {
-                    PlayerMenuManager.OpenPlayerMenu(PlayerControl.AllPlayerControls.ToArray().ToList(),
+                    PlayerMenuManager.OpenPlayerMenu(PlayerControl.AllPlayerControls.ToArray().ToList().ConvertAll(p => p.PlayerId),
                         player => PlayerControl.LocalPlayer.RpcShapeshift(player, false));
                 }, Settings.MorphingCooldown.Value,
                 PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Morph.png", 737f), Vector2.zero, false, this,

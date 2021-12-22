@@ -9,6 +9,7 @@
         DragBody,
         Freeze,
         CleanBody,
+        MindControl,
         StartHideAndSeek
     }
 }
