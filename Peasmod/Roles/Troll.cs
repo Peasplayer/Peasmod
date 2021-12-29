@@ -21,7 +21,7 @@ namespace Peasmod.Roles
         public override bool HasToDoTasks => false;
         public override int Limit => (int) Settings.TrollAmount.Value;
 
-        public override void OnKill(PlayerControl victim)
+        public override void OnKill(PlayerControl killer, PlayerControl victim)
         {
             if (victim.IsRole<Troll>() && victim.IsLocal())
                 new CustomEndReason(victim);

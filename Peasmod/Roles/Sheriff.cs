@@ -20,7 +20,8 @@ namespace Peasmod.Roles
         public override bool HasToDoTasks => true;
         public override int Limit => (int) Settings.SheriffAmount.Value;
         public override bool CanKill(PlayerControl victim = null) => true;
-        public override PlayerControl FindClosestTarget(PlayerControl from, bool protecting)
+        
+        /*public override PlayerControl FindClosestTarget(PlayerControl from, bool protecting)
         {
             PlayerControl result = null;
             float num = GameOptionsData.KillDistances[Mathf.Clamp(PlayerControl.GameOptions.KillDistance, 0, 2)];
@@ -47,11 +48,11 @@ namespace Peasmod.Roles
                 }
             }
             return result;
-        }
+        }*/
 
-        public override void OnKill(PlayerControl victim)
+        public override void OnKill(PlayerControl killer, PlayerControl victim)
         {
-            if (!victim.Data.Role.IsImpostor && !victim.IsLocal())
+            if (killer.IsLocal() && !victim.Data.Role.IsImpostor && !victim.IsLocal())
                 PlayerControl.LocalPlayer.RpcMurderPlayer(PlayerControl.LocalPlayer);
         }
     }

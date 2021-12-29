@@ -42,6 +42,16 @@ namespace Peasmod
         public static CustomOptionHeader NeutralRolesHeader =
             new CustomOptionHeader($"{Utility.StringColor.Reset}Neutral Roles");
 
+        public static readonly CustomNumberOption AssassinAmount =
+            new CustomNumberOption("assassins",
+                $"• {Color.magenta.GetTextColor()}Assassins{Utility.StringColor.Reset}", 0, 14, 1, 0,
+                NumberSuffixes.None);
+        
+        public static readonly CustomNumberOption ChangelingAmount =
+            new CustomNumberOption("changelings",
+                $"• {ModdedPalette.ChangelingColor.GetTextColor()}Changelings{Utility.StringColor.Reset}", 0, 14, 1, 0,
+                NumberSuffixes.None);
+        
         public static readonly CustomNumberOption JesterAmount =
             new CustomNumberOption("jesters",
                 $"• {ModdedPalette.JesterColor.GetTextColor()}Jesters{Utility.StringColor.Reset}", 0, 14, 1, 0,
@@ -234,6 +244,8 @@ namespace Peasmod
 
         public static void SectionNeutralRolesListener(bool value)
         {
+            AssassinAmount.MenuVisible = value;
+            ChangelingAmount.MenuVisible = value;
             JesterAmount.MenuVisible = value;
             TrollAmount.MenuVisible = value;
         }
@@ -267,6 +279,9 @@ namespace Peasmod
             GlaciaterAmount.MenuVisible = value;
             FreezeCooldown.MenuVisible = value;
             FreezeDuration.MenuVisible = value;
+            MentalistAmount.MenuVisible = value;
+            ControlCooldown.MenuVisible = value;
+            ControlDuration.MenuVisible = value;
         }
 
         public static void SectionModesListener(bool value)

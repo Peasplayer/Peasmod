@@ -12,5 +12,6 @@ namespace Peasmod
         public static Color JesterColor = new Color(136f / 256f, 31f / 255f, 136f / 255f);
         public static Color TrollColor = Palette.AcceptedGreen;
         public static Color MayorColor = new Color(17f / 255f, 49f / 255f, 255f / 255f);
+        public static Color ChangelingColor = new Color(50 / 255f, 240 / 255f, 30 / 255f);
     }
 }
