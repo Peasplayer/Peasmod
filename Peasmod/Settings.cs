@@ -42,10 +42,10 @@ namespace Peasmod
         public static CustomOptionHeader NeutralRolesHeader =
             new CustomOptionHeader($"{Utility.StringColor.Reset}Neutral Roles");
 
-        public static readonly CustomNumberOption AssassinAmount =
+        /*public static readonly CustomNumberOption AssassinAmount =
             new CustomNumberOption("assassins",
                 $"• {Color.magenta.GetTextColor()}Assassins{Utility.StringColor.Reset}", 0, 14, 1, 0,
-                NumberSuffixes.None);
+                NumberSuffixes.None);*/
         
         public static readonly CustomNumberOption ChangelingAmount =
             new CustomNumberOption("changelings",
@@ -244,7 +244,7 @@ namespace Peasmod
 
         public static void SectionNeutralRolesListener(bool value)
         {
-            AssassinAmount.MenuVisible = value;
+            //AssassinAmount.MenuVisible = value;
             ChangelingAmount.MenuVisible = value;
             JesterAmount.MenuVisible = value;
             TrollAmount.MenuVisible = value;
