@@ -55,10 +55,7 @@ namespace Peasmod.Roles.GameModes
 
             VentBuildButton = CustomButton.AddRoleButton(
                 () =>
-                {
-                    var pos = PlayerControl.LocalPlayer.transform.position;
-                    Builder.RpcCreateVent(PlayerControl.LocalPlayer, pos.x, pos.y, pos.z);
-                },
+                { PlayerControl.LocalPlayer.RpcCreateVent(); },
                 Settings.VentBuildingCooldown.Value,
                 PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png", 552f),
                 this, text: "<size=40%>Build");
@@ -71,91 +68,89 @@ namespace Peasmod.Roles.GameModes
                         Undertaker.Instance.CarryingBody = false;
                         DragBodyButton.SetImage(Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f));
                         DragBodyButton.Text = "<size=40%>Drag";
-                        Undertaker.RpcDragBody(PlayerControl.LocalPlayer, false, byte.MaxValue);
+                        PlayerControl.LocalPlayer.RpcDropBody();
                     }
                     else
                     {
                         Undertaker.Instance.CarryingBody = true;
                         DragBodyButton.SetImage(Utility.CreateSprite("Peasmod.Resources.Buttons.DropBody.png", 803f));
                         DragBodyButton.Text = "<size=40%>Drop";
-                        Undertaker.RpcDragBody(PlayerControl.LocalPlayer, true,
-                            Undertaker.Instance.TargetBody.GetComponent<DeadBody>().ParentId);
+                        PlayerControl.LocalPlayer.RpcDragBody(Undertaker.Instance.TargetBody.GetComponent<DeadBody>().ParentId);
                     }
                 }, 0f, Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f),this,
                 text: "<size=40%>Drag");
             DragBodyButton.Enabled = DragBodyButton.Visible = Settings.BodyDragging.Value;
 
             InvisibilityButton = CustomButton.AddRoleButton(
-                () => { Ninja.RpcGoInvisible(PlayerControl.LocalPlayer, true); }, Settings.InvisibilityCooldown.Value,
+                () => { PlayerControl.LocalPlayer.RpcGoInvisible(true); }, Settings.InvisibilityCooldown.Value,
                 Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png", 794f), this,
-                effectDuration: Settings.InvisibilityDuration.Value, onEffectEnd: () => { Ninja.RpcGoInvisible(PlayerControl.LocalPlayer, false); },
+                effectDuration: Settings.InvisibilityDuration.Value, onEffectEnd: () => { PlayerControl.LocalPlayer.RpcGoInvisible(false); },
                 text: "<size=40%>Hide");
             InvisibilityButton.Enabled = InvisibilityButton.Visible = Settings.Invisibility.Value;
 
             FreezeTimeButton = CustomButton.AddRoleButton(
-                () => { Glaciater.RpcFreeze(PlayerControl.LocalPlayer, true); }, Settings.FreezeCooldown.Value,
+                () => { PlayerControl.LocalPlayer.RpcFreeze(true); }, Settings.FreezeCooldown.Value,
                 Utility.CreateSprite("Peasmod.Resources.Buttons.Freezing.png", 851f), this,
-                effectDuration: Settings.FreezeDuration.Value, onEffectEnd: () => { Glaciater.RpcFreeze(PlayerControl.LocalPlayer, false); },
+                effectDuration: Settings.FreezeDuration.Value, onEffectEnd: () => { PlayerControl.LocalPlayer.RpcFreeze(false); },
                 text: "<size=40%>Freeze");
             FreezeTimeButton.Enabled = FreezeTimeButton.Visible = Settings.Freeze.Value;
         }
 
         public override void OnUpdate()
         {
-            if (VentBuildButton == null)
-                return;
-            if (Object.FindObjectOfType<Vent>() == null)
-                return;
-            var vent = Object.FindObjectOfType<Vent>().gameObject;
-            var ventSize = Vector2.Scale(vent.GetComponent<BoxCollider2D>().size, vent.transform.localScale) * 0.75f;
-            var hits = Physics2D.OverlapBoxAll(PlayerControl.LocalPlayer.transform.position, ventSize, 0).Where(c => (c.name.Contains("Vent") || !c.isTrigger) && c.gameObject.layer != 8 && c.gameObject.layer != 5).ToArray();
-            VentBuildButton.Usable = hits.Length == 0;
-            
-            if (DragBodyButton == null)
-                return;
-
-            if (Undertaker.Instance.CarriedBodys != null)
+            if (VentBuildButton != null && Object.FindObjectOfType<Vent>() != null)
             {
-                for (int i = 0; i < Undertaker.Instance.CarriedBodys.Count; i++)
-                {
-                    var player = Undertaker.Instance.CarriedBodys.Keys.ToArray()[i].GetPlayer();
-                    var body = Undertaker.Instance.CarriedBodys.Values.ToArray()[i];
+                var vent = Object.FindObjectOfType<Vent>().gameObject;
+                var ventSize = Vector2.Scale(vent.GetComponent<BoxCollider2D>().size, vent.transform.localScale) * 0.75f;
+                var hits = Physics2D.OverlapBoxAll(PlayerControl.LocalPlayer.transform.position, ventSize, 0).Where(c => (c.name.Contains("Vent") || !c.isTrigger) && c.gameObject.layer != 8 && c.gameObject.layer != 5).ToArray();
+                VentBuildButton.Usable = hits.Length == 0;
+            }
 
-                    var bodyObject = UnityEngine.Object.FindObjectsOfType<DeadBody>()
-                        .Where(_body => _body.ParentId == body).ToList();
-                    if (bodyObject.Count == 0)
+            if (DragBodyButton != null)
+            {
+                if (Undertaker.Instance.CarriedBodys != null)
+                {
+                    for (int i = 0; i < Undertaker.Instance.CarriedBodys.Count; i++)
                     {
-                        if (player.IsLocal())
+                        var player = Undertaker.Instance.CarriedBodys.Keys.ToArray()[i].GetPlayer();
+                        var body = Undertaker.Instance.CarriedBodys.Values.ToArray()[i];
+
+                        var bodyObject = UnityEngine.Object.FindObjectsOfType<DeadBody>()
+                            .Where(_body => _body.ParentId == body).ToList();
+                        if (bodyObject.Count == 0)
                         {
-                            Undertaker.Instance.CarryingBody = false;
-                            DragBodyButton.SetImage(Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png"));
-                            Undertaker.RpcDragBody(PlayerControl.LocalPlayer, false, byte.MaxValue);
+                            if (player.IsLocal())
+                            {
+                                Undertaker.Instance.CarryingBody = false;
+                                DragBodyButton.SetImage(Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png"));
+                                Undertaker.RpcDragBody(PlayerControl.LocalPlayer, false, byte.MaxValue);
+                            }
+
+                            continue;
                         }
 
-                        continue;
+                        Undertaker.MoveBody(player, body);
                     }
-
-                    Undertaker.MoveBody(player, body);
                 }
-            }
-
-            if (Undertaker.Instance.CarryingBody)
-            {
-                DragBodyButton.Usable = true;
-            }
-            else
-            {
-                Undertaker.Instance.TargetBody = null;
-                DragBodyButton.Usable = false;
-
-                var bodys = Physics2D
-                    .OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(),
-                        PlayerControl.LocalPlayer.MaxReportDistance - 2f, Constants.PlayersOnlyMask)
-                    .Where(collider => collider.CompareTag("DeadBody")).ToList();
-                if (bodys.Count != 0)
+                
+                if (Undertaker.Instance.CarryingBody)
                 {
-                    Undertaker.Instance.TargetBody = bodys[0].gameObject;
                     DragBodyButton.Usable = true;
+                }
+                else
+                {
+                    Undertaker.Instance.TargetBody = null;
+                    DragBodyButton.Usable = false;
+
+                    var bodys = Physics2D
+                        .OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(),
+                            PlayerControl.LocalPlayer.MaxReportDistance - 2f, Constants.PlayersOnlyMask)
+                        .Where(collider => collider.CompareTag("DeadBody")).ToList();
+                    if (bodys.Count != 0)
+                    {
+                        Undertaker.Instance.TargetBody = bodys[0].gameObject;
+                        DragBodyButton.Usable = true;
+                    }
                 }
             }
         }

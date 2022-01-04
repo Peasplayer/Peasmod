@@ -41,7 +41,7 @@ namespace Peasmod
             CustomServerManager.RegisterServer("Peaspowered", "au.peasplayer.tk", 22023);
             CustomServerManager.RegisterServer("matux.fr", "152.228.160.91", 22023);
             
-            UpdateManager.RegisterUpdateListener("https://raw.githubusercontent.com/Peasplayer/Peasmod/dev/Peasmod/Data.json");
+            UpdateManager.RegisterGitHubUpdateListener("Peasplayer", "Peasmod");
             
             CustomHatManager.RegisterNewVisor("DreamMask", "Peasmod.Resources.Hats.DreamMask.png", new Vector2(0f, 0.2f));
             CustomHatManager.RegisterNewVisor("PeasMask", "Peasmod.Resources.Hats.PeasMask.png", new Vector2(0f, 0.2f));

@@ -61,7 +61,7 @@ namespace Peasmod.Roles
                 {
                     Dictionary<byte, int> self = CalculateVotes(__instance);
                     bool tie;
-                    KeyValuePair<byte, int> max = Extensions.MaxPair(self, out tie);
+                    KeyValuePair<byte, int> max = global::Extensions.MaxPair(self, out tie);
                     GameData.PlayerInfo exiled = GameData.Instance.AllPlayers.ToArray()
                         .FirstOrDefault(v => !tie && v.PlayerId == max.Key);
                     MeetingHud.VoterState[] array = new MeetingHud.VoterState[__instance.playerStates.Length];

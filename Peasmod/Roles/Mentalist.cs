@@ -67,11 +67,25 @@ namespace Peasmod.Roles
 			}
 		}
 
+		private static IEnumerator CoGoInvisibleAfterwards(PlayerControl player)
+		{
+			player.RpcGoInvisible(true);
+			yield return new WaitForSeconds(3f);
+			player.RpcGoInvisible(false);
+		}
+
 		[MethodRpc((uint) CustomRpcCalls.MindControl, LocalHandling = RpcLocalHandling.Before)]
 		public static void RpcMindControl(PlayerControl sender, PlayerControl target, bool enable)
 		{
 			if (AmongUsClient.Instance.AmHost)
-				sender.RpcShapeshift(enable ? target : sender, false);
+			{
+				if (enable)
+					sender.RpcShapeshift(target, false);
+				else
+					sender.RpcRevertShapeshift(false);
+			}
+			if (target.IsLocal())
+				HudManager.Instance.PlayerCam.SetTarget(enable ? sender : target);
 			if (enable)
 			{
 				Instance.OldPositions.Add(sender.PlayerId, sender.transform.position);
@@ -84,10 +98,12 @@ namespace Peasmod.Roles
 			{
 				if (Instance.ControlledPlayers.ContainsKey(sender.PlayerId) && Instance.OldPositions.ContainsKey(sender.PlayerId) && Instance.ControlledPlayers.ContainsValue(target.PlayerId))
 				{
+					if (sender.IsLocal())
+						Coroutines.Start(CoGoInvisibleAfterwards(sender));
+					
 					Instance.ControlledPlayers.Remove(sender.PlayerId);
 					target.Visible = true;
 					target.moveable = true;
-					//sender.Visible = true;
 					sender.transform.position = Instance.OldPositions[sender.PlayerId];
 					Instance.OldPositions.Remove(sender.PlayerId);
 				}
