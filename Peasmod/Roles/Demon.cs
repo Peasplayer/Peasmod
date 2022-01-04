@@ -45,8 +45,7 @@ namespace Peasmod.Roles
                     RpcDemonAbility(PlayerControl.LocalPlayer, true);
                     Coroutines.Start(CoStartDemonAbility(Settings.DemonDuration.Value));
                 }, Settings.DemonCooldown.Value,
-                Utility.CreateSprite("Peasmod.Resources.Buttons.SwapAfterlife.png", 650f), Vector2.zero, false,
-                this, "<size=40%>Swap");
+                Utility.CreateSprite("Peasmod.Resources.Buttons.SwapAfterlife.png", 650f), this, text: "<size=40%>Swap");
         }
 
         private IEnumerator CoStartDemonAbility(float cooldown)

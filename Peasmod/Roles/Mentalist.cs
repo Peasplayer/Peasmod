@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BepInEx.IL2CPP;
@@ -7,6 +8,7 @@ using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Managers;
 using PeasAPI.Roles;
+using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.MethodRpc;
 using UnityEngine;
@@ -48,10 +50,10 @@ namespace Peasmod.Roles
 				{
 					RpcMindControl(PlayerControl.LocalPlayer, player, true);
 				});
-			}, Settings.ControlCooldown.Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Button1.png"), Vector2.zero, false, this, Settings.ControlDuration.Value, delegate()
+			}, Settings.ControlCooldown.Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Button1.png"), this, effectDuration: Settings.ControlDuration.Value, onEffectEnd: delegate()
 			{
 				RpcMindControl(PlayerControl.LocalPlayer, ControlledPlayers[PlayerControl.LocalPlayer.PlayerId].GetPlayer(), false);
-			}, "<size=40%>Control", new Vector2(0f, 0.5f));
+			}, text: "<size=40%>Control", textOffset: new Vector2(0f, 0.5f));
 		}
 
 		public override void OnUpdate()

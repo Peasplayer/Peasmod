@@ -46,7 +46,7 @@ namespace Peasmod.Roles
                             p.RpcSetRole(null);
                         });
                 }, 0f,
-                Utility.CreateSprite("Peasmod.Resources.Buttons.Button1.png"), Vector2.zero, false, this);
+                Utility.CreateSprite("Peasmod.Resources.Buttons.Button1.png"), this, text: "<size=40%>Change\nRole", textOffset: new Vector2(0f, 0.5f));
         }
     }
 }

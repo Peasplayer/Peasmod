@@ -57,7 +57,7 @@ namespace Peasmod.Roles
                     Button.Text = "<size=40%>Drop";
                     RpcDragBody(PlayerControl.LocalPlayer, true, TargetBody.GetComponent<DeadBody>().ParentId);
                 }
-            }, 0f, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f), Vector2.zero, false, this, "<size=40%>Drag");
+            }, 0f, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f),this, text: "<size=40%>Drag");
         }
         
         public override void OnUpdate()

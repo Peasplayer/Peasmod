@@ -41,7 +41,7 @@ namespace Peasmod.Roles
                         RpcCleanBody(PlayerControl.LocalPlayer, TargetBody.GetComponent<DeadBody>().ParentId);
                     TargetBody = null;
                 }, Settings.JanitorCooldown.Value,
-                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Button1.png"), Vector2.zero, false, this, "<size=40%>Clear", new Vector2(0f, 0.5f));
+                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Button1.png"), this, text: "<size=40%>Clear", textOffset: new Vector2(0f, 0.5f));
         }
 
         public override void OnUpdate()

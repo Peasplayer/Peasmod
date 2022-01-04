@@ -49,8 +49,8 @@ namespace Peasmod.Roles.GameModes
                     PlayerMenuManager.OpenPlayerMenu(PlayerControl.AllPlayerControls.ToArray().ToList().ConvertAll(p => p.PlayerId),
                         player => PlayerControl.LocalPlayer.RpcShapeshift(player, false));
                 }, Settings.MorphingCooldown.Value,
-                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Morph.png", 737f), Vector2.zero, false, this,
-                "<size=40%>Morph");
+                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Morph.png", 737f), this,
+                text: "<size=40%>Morph");
             MorphButton.Enabled = MorphButton.Visible = Settings.Morphing.Value;
 
             VentBuildButton = CustomButton.AddRoleButton(
@@ -60,8 +60,8 @@ namespace Peasmod.Roles.GameModes
                     Builder.RpcCreateVent(PlayerControl.LocalPlayer, pos.x, pos.y, pos.z);
                 },
                 Settings.VentBuildingCooldown.Value,
-                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png", 552f), Vector2.zero, false,
-                this, "<size=40%>Build");
+                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png", 552f),
+                this, text: "<size=40%>Build");
             VentBuildButton.Enabled = VentBuildButton.Visible = Settings.VentBuilding.Value;
 
             DragBodyButton = CustomButton.AddRoleButton(() =>
@@ -81,22 +81,22 @@ namespace Peasmod.Roles.GameModes
                         Undertaker.RpcDragBody(PlayerControl.LocalPlayer, true,
                             Undertaker.Instance.TargetBody.GetComponent<DeadBody>().ParentId);
                     }
-                }, 0f, Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f), Vector2.zero, false, this,
-                "<size=40%>Drag");
+                }, 0f, Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f),this,
+                text: "<size=40%>Drag");
             DragBodyButton.Enabled = DragBodyButton.Visible = Settings.BodyDragging.Value;
 
             InvisibilityButton = CustomButton.AddRoleButton(
                 () => { Ninja.RpcGoInvisible(PlayerControl.LocalPlayer, true); }, Settings.InvisibilityCooldown.Value,
-                Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png", 794f), Vector2.zero, false, this,
-                Settings.InvisibilityDuration.Value, () => { Ninja.RpcGoInvisible(PlayerControl.LocalPlayer, false); },
-                "<size=40%>Hide");
+                Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png", 794f), this,
+                effectDuration: Settings.InvisibilityDuration.Value, onEffectEnd: () => { Ninja.RpcGoInvisible(PlayerControl.LocalPlayer, false); },
+                text: "<size=40%>Hide");
             InvisibilityButton.Enabled = InvisibilityButton.Visible = Settings.Invisibility.Value;
 
             FreezeTimeButton = CustomButton.AddRoleButton(
                 () => { Glaciater.RpcFreeze(PlayerControl.LocalPlayer, true); }, Settings.FreezeCooldown.Value,
-                Utility.CreateSprite("Peasmod.Resources.Buttons.Freezing.png", 851f), Vector2.zero, false, this,
-                Settings.FreezeDuration.Value, () => { Glaciater.RpcFreeze(PlayerControl.LocalPlayer, false); },
-                "<size=40%>Freeze");
+                Utility.CreateSprite("Peasmod.Resources.Buttons.Freezing.png", 851f), this,
+                effectDuration: Settings.FreezeDuration.Value, onEffectEnd: () => { Glaciater.RpcFreeze(PlayerControl.LocalPlayer, false); },
+                text: "<size=40%>Freeze");
             FreezeTimeButton.Enabled = FreezeTimeButton.Visible = Settings.Freeze.Value;
         }
 

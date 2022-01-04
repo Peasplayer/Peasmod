@@ -41,10 +41,10 @@ namespace Peasmod.Roles
             Button = CustomButton.AddRoleButton(() => {
                     RpcFreeze(PlayerControl.LocalPlayer, true);
                 }, Settings.FreezeCooldown.Value,
-                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Freezing.png", 851f), Vector2.zero, false, this,
-                Settings.FreezeDuration.Value, () => {
+                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Freezing.png", 851f), this,
+                effectDuration: Settings.FreezeDuration.Value, onEffectEnd: () => {
                     RpcFreeze(PlayerControl.LocalPlayer, false);
-                }, "<size=40%>Freeze");
+                }, text: "<size=40%>Freeze");
         }
 
         public override void OnUpdate()

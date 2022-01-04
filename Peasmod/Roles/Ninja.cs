@@ -41,9 +41,8 @@ namespace Peasmod.Roles
             _invisiblePlayers.Clear();
             Button = CustomButton.AddRoleButton(
                 () => { RpcGoInvisible(PlayerControl.LocalPlayer, true); },
-                Settings.InvisibilityCooldown.Value, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png", 794f),
-                Vector2.zero, false, this, Settings.InvisibilityDuration.Value,
-                () => { RpcGoInvisible(PlayerControl.LocalPlayer, false); }, "<size=40%>Hide");
+                Settings.InvisibilityCooldown.Value, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png", 794f), this, effectDuration: Settings.InvisibilityDuration.Value,
+                onEffectEnd: () => { RpcGoInvisible(PlayerControl.LocalPlayer, false); }, text: "<size=40%>Hide");
         }
 
         public override void OnUpdate()

@@ -47,7 +47,7 @@ namespace Peasmod.Roles
                         _bodys[0].gameObject.Destroy();
                     }
                 }, Settings.DoctorCooldown.Value,
-                Utility.CreateSprite("Peasmod.Resources.Buttons.Revive.png", 803f), Vector2.zero, false, this, "<size=40%>Revive");
+                Utility.CreateSprite("Peasmod.Resources.Buttons.Revive.png", 803f), this, text: "<size=40%>Revive");
         }
 
         public override void OnUpdate()

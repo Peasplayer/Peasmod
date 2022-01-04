@@ -28,7 +28,7 @@ namespace Peasmod.Roles
                 {
                     PlayerControl.LocalPlayer.CmdReportDeadBody(null);
                 }, Settings.CaptainCooldown.Value,
-                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CallMeeting.png", 650f), Vector2.zero, false, this, "<size=40%>Call");
+                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CallMeeting.png", 650f), this, text: "<size=40%>Call");
         }
     }
 }

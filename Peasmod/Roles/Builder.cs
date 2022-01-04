@@ -40,7 +40,7 @@ namespace Peasmod.Roles
             {
                 var pos = PlayerControl.LocalPlayer.transform.position;
                 RpcCreateVent(PlayerControl.LocalPlayer, pos.x, pos.y, pos.z);
-            }, Settings.VentBuildingCooldown.Value, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png", 552f), Vector2.zero, false, this, "<size=40%>Build");
+            }, Settings.VentBuildingCooldown.Value, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png", 552f), this, text: "<size=40%>Build");
         }
 
         public override void OnUpdate()
