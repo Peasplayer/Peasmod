@@ -52,6 +52,11 @@ namespace Peasmod
                 $"• {ModdedPalette.ChangelingColor.GetTextColor()}Changelings{Utility.StringColor.Reset}", 0, 14, 1, 0,
                 NumberSuffixes.None);
         
+        public static readonly CustomNumberOption GangsterAmount =
+            new CustomNumberOption("gangster",
+                $"• {ModdedPalette.ChangelingColor.GetTextColor()}Gangsters{Utility.StringColor.Reset}", 0, 14, 1, 0,
+                NumberSuffixes.None);
+        
         public static readonly CustomNumberOption JesterAmount =
             new CustomNumberOption("jesters",
                 $"• {ModdedPalette.JesterColor.GetTextColor()}Jesters{Utility.StringColor.Reset}", 0, 14, 1, 0,
@@ -246,6 +251,7 @@ namespace Peasmod
         {
             //AssassinAmount.MenuVisible = value;
             ChangelingAmount.MenuVisible = value;
+            GangsterAmount.MenuVisible = value;
             JesterAmount.MenuVisible = value;
             TrollAmount.MenuVisible = value;
         }
