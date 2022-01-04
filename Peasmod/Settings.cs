@@ -46,17 +46,17 @@ namespace Peasmod
             new CustomNumberOption("assassins",
                 $"• {Color.magenta.GetTextColor()}Assassins{Utility.StringColor.Reset}", 0, 14, 1, 0,
                 NumberSuffixes.None);*/
-        
+
         public static readonly CustomNumberOption ChangelingAmount =
             new CustomNumberOption("changelings",
                 $"• {ModdedPalette.ChangelingColor.GetTextColor()}Changelings{Utility.StringColor.Reset}", 0, 14, 1, 0,
                 NumberSuffixes.None);
-        
+
         public static readonly CustomNumberOption GangsterAmount =
             new CustomNumberOption("gangster",
                 $"• {ModdedPalette.ChangelingColor.GetTextColor()}Gangsters{Utility.StringColor.Reset}", 0, 14, 1, 0,
                 NumberSuffixes.None);
-        
+
         public static readonly CustomNumberOption JesterAmount =
             new CustomNumberOption("jesters",
                 $"• {ModdedPalette.JesterColor.GetTextColor()}Jesters{Utility.StringColor.Reset}", 0, 14, 1, 0,
@@ -118,6 +118,9 @@ namespace Peasmod
         public static readonly CustomNumberOption SheriffCooldown =
             new CustomNumberOption("sheriffcooldown", "└ Shoot-Cooldown", 10, 60, 1, 20, NumberSuffixes.Seconds);
 
+        public static readonly CustomToggleOption SheriffCanKillNeutrals =
+            new CustomToggleOption("sheriffkillneutrals", "└ Can Kill Neutrals", false);
+
         public static readonly CustomOptionButton SectionImpostorRoles =
             new CustomOptionButton("ImpostorRoles", "˅ Impostor Roles", false);
 
@@ -134,8 +137,8 @@ namespace Peasmod
         public static readonly CustomToggleOption JanitorCanKill =
             new CustomToggleOption("janitorcankill", "└ Can Kill", true);
 
-        public static readonly CustomNumberOption BuilderAmount = new CustomNumberOption("builders",
-            $"• {Palette.ImpostorRed.GetTextColor()}Builders{Utility.StringColor.Reset}", 0, 3, 1, 0,
+        public static readonly CustomNumberOption EvilBuilderAmount = new CustomNumberOption("evilbuilders",
+            $"• {Palette.ImpostorRed.GetTextColor()}Evil Builders{Utility.StringColor.Reset}", 0, 3, 1, 0,
             NumberSuffixes.None);
 
         public static readonly CustomNumberOption VentBuildingCooldown =
@@ -171,12 +174,16 @@ namespace Peasmod
             new CustomNumberOption("freezeduration",
                 $"└ Freezing-Duration", 10, 30, 1, 10,
                 NumberSuffixes.Seconds);
-        
-        public static readonly CustomNumberOption MentalistAmount = new CustomNumberOption("mentalists", "• " + Palette.ImpostorRed.GetTextColor() + "Mentalists<color=#ffffffff>", 0f, 3f, 1f, 0f, NumberSuffixes.None);
 
-        public static readonly CustomNumberOption ControlCooldown = new CustomNumberOption("controlcooldown", "└ Controlling-Cooldown", 20f, 60f, 1f, 20f, NumberSuffixes.Seconds);
+        public static readonly CustomNumberOption MentalistAmount = new CustomNumberOption("mentalists",
+            "• " + Palette.ImpostorRed.GetTextColor() + "Mentalists<color=#ffffffff>", 0f, 3f, 1f, 0f,
+            NumberSuffixes.None);
 
-        public static readonly CustomNumberOption ControlDuration = new CustomNumberOption("controlduration", "└ Controlling-Duration", 10f, 30f, 1f, 10f, NumberSuffixes.Seconds);
+        public static readonly CustomNumberOption ControlCooldown = new CustomNumberOption("controlcooldown",
+            "└ Controlling-Cooldown", 20f, 60f, 1f, 20f, NumberSuffixes.Seconds);
+
+        public static readonly CustomNumberOption ControlDuration = new CustomNumberOption("controlduration",
+            "└ Controlling-Duration", 10f, 30f, 1f, 10f, NumberSuffixes.Seconds);
 
         public static readonly CustomOptionButton SectionModes =
             new CustomOptionButton("ModeSettings", "˅ GameModes", false);
@@ -269,6 +276,7 @@ namespace Peasmod
             InspectorAmount.MenuVisible = value;
             SheriffAmount.MenuVisible = value;
             SheriffCooldown.MenuVisible = value;
+            SheriffCanKillNeutrals.MenuVisible = value;
         }
 
         public static void SectionImpostorRolesListener(bool value)
@@ -276,7 +284,7 @@ namespace Peasmod
             JanitorAmount.MenuVisible = value;
             JanitorCooldown.MenuVisible = value;
             JanitorCanKill.MenuVisible = value;
-            BuilderAmount.MenuVisible = value;
+            EvilBuilderAmount.MenuVisible = value;
             VentBuildingCooldown.MenuVisible = value;
             NinjaAmount.MenuVisible = value;
             InvisibilityCooldown.MenuVisible = value;

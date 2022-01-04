@@ -9,7 +9,9 @@ namespace Peasmod.Roles
     [RegisterCustomRole]
     public class Sheriff : BaseRole
     {
-        public Sheriff(BasePlugin plugin) : base(plugin) { }
+        public Sheriff(BasePlugin plugin) : base(plugin)
+        {
+        }
 
         public override string Name => "Sheriff";
         public override string Description => "Execute the impostor";
@@ -18,13 +20,16 @@ namespace Peasmod.Roles
         public override Team Team => Team.Crewmate;
         public override Visibility Visibility => Visibility.NoOne;
         public override bool HasToDoTasks => true;
-        public override int Limit => (int) Settings.SheriffAmount.Value;
+        public override int Limit => (int)Settings.SheriffAmount.Value;
         public override bool CanKill(PlayerControl victim = null) => true;
 
         public override void OnKill(PlayerControl killer, PlayerControl victim)
         {
-            if (killer.IsRole(this) && killer.IsLocal() && !victim.Data.Role.IsImpostor && !victim.IsLocal())
-                PlayerControl.LocalPlayer.RpcMurderPlayer(PlayerControl.LocalPlayer);
+            if (killer.IsRole(this) && killer.IsLocal() && !victim.IsLocal())
+                if (!(victim.Data.Role.IsImpostor || victim.GetRole() != null && (victim.GetRole().Team == Team.Role ||
+                        victim.GetRole().Team == Team.Alone) &&
+                    Settings.SheriffCanKillNeutrals.Value))
+                    PlayerControl.LocalPlayer.RpcMurderPlayer(PlayerControl.LocalPlayer);
         }
     }
 }

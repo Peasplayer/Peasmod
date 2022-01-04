@@ -36,7 +36,7 @@ namespace Peasmod.Roles
         public CustomButton Button;
         public bool CarryingBody;
         public GameObject TargetBody;
-        public Dictionary<byte, byte> CarriedBodys;
+        public Dictionary<byte, byte> CarriedBodys = new ();
 
         public override void OnGameStart()
         {

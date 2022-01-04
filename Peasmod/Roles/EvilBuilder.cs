@@ -19,14 +19,14 @@ namespace Peasmod.Roles
         {
         }
 
-        public override string Name => "Builder";
+        public override string Name => "EvilBuilder";
         public override string Description => "Build new vents";
         public override string TaskText => "Add new vents to the map";
         public override Color Color => Palette.ImpostorRed;
         public override Visibility Visibility => Visibility.Impostor;
         public override Team Team => Team.Impostor;
         public override bool HasToDoTasks => true;
-        public override int Limit => (int) Settings.BuilderAmount.Value;
+        public override int Limit => (int) Settings.EvilBuilderAmount.Value;
         public override bool CanVent => true;
         public override bool CanKill(PlayerControl victim = null) => !victim || victim.Data.Role.IsImpostor;
         public override bool CanSabotage(SystemTypes? sabotage) => false;
