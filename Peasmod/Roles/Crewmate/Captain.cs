@@ -1,10 +1,11 @@
 ﻿using BepInEx.IL2CPP;
+using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Roles;
 using UnityEngine;
 
-namespace Peasmod.Roles
+namespace Peasmod.Roles.Crewmate
 {
     [RegisterCustomRole]
     public class Captain : BaseRole
@@ -24,11 +25,11 @@ namespace Peasmod.Roles
 
         public override void OnGameStart()
         {
-            Button = CustomButton.AddRoleButton(() =>
+            Button = CustomButton.AddButton(() =>
                 {
                     PlayerControl.LocalPlayer.CmdReportDeadBody(null);
                 }, Settings.CaptainCooldown.Value,
-                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CallMeeting.png", 650f), this, text: "<size=40%>Call");
+                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CallMeeting.png", 650f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Call");
         }
     }
 }

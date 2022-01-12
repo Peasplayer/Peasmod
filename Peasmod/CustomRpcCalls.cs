@@ -10,6 +10,7 @@
         Freeze,
         CleanBody,
         MindControl,
+        FreezePlayer,
         StartHideAndSeek
     }
 }

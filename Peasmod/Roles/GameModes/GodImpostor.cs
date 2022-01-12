@@ -6,6 +6,7 @@ using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Managers;
 using PeasAPI.Roles;
+using Peasmod.Roles.Impostor;
 using Reactor.Networking;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -43,25 +44,24 @@ namespace Peasmod.Roles.GameModes
 
         public override void OnGameStart()
         {
-            MorphButton = CustomButton.AddRoleButton(
+            MorphButton = CustomButton.AddButton(
                 () =>
                 {
                     PlayerMenuManager.OpenPlayerMenu(PlayerControl.AllPlayerControls.ToArray().ToList().ConvertAll(p => p.PlayerId),
-                        player => PlayerControl.LocalPlayer.RpcShapeshift(player, false));
+                        player => PlayerControl.LocalPlayer.RpcShapeshift(player, false), () => MorphButton.SetCoolDown(0));
                 }, Settings.MorphingCooldown.Value,
-                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Morph.png", 737f), this,
+                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Morph.png", 737f), p => p.IsRole(this) && !p.Data.IsDead, _ => true,
                 text: "<size=40%>Morph");
             MorphButton.Enabled = MorphButton.Visible = Settings.Morphing.Value;
 
-            VentBuildButton = CustomButton.AddRoleButton(
+            VentBuildButton = CustomButton.AddButton(
                 () =>
                 { PlayerControl.LocalPlayer.RpcCreateVent(); },
                 Settings.VentBuildingCooldown.Value,
-                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png", 552f),
-                this, text: "<size=40%>Build");
+                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png", 552f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Build");
             VentBuildButton.Enabled = VentBuildButton.Visible = Settings.VentBuilding.Value;
 
-            DragBodyButton = CustomButton.AddRoleButton(() =>
+            DragBodyButton = CustomButton.AddButton(() =>
                 {
                     if (Undertaker.Instance.CarryingBody)
                     {
@@ -77,20 +77,20 @@ namespace Peasmod.Roles.GameModes
                         DragBodyButton.Text = "<size=40%>Drop";
                         PlayerControl.LocalPlayer.RpcDragBody(Undertaker.Instance.TargetBody.GetComponent<DeadBody>().ParentId);
                     }
-                }, 0f, Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f),this,
+                }, 0f, Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f), p => p.IsRole(this) && !p.Data.IsDead, _ => true,
                 text: "<size=40%>Drag");
             DragBodyButton.Enabled = DragBodyButton.Visible = Settings.BodyDragging.Value;
 
-            InvisibilityButton = CustomButton.AddRoleButton(
+            InvisibilityButton = CustomButton.AddButton(
                 () => { PlayerControl.LocalPlayer.RpcGoInvisible(true); }, Settings.InvisibilityCooldown.Value,
-                Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png", 794f), this,
+                Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png", 794f), p => p.IsRole(this) && !p.Data.IsDead, _ => true,
                 effectDuration: Settings.InvisibilityDuration.Value, onEffectEnd: () => { PlayerControl.LocalPlayer.RpcGoInvisible(false); },
                 text: "<size=40%>Hide");
             InvisibilityButton.Enabled = InvisibilityButton.Visible = Settings.Invisibility.Value;
 
-            FreezeTimeButton = CustomButton.AddRoleButton(
+            FreezeTimeButton = CustomButton.AddButton(
                 () => { PlayerControl.LocalPlayer.RpcFreeze(true); }, Settings.FreezeCooldown.Value,
-                Utility.CreateSprite("Peasmod.Resources.Buttons.Freezing.png", 851f), this,
+                Utility.CreateSprite("Peasmod.Resources.Buttons.Freezing.png", 851f), p => p.IsRole(this) && !p.Data.IsDead, _ => true,
                 effectDuration: Settings.FreezeDuration.Value, onEffectEnd: () => { PlayerControl.LocalPlayer.RpcFreeze(false); },
                 text: "<size=40%>Freeze");
             FreezeTimeButton.Enabled = FreezeTimeButton.Visible = Settings.Freeze.Value;

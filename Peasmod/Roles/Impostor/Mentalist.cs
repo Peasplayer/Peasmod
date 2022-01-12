@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BepInEx.IL2CPP;
@@ -13,7 +12,7 @@ using Reactor.Networking;
 using Reactor.Networking.MethodRpc;
 using UnityEngine;
 
-namespace Peasmod.Roles
+namespace Peasmod.Roles.Impostor
 {
 	[RegisterCustomRole]
 	public class Mentalist : BaseRole
@@ -44,13 +43,17 @@ namespace Peasmod.Roles
 		{
 			OldPositions = new Dictionary<byte, Vector3>();
 			ControlledPlayers = new Dictionary<byte, byte>();
-			Button = CustomButton.AddRoleButton(delegate()
+			Button = CustomButton.AddButton(() =>
 			{
 				PlayerMenuManager.OpenPlayerMenu(PlayerControl.AllPlayerControls.ToArray().Where(player => !player.IsLocal() && !player.Data.IsDead).ToList().ConvertAll(p => p.PlayerId), delegate(PlayerControl player)
 				{
 					RpcMindControl(PlayerControl.LocalPlayer, player, true);
+				}, () =>
+				{
+					Button.IsEffectActive = false;
+					Button.SetCoolDown(0);
 				});
-			}, Settings.ControlCooldown.Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Button1.png"), this, effectDuration: Settings.ControlDuration.Value, onEffectEnd: delegate()
+			}, Settings.ControlCooldown.Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), p => p.IsRole(this) && !p.Data.IsDead, _ => true, effectDuration: Settings.ControlDuration.Value, onEffectEnd: () =>
 			{
 				RpcMindControl(PlayerControl.LocalPlayer, ControlledPlayers[PlayerControl.LocalPlayer.PlayerId].GetPlayer(), false);
 			}, text: "<size=40%>Control", textOffset: new Vector2(0f, 0.5f));

@@ -9,7 +9,7 @@ using Reactor.Networking;
 using Reactor.Networking.MethodRpc;
 using UnityEngine;
 
-namespace Peasmod.Roles
+namespace Peasmod.Roles.Impostor
 {
     [RegisterCustomRole]
     public class Undertaker : BaseRole
@@ -41,7 +41,7 @@ namespace Peasmod.Roles
         public override void OnGameStart()
         {
             CarriedBodys = new Dictionary<byte, byte>();
-            Button = CustomButton.AddRoleButton(() =>
+            Button = CustomButton.AddButton(() =>
             {
                 if (CarryingBody)
                 {
@@ -57,7 +57,7 @@ namespace Peasmod.Roles
                     Button.Text = "<size=40%>Drop";
                     RpcDragBody(PlayerControl.LocalPlayer, true, TargetBody.GetComponent<DeadBody>().ParentId);
                 }
-            }, 0f, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f),this, text: "<size=40%>Drag");
+            }, 0f, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Drag");
         }
         
         public override void OnUpdate()

@@ -5,10 +5,9 @@ using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Managers;
 using PeasAPI.Roles;
-using Reactor.Extensions;
 using UnityEngine;
 
-namespace Peasmod.Roles
+namespace Peasmod.Roles.Neutral
 {
     [RegisterCustomRole]
     public class Gangster : BaseRole
@@ -30,10 +29,10 @@ namespace Peasmod.Roles
 
         public override void OnGameStart()
         {
-            Button = CustomButton.AddRoleButton(() =>
+            Button = CustomButton.AddButton(() =>
                 {
                     PlayerMenuManager.OpenPlayerMenu(
-                        Utility.GetAllPlayers().Where(p => !p.Data.IsDead && !p.IsLocal()).ToList().ConvertAll(p => p.PlayerId),
+                        Utility.GetAllPlayers().Where(p => p.Data.IsDead && !p.IsLocal()).ToList().ConvertAll(p => p.PlayerId),
                         p =>
                         {
                             GameObject.Find(PlayerControl.LocalPlayer.GetRole().Name + "Task")
@@ -44,9 +43,9 @@ namespace Peasmod.Roles
                             PlayerControl.LocalPlayer.RpcSetRole(p.GetRole());
                             p.RpcSetVanillaRole(RoleTypes.Crewmate);
                             p.RpcSetRole(null);
-                        });
+                        }, () => { Button.SetCoolDown(0); });
                 }, 0f,
-                Utility.CreateSprite("Peasmod.Resources.Buttons.Button1.png"), this, text: "<size=40%>Change\nRole", textOffset: new Vector2(0f, 0.5f));
+                Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Change\nRole", textOffset: new Vector2(0f, 0.5f));
         }
     }
 }

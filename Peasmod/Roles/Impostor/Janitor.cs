@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using BepInEx.IL2CPP;
+using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Roles;
@@ -7,7 +8,7 @@ using Reactor.Extensions;
 using Reactor.Networking.MethodRpc;
 using UnityEngine;
 
-namespace Peasmod.Roles
+namespace Peasmod.Roles.Impostor
 {
     [RegisterCustomRole]
     public class Janitor : BaseRole
@@ -35,13 +36,13 @@ namespace Peasmod.Roles
         
         public override void OnGameStart()
         {
-            Button = CustomButton.AddRoleButton(() =>
+            Button = CustomButton.AddButton(() =>
                 {
                     if (TargetBody != null)
                         RpcCleanBody(PlayerControl.LocalPlayer, TargetBody.GetComponent<DeadBody>().ParentId);
                     TargetBody = null;
                 }, Settings.JanitorCooldown.Value,
-                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Button1.png"), this, text: "<size=40%>Clear", textOffset: new Vector2(0f, 0.5f));
+                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Clear", textOffset: new Vector2(0f, 0.5f));
         }
 
         public override void OnUpdate()

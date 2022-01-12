@@ -6,7 +6,7 @@ using PeasAPI.Components;
 using PeasAPI.Roles;
 using UnityEngine;
 
-namespace Peasmod.Roles
+namespace Peasmod.Roles.Crewmate
 {
     [RegisterCustomRole]
     public class Inspector : BaseRole

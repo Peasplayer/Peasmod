@@ -1,13 +1,13 @@
 ﻿using System.Linq;
-using Il2CppSystem.Collections.Generic;
 using BepInEx.IL2CPP;
 using HarmonyLib;
+using Il2CppSystem.Collections.Generic;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.Roles;
 using UnityEngine;
 
-namespace Peasmod.Roles
+namespace Peasmod.Roles.Crewmate
 {
     [RegisterCustomRole]
     public class Mayor : BaseRole

@@ -6,7 +6,7 @@ using PeasAPI.CustomEndReason;
 using PeasAPI.Roles;
 using UnityEngine;
 
-namespace Peasmod.Roles
+namespace Peasmod.Roles.Neutral
 {
     [RegisterCustomRole]
     public class Jester : BaseRole

@@ -1,16 +1,13 @@
 ﻿using System.Linq;
 using BepInEx.IL2CPP;
-using Hazel;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Roles;
-using Reactor;
-using Reactor.Networking;
 using Reactor.Networking.MethodRpc;
 using UnityEngine;
 
-namespace Peasmod.Roles
+namespace Peasmod.Roles.Impostor
 {
     [RegisterCustomRole]
     public class Builder : BaseRole
@@ -36,11 +33,11 @@ namespace Peasmod.Roles
         
         public override void OnGameStart()
         {
-            Button = CustomButton.AddRoleButton(() =>
+            Button = CustomButton.AddButton(() =>
             {
                 var pos = PlayerControl.LocalPlayer.transform.position;
                 RpcCreateVent(PlayerControl.LocalPlayer, pos.x, pos.y, pos.z);
-            }, Settings.VentBuildingCooldown.Value, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png", 552f), this, text: "<size=40%>Build");
+            }, Settings.VentBuildingCooldown.Value, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png", 552f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Build");
         }
 
         public override void OnUpdate()

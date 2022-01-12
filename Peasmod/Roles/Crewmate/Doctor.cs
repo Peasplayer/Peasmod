@@ -9,7 +9,7 @@ using Reactor.Extensions;
 using Reactor.Networking.MethodRpc;
 using UnityEngine;
 
-namespace Peasmod.Roles
+namespace Peasmod.Roles.Crewmate
 {
     [RegisterCustomRole]
     public class Doctor : BaseRole
@@ -29,7 +29,7 @@ namespace Peasmod.Roles
 
         public override void OnGameStart()
         {
-            Button = CustomButton.AddRoleButton(() =>
+            Button = CustomButton.AddButton(() =>
                 {
                     List<DeadBody> _bodys = Physics2D
                         .OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(),
@@ -47,7 +47,7 @@ namespace Peasmod.Roles
                         _bodys[0].gameObject.Destroy();
                     }
                 }, Settings.DoctorCooldown.Value,
-                Utility.CreateSprite("Peasmod.Resources.Buttons.Revive.png", 803f), this, text: "<size=40%>Revive");
+                Utility.CreateSprite("Peasmod.Resources.Buttons.Revive.png", 803f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Revive");
         }
 
         public override void OnUpdate()

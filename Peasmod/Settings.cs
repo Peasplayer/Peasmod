@@ -47,6 +47,12 @@ namespace Peasmod
                 $"• {Color.magenta.GetTextColor()}Assassins{Utility.StringColor.Reset}", 0, 14, 1, 0,
                 NumberSuffixes.None);*/
 
+        public static readonly CustomNumberOption BountyHunterAmount =
+            new CustomNumberOption("bountyhunters",
+                $"• {ModdedPalette.BountyHunterColor.GetTextColor()}Bounty-Hunters{Utility.StringColor.Reset}", 0, 14,
+                1, 0,
+                NumberSuffixes.None);
+
         public static readonly CustomNumberOption ChangelingAmount =
             new CustomNumberOption("changelings",
                 $"• {ModdedPalette.ChangelingColor.GetTextColor()}Changelings{Utility.StringColor.Reset}", 0, 14, 1, 0,
@@ -62,6 +68,16 @@ namespace Peasmod
                 $"• {ModdedPalette.JesterColor.GetTextColor()}Jesters{Utility.StringColor.Reset}", 0, 14, 1, 0,
                 NumberSuffixes.None);
 
+        public static readonly CustomNumberOption JinxAmount =
+            new CustomNumberOption("jinxs",
+                $"• {ModdedPalette.JinxColor.GetTextColor()}Jinxs{Utility.StringColor.Reset}", 0, 14, 1, 0,
+                NumberSuffixes.None);
+
+        public static readonly CustomNumberOption TraitorAmount =
+            new CustomNumberOption("traitors",
+                $"• {Palette.ImpostorRed.GetTextColor()}Traitors{Utility.StringColor.Reset}", 0, 14, 1, 0,
+                NumberSuffixes.None);
+        
         public static readonly CustomNumberOption TrollAmount =
             new CustomNumberOption("trolls",
                 $"• {ModdedPalette.TrollColor.GetTextColor()}Trolls{Utility.StringColor.Reset}", 0, 14, 1, 0,
@@ -81,6 +97,17 @@ namespace Peasmod
         public static readonly CustomNumberOption CaptainCooldown =
             new CustomNumberOption("captaincooldown", "└ Call-Cooldown", 10, 60, 1, 20, NumberSuffixes.Seconds);
 
+        public static readonly CustomNumberOption CloakAmount =
+            new CustomNumberOption("cloaks",
+                $"• {ModdedPalette.CloakColor.GetTextColor()}Cloaks{Utility.StringColor.Reset}", 0, 14, 1, 0,
+                NumberSuffixes.None);
+
+        public static readonly CustomNumberOption CloakCooldown =
+            new CustomNumberOption("cloakcooldown", "└ Invisibility-Cooldown", 20, 60, 1, 20, NumberSuffixes.Seconds);
+
+        public static readonly CustomNumberOption CloakDuration =
+            new CustomNumberOption("cloakduration", "└ Invisibility-Duration", 10, 60, 1, 10, NumberSuffixes.Seconds);
+
         public static readonly CustomNumberOption DemonAmount =
             new CustomNumberOption("demons",
                 $"• {ModdedPalette.DemonColor.GetTextColor()}Demons{Utility.StringColor.Reset}", 0, 14, 1, 0,
@@ -99,6 +126,23 @@ namespace Peasmod
 
         public static readonly CustomNumberOption DoctorCooldown =
             new CustomNumberOption("doctorcooldown", "└ Revive-Cooldown", 10, 60, 1, 20, NumberSuffixes.Seconds);
+        
+        public static readonly CustomNumberOption ForesightAmount =
+            new CustomNumberOption("foresights",
+                $"• {ModdedPalette.ForesightColor.GetTextColor()}Foresights{Utility.StringColor.Reset}", 0, 14, 1, 0,
+                NumberSuffixes.None);
+
+        public static readonly CustomNumberOption ForesightCooldown =
+            new CustomNumberOption("foresightcooldown", "└ Reveal-Cooldown", 10, 120, 1, 20, NumberSuffixes.Seconds);
+
+        public static readonly CustomNumberOption ForesightReveals =
+            new CustomNumberOption("foresightreveals", "└ Reveals", 1, 15, 1, 2, NumberSuffixes.None);
+
+        public static readonly CustomStringOption ForesightVariant =
+            new CustomStringOption("foresightvariants", "└ Variant", "Safe", "Strong");
+
+        public static readonly CustomStringOption ForesightTarget =
+            new CustomStringOption("foresighttarget", "└ Choose player (Variant B)", "Random", "In Menu", "In Range");
 
         public static readonly CustomNumberOption InspectorAmount =
             new CustomNumberOption("inspectors",
@@ -110,13 +154,29 @@ namespace Peasmod
                 $"• {ModdedPalette.MayorColor.GetTextColor()}Mayors{Utility.StringColor.Reset}", 0, 14, 1, 0,
                 NumberSuffixes.None);
 
+        public static readonly CustomNumberOption OfficerAmount =
+            new CustomNumberOption("officers",
+                $"• {ModdedPalette.OfficerColor.GetTextColor()}Officers{Utility.StringColor.Reset}", 0, 14, 1, 0,
+                NumberSuffixes.None);
+
+        public static readonly CustomNumberOption OfficerCooldown = 
+            new CustomNumberOption("officercooldown", "└ Arrest-Cooldown", 10, 60, 1, 20, NumberSuffixes.Seconds);
+
+        public static readonly CustomStringOption OfficerArrestPeriod =
+            new CustomStringOption("officerarrestperiod", "└ Arrest-Period", "Seconds", "Until Meeting");
+        
+        public static readonly CustomNumberOption OfficerDuration =
+            new CustomNumberOption("officerduration", $"└ Arrest-Duration", 10, 120, 1, 30,
+                NumberSuffixes.Seconds);
+        
+        public static readonly CustomNumberOption OfficerKills =
+            new CustomNumberOption("officerkills", $"└ Number of Kills", 0, 10, 1, 10,
+                NumberSuffixes.None);
+
         public static readonly CustomNumberOption SheriffAmount =
             new CustomNumberOption("sheriffs",
                 $"• {ModdedPalette.SheriffColor.GetTextColor()}Sheriffs{Utility.StringColor.Reset}", 0, 14, 1, 0,
                 NumberSuffixes.None);
-
-        public static readonly CustomNumberOption SheriffCooldown =
-            new CustomNumberOption("sheriffcooldown", "└ Shoot-Cooldown", 10, 60, 1, 20, NumberSuffixes.Seconds);
 
         public static readonly CustomToggleOption SheriffCanKillNeutrals =
             new CustomToggleOption("sheriffkillneutrals", "└ Can Kill Neutrals", false);
@@ -257,9 +317,12 @@ namespace Peasmod
         public static void SectionNeutralRolesListener(bool value)
         {
             //AssassinAmount.MenuVisible = value;
+            BountyHunterAmount.MenuVisible = value;
             ChangelingAmount.MenuVisible = value;
             GangsterAmount.MenuVisible = value;
             JesterAmount.MenuVisible = value;
+            JinxAmount.MenuVisible = value;
+            TraitorAmount.MenuVisible = value;
             TrollAmount.MenuVisible = value;
         }
 
@@ -267,15 +330,27 @@ namespace Peasmod
         {
             CaptainAmount.MenuVisible = value;
             CaptainCooldown.MenuVisible = value;
+            CloakAmount.MenuVisible = value;
+            CloakCooldown.MenuVisible = value;
+            CloakDuration.MenuVisible = value;
             DemonAmount.MenuVisible = value;
             DemonCooldown.MenuVisible = value;
             DemonDuration.MenuVisible = value;
             DoctorAmount.MenuVisible = value;
             DoctorCooldown.MenuVisible = value;
+            ForesightAmount.MenuVisible = value;
+            ForesightCooldown.MenuVisible = value;
+            ForesightReveals.MenuVisible = value;
+            ForesightTarget.MenuVisible = value;
+            ForesightVariant.MenuVisible = value;
             MayorAmount.MenuVisible = value;
             InspectorAmount.MenuVisible = value;
+            OfficerAmount.MenuVisible = value;
+            OfficerCooldown.MenuVisible = value;
+            OfficerDuration.MenuVisible = value;
+            OfficerArrestPeriod.MenuVisible = value;
+            OfficerKills.MenuVisible = value;
             SheriffAmount.MenuVisible = value;
-            SheriffCooldown.MenuVisible = value;
             SheriffCanKillNeutrals.MenuVisible = value;
         }
 

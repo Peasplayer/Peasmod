@@ -10,7 +10,7 @@ using Reactor.Extensions;
 using Reactor.Networking.MethodRpc;
 using UnityEngine;
 
-namespace Peasmod.Roles
+namespace Peasmod.Roles.Crewmate
 {
     [RegisterCustomRole]
     public class Demon : BaseRole
@@ -36,7 +36,7 @@ namespace Peasmod.Roles
 
         public override void OnGameStart()
         {
-            Button = CustomButton.AddRoleButton(() =>
+            Button = CustomButton.AddButton(() =>
                 {
                     IsSwaped = true;
                     PlayerControl.LocalPlayer.Die(DeathReason.Disconnect);
@@ -45,7 +45,7 @@ namespace Peasmod.Roles
                     RpcDemonAbility(PlayerControl.LocalPlayer, true);
                     Coroutines.Start(CoStartDemonAbility(Settings.DemonDuration.Value));
                 }, Settings.DemonCooldown.Value,
-                Utility.CreateSprite("Peasmod.Resources.Buttons.SwapAfterlife.png", 650f), this, text: "<size=40%>Swap");
+                Utility.CreateSprite("Peasmod.Resources.Buttons.SwapAfterlife.png", 650f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Swap");
         }
 
         private IEnumerator CoStartDemonAbility(float cooldown)

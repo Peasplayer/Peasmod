@@ -1,4 +1,5 @@
 ﻿using Peasmod.Roles;
+using Peasmod.Roles.Impostor;
 using UnityEngine;
 
 namespace Peasmod

@@ -166,7 +166,7 @@ namespace Peasmod.GameModes
                 
                 IsFroozen = false;
                 PlayerControl.LocalPlayer.moveable = true;
-                TextMessageManager.RpcShowMessage("The seeker can\nseek now!", PlayerControl.AllPlayerControls.ToArray().ToList());
+                TextMessageManager.RpcShowMessage("The seeker can\nseek now!", 1f, PlayerControl.AllPlayerControls.ToArray().ToList());
             }
         }
 

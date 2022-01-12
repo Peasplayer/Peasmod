@@ -8,7 +8,7 @@ using Reactor.Networking;
 using Reactor.Networking.MethodRpc;
 using UnityEngine;
 
-namespace Peasmod.Roles
+namespace Peasmod.Roles.Impostor
 {
     [RegisterCustomRole]
     public class Glaciater : BaseRole
@@ -38,10 +38,10 @@ namespace Peasmod.Roles
         public override void OnGameStart()
         {
             IsFrozen = false;
-            Button = CustomButton.AddRoleButton(() => {
+            Button = CustomButton.AddButton(() => {
                     RpcFreeze(PlayerControl.LocalPlayer, true);
                 }, Settings.FreezeCooldown.Value,
-                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Freezing.png", 851f), this,
+                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Freezing.png", 851f), p => p.IsRole(this) && !p.Data.IsDead, _ => true,
                 effectDuration: Settings.FreezeDuration.Value, onEffectEnd: () => {
                     RpcFreeze(PlayerControl.LocalPlayer, false);
                 }, text: "<size=40%>Freeze");
@@ -68,7 +68,7 @@ namespace Peasmod.Roles
             if (!PlayerControl.LocalPlayer.Data.Role.IsImpostor)
                 PlayerControl.LocalPlayer.moveable = !enable;
             if (PlayerControl.LocalPlayer.Data.Role.IsImpostor && !sender.IsLocal())
-                TextMessageManager.ShowMessage(enable ? "Everyone got frozen" : "Everyone got unfrozen");
+                TextMessageManager.ShowMessage(enable ? "Everyone got frozen" : "Everyone got unfrozen", 1f);
         }
     }
 }

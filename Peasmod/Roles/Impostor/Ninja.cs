@@ -9,7 +9,7 @@ using Reactor.Networking;
 using Reactor.Networking.MethodRpc;
 using UnityEngine;
 
-namespace Peasmod.Roles
+namespace Peasmod.Roles.Impostor
 {
     [RegisterCustomRole]
     public class Ninja : BaseRole
@@ -39,9 +39,9 @@ namespace Peasmod.Roles
         public override void OnGameStart()
         {
             _invisiblePlayers.Clear();
-            Button = CustomButton.AddRoleButton(
+            Button = CustomButton.AddButton(
                 () => { RpcGoInvisible(PlayerControl.LocalPlayer, true); },
-                Settings.InvisibilityCooldown.Value, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png", 794f), this, effectDuration: Settings.InvisibilityDuration.Value,
+                Settings.InvisibilityCooldown.Value, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png", 794f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, effectDuration: Settings.InvisibilityDuration.Value,
                 onEffectEnd: () => { RpcGoInvisible(PlayerControl.LocalPlayer, false); }, text: "<size=40%>Hide");
         }
 

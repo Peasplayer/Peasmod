@@ -1,17 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using BepInEx.IL2CPP;
-using HarmonyLib;
 using PeasAPI;
-using PeasAPI.Components;
-using PeasAPI.CustomButtons;
 using PeasAPI.CustomEndReason;
 using PeasAPI.Roles;
-using Reactor.Networking;
-using Reactor.Networking.MethodRpc;
 using UnityEngine;
 
-namespace Peasmod.Roles
+namespace Peasmod.Roles.Neutral
 {
     //[RegisterCustomRole]
     public class Assassin : BaseRole
