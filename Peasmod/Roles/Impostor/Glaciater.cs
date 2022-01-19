@@ -1,8 +1,10 @@
-﻿using BepInEx.IL2CPP;
+﻿using System.Collections.Generic;
+using BepInEx.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Managers;
+using PeasAPI.Options;
 using PeasAPI.Roles;
 using Reactor.Networking;
 using Reactor.Networking.MethodRpc;
@@ -19,13 +21,24 @@ namespace Peasmod.Roles.Impostor
         }
 
         public override string Name => "Glaciater";
+        public override Sprite Icon => Utility.CreateSprite("Peasmod.Resources.Buttons.Freezing.png");
         public override string Description => "Stop the players from moving";
+        public override string LongDescription => "";
         public override string TaskText => "Stop the players from moving";
         public override Color Color => Palette.ImpostorRed;
         public override Visibility Visibility => Visibility.Impostor;
         public override Team Team => Team.Impostor;
         public override bool HasToDoTasks => true;
-        public override int Limit => (int)Settings.GlaciaterAmount.Value;
+        public override int MaxCount => 3;
+        public override Dictionary<string, CustomOption> AdvancedOptions => new Dictionary<string, CustomOption>()
+        {
+            {
+                "FreezeCooldown", new CustomNumberOption("freezecooldown", "Freezing-Cooldown", 20, 60, 1, 20, NumberSuffixes.Seconds)
+            },
+            {
+                "FreezeDuration", new CustomNumberOption("freezeduration", "Freezing-Duration", 10, 30, 1, 10, NumberSuffixes.Seconds)
+            }
+        };
         public override bool CanVent => true;
         public override bool CanKill(PlayerControl victim = null) => !victim || victim.Data.Role.IsImpostor;
         public override bool CanSabotage(SystemTypes? sabotage) => true;
@@ -40,9 +53,9 @@ namespace Peasmod.Roles.Impostor
             IsFrozen = false;
             Button = CustomButton.AddButton(() => {
                     RpcFreeze(PlayerControl.LocalPlayer, true);
-                }, Settings.FreezeCooldown.Value,
-                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Freezing.png", 851f), p => p.IsRole(this) && !p.Data.IsDead, _ => true,
-                effectDuration: Settings.FreezeDuration.Value, onEffectEnd: () => {
+                }, ((CustomNumberOption) AdvancedOptions["FreezeCooldown"]).Value,
+                Utility.CreateSprite("Peasmod.Resources.Buttons.Freezing.png", 851f), p => p.IsRole(this) && !p.Data.IsDead, _ => true,
+                effectDuration: ((CustomNumberOption) AdvancedOptions["FreezeDuration"]).Value, onEffectEnd: () => {
                     RpcFreeze(PlayerControl.LocalPlayer, false);
                 }, text: "<size=40%>Freeze");
         }

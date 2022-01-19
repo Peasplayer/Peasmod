@@ -17,12 +17,14 @@ namespace Peasmod.Roles.Neutral
 
         public override string Name => "Assasin";
         public override string Description => "Kill every player";
+        public override string LongDescription => "";
         public override string TaskText => "Kill every impostor and crewmate";
         public override Color Color => Color.magenta;
         public override Visibility Visibility => Visibility.NoOne;
         public override Team Team => Team.Alone;
         public override bool HasToDoTasks => false;
         //public override int Limit => (int)Settings.AssassinAmount.Value;
+        public override int MaxCount => 0;
         public override float KillDistance => GameOptionsData.KillDistances[Mathf.Clamp(PlayerControl.GameOptions.KillDistance, 0, 2)] + 0.35f;
         public override bool CanKill(PlayerControl victim = null) => true;
         public override bool CanSabotage(SystemTypes? sabotage) => sabotage == null || sabotage == SystemTypes.Comms;

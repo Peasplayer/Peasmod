@@ -36,215 +36,6 @@ namespace Peasmod
             new CustomToggleOption("crewventing",
                 $"• {Palette.CrewmateBlue.GetTextColor()}Crew-Venting{Utility.StringColor.Reset}", false);
 
-        public static readonly CustomOptionButton SectionNeutralRoles =
-            new CustomOptionButton("NeutralRoles", "˅ Neutral Roles", false);
-
-        public static CustomOptionHeader NeutralRolesHeader =
-            new CustomOptionHeader($"{Utility.StringColor.Reset}Neutral Roles");
-
-        /*public static readonly CustomNumberOption AssassinAmount =
-            new CustomNumberOption("assassins",
-                $"• {Color.magenta.GetTextColor()}Assassins{Utility.StringColor.Reset}", 0, 14, 1, 0,
-                NumberSuffixes.None);*/
-
-        public static readonly CustomNumberOption BountyHunterAmount =
-            new CustomNumberOption("bountyhunters",
-                $"• {ModdedPalette.BountyHunterColor.GetTextColor()}Bounty-Hunters{Utility.StringColor.Reset}", 0, 14,
-                1, 0,
-                NumberSuffixes.None);
-
-        public static readonly CustomNumberOption ChangelingAmount =
-            new CustomNumberOption("changelings",
-                $"• {ModdedPalette.ChangelingColor.GetTextColor()}Changelings{Utility.StringColor.Reset}", 0, 14, 1, 0,
-                NumberSuffixes.None);
-
-        public static readonly CustomNumberOption GangsterAmount =
-            new CustomNumberOption("gangster",
-                $"• {ModdedPalette.ChangelingColor.GetTextColor()}Gangsters{Utility.StringColor.Reset}", 0, 14, 1, 0,
-                NumberSuffixes.None);
-
-        public static readonly CustomNumberOption JesterAmount =
-            new CustomNumberOption("jesters",
-                $"• {ModdedPalette.JesterColor.GetTextColor()}Jesters{Utility.StringColor.Reset}", 0, 14, 1, 0,
-                NumberSuffixes.None);
-
-        public static readonly CustomNumberOption JinxAmount =
-            new CustomNumberOption("jinxs",
-                $"• {ModdedPalette.JinxColor.GetTextColor()}Jinxs{Utility.StringColor.Reset}", 0, 14, 1, 0,
-                NumberSuffixes.None);
-
-        public static readonly CustomNumberOption TraitorAmount =
-            new CustomNumberOption("traitors",
-                $"• {Palette.ImpostorRed.GetTextColor()}Traitors{Utility.StringColor.Reset}", 0, 14, 1, 0,
-                NumberSuffixes.None);
-        
-        public static readonly CustomNumberOption TrollAmount =
-            new CustomNumberOption("trolls",
-                $"• {ModdedPalette.TrollColor.GetTextColor()}Trolls{Utility.StringColor.Reset}", 0, 14, 1, 0,
-                NumberSuffixes.None);
-
-        public static readonly CustomOptionButton SectionCrewmateRoles =
-            new CustomOptionButton("CrewmateRoles", "˅ Crewmate Roles", false);
-
-        public static CustomOptionHeader CrewmateRolesHeader =
-            new CustomOptionHeader($"{Utility.StringColor.Reset}Crewmate Roles");
-
-        public static readonly CustomNumberOption CaptainAmount =
-            new CustomNumberOption("captains",
-                $"• {ModdedPalette.CaptainColor.GetTextColor()}Captains{Utility.StringColor.Reset}", 0, 14, 1, 0,
-                NumberSuffixes.None);
-
-        public static readonly CustomNumberOption CaptainCooldown =
-            new CustomNumberOption("captaincooldown", "└ Call-Cooldown", 10, 60, 1, 20, NumberSuffixes.Seconds);
-
-        public static readonly CustomNumberOption CloakAmount =
-            new CustomNumberOption("cloaks",
-                $"• {ModdedPalette.CloakColor.GetTextColor()}Cloaks{Utility.StringColor.Reset}", 0, 14, 1, 0,
-                NumberSuffixes.None);
-
-        public static readonly CustomNumberOption CloakCooldown =
-            new CustomNumberOption("cloakcooldown", "└ Invisibility-Cooldown", 20, 60, 1, 20, NumberSuffixes.Seconds);
-
-        public static readonly CustomNumberOption CloakDuration =
-            new CustomNumberOption("cloakduration", "└ Invisibility-Duration", 10, 60, 1, 10, NumberSuffixes.Seconds);
-
-        public static readonly CustomNumberOption DemonAmount =
-            new CustomNumberOption("demons",
-                $"• {ModdedPalette.DemonColor.GetTextColor()}Demons{Utility.StringColor.Reset}", 0, 14, 1, 0,
-                NumberSuffixes.None);
-
-        public static readonly CustomNumberOption DemonCooldown =
-            new CustomNumberOption("demoncooldown", "└ Demon-Ability-Cooldown", 10, 60, 1, 20, NumberSuffixes.Seconds);
-
-        public static readonly CustomNumberOption DemonDuration =
-            new CustomNumberOption("demonduration", "└ Demon-Ability-Duration", 10, 60, 1, 10, NumberSuffixes.Seconds);
-
-        public static readonly CustomNumberOption DoctorAmount =
-            new CustomNumberOption("doctors",
-                $"• {ModdedPalette.DoctorColor.GetTextColor()}Doctors{Utility.StringColor.Reset}", 0, 14, 1, 0,
-                NumberSuffixes.None);
-
-        public static readonly CustomNumberOption DoctorCooldown =
-            new CustomNumberOption("doctorcooldown", "└ Revive-Cooldown", 10, 60, 1, 20, NumberSuffixes.Seconds);
-        
-        public static readonly CustomNumberOption ForesightAmount =
-            new CustomNumberOption("foresights",
-                $"• {ModdedPalette.ForesightColor.GetTextColor()}Foresights{Utility.StringColor.Reset}", 0, 14, 1, 0,
-                NumberSuffixes.None);
-
-        public static readonly CustomNumberOption ForesightCooldown =
-            new CustomNumberOption("foresightcooldown", "└ Reveal-Cooldown", 10, 120, 1, 20, NumberSuffixes.Seconds);
-
-        public static readonly CustomNumberOption ForesightReveals =
-            new CustomNumberOption("foresightreveals", "└ Reveals", 1, 15, 1, 2, NumberSuffixes.None);
-
-        public static readonly CustomStringOption ForesightVariant =
-            new CustomStringOption("foresightvariants", "└ Variant", "Safe", "Strong");
-
-        public static readonly CustomStringOption ForesightTarget =
-            new CustomStringOption("foresighttarget", "└ Choose player (Variant B)", "Random", "In Menu", "In Range");
-
-        public static readonly CustomNumberOption InspectorAmount =
-            new CustomNumberOption("inspectors",
-                $"• {ModdedPalette.InspectorColor.GetTextColor()}Inspectors{Utility.StringColor.Reset}", 0, 14, 1, 0,
-                NumberSuffixes.None);
-
-        public static readonly CustomNumberOption MayorAmount =
-            new CustomNumberOption("mayors",
-                $"• {ModdedPalette.MayorColor.GetTextColor()}Mayors{Utility.StringColor.Reset}", 0, 14, 1, 0,
-                NumberSuffixes.None);
-
-        public static readonly CustomNumberOption OfficerAmount =
-            new CustomNumberOption("officers",
-                $"• {ModdedPalette.OfficerColor.GetTextColor()}Officers{Utility.StringColor.Reset}", 0, 14, 1, 0,
-                NumberSuffixes.None);
-
-        public static readonly CustomNumberOption OfficerCooldown = 
-            new CustomNumberOption("officercooldown", "└ Arrest-Cooldown", 10, 60, 1, 20, NumberSuffixes.Seconds);
-
-        public static readonly CustomStringOption OfficerArrestPeriod =
-            new CustomStringOption("officerarrestperiod", "└ Arrest-Period", "Seconds", "Until Meeting");
-        
-        public static readonly CustomNumberOption OfficerDuration =
-            new CustomNumberOption("officerduration", $"└ Arrest-Duration", 10, 120, 1, 30,
-                NumberSuffixes.Seconds);
-        
-        public static readonly CustomNumberOption OfficerKills =
-            new CustomNumberOption("officerkills", $"└ Number of Kills", 0, 10, 1, 10,
-                NumberSuffixes.None);
-
-        public static readonly CustomNumberOption SheriffAmount =
-            new CustomNumberOption("sheriffs",
-                $"• {ModdedPalette.SheriffColor.GetTextColor()}Sheriffs{Utility.StringColor.Reset}", 0, 14, 1, 0,
-                NumberSuffixes.None);
-
-        public static readonly CustomToggleOption SheriffCanKillNeutrals =
-            new CustomToggleOption("sheriffkillneutrals", "└ Can Kill Neutrals", false);
-
-        public static readonly CustomOptionButton SectionImpostorRoles =
-            new CustomOptionButton("ImpostorRoles", "˅ Impostor Roles", false);
-
-        public static CustomOptionHeader ImpostorRolesHeader =
-            new CustomOptionHeader($"Impostor Roles");
-
-        public static readonly CustomNumberOption JanitorAmount = new CustomNumberOption("janitors",
-            $"• {Palette.ImpostorRed.GetTextColor()}Janitors{Utility.StringColor.Reset}", 0, 3, 1, 0,
-            NumberSuffixes.None);
-
-        public static readonly CustomNumberOption JanitorCooldown =
-            new CustomNumberOption("janitorcooldown", "└ Clean-Body-Cooldown", 10, 120, 1, 40, NumberSuffixes.Seconds);
-
-        public static readonly CustomToggleOption JanitorCanKill =
-            new CustomToggleOption("janitorcankill", "└ Can Kill", true);
-
-        public static readonly CustomNumberOption EvilBuilderAmount = new CustomNumberOption("evilbuilders",
-            $"• {Palette.ImpostorRed.GetTextColor()}Evil Builders{Utility.StringColor.Reset}", 0, 3, 1, 0,
-            NumberSuffixes.None);
-
-        public static readonly CustomNumberOption VentBuildingCooldown =
-            new CustomNumberOption("ventbuildingcooldown", $"└ Vent-Building-Cooldown", 10, 30, 1, 10,
-                NumberSuffixes.Seconds);
-
-        public static readonly CustomNumberOption NinjaAmount = new CustomNumberOption("ninjas",
-            $"• {Palette.ImpostorRed.GetTextColor()}Ninjas{Utility.StringColor.Reset}", 0, 3, 1, 0,
-            NumberSuffixes.None);
-
-        public static readonly CustomNumberOption InvisibilityCooldown =
-            new CustomNumberOption("invisibilitycooldown", $"└ Invisibility-Cooldown", 20, 60, 1, 20,
-                NumberSuffixes.Seconds);
-
-        public static readonly CustomNumberOption InvisibilityDuration =
-            new CustomNumberOption("invisibilityduration", $"└ Invisibility-Duration", 10, 30, 1, 10,
-                NumberSuffixes.Seconds);
-
-        public static readonly CustomNumberOption UndertakerAmount = new CustomNumberOption("undertakers",
-            $"• {Palette.ImpostorRed.GetTextColor()}Undertakers{Utility.StringColor.Reset}", 0, 3, 1, 0,
-            NumberSuffixes.None);
-
-        public static readonly CustomNumberOption GlaciaterAmount = new CustomNumberOption("Glaciaters",
-            $"• {Palette.ImpostorRed.GetTextColor()}Glaciaters{Utility.StringColor.Reset}", 0, 3, 1, 0,
-            NumberSuffixes.None);
-
-        public static readonly CustomNumberOption FreezeCooldown =
-            new CustomNumberOption("freezecooldown",
-                $"└ Freezing-Cooldown", 20, 60, 1, 20,
-                NumberSuffixes.Seconds);
-
-        public static readonly CustomNumberOption FreezeDuration =
-            new CustomNumberOption("freezeduration",
-                $"└ Freezing-Duration", 10, 30, 1, 10,
-                NumberSuffixes.Seconds);
-
-        public static readonly CustomNumberOption MentalistAmount = new CustomNumberOption("mentalists",
-            "• " + Palette.ImpostorRed.GetTextColor() + "Mentalists<color=#ffffffff>", 0f, 3f, 1f, 0f,
-            NumberSuffixes.None);
-
-        public static readonly CustomNumberOption ControlCooldown = new CustomNumberOption("controlcooldown",
-            "└ Controlling-Cooldown", 20f, 60f, 1f, 20f, NumberSuffixes.Seconds);
-
-        public static readonly CustomNumberOption ControlDuration = new CustomNumberOption("controlduration",
-            "└ Controlling-Duration", 10f, 30f, 1f, 10f, NumberSuffixes.Seconds);
-
         public static readonly CustomOptionButton SectionModes =
             new CustomOptionButton("ModeSettings", "˅ GameModes", false);
 
@@ -287,20 +78,11 @@ namespace Peasmod
         public static void Load()
         {
             SectionGeneralListener(false);
-            SectionNeutralRolesListener(false);
-            SectionCrewmateRolesListener(false);
-            SectionImpostorRolesListener(false);
             SectionModesListener(false);
 
             GeneralHeader.MenuVisible = false;
-            NeutralRolesHeader.MenuVisible = false;
-            CrewmateRolesHeader.MenuVisible = false;
-            ImpostorRolesHeader.MenuVisible = false;
             ModesHeader.MenuVisible = false;
             SectionGeneral.HudVisible = false;
-            SectionNeutralRoles.HudVisible = false;
-            SectionCrewmateRoles.HudVisible = false;
-            SectionImpostorRoles.HudVisible = false;
             SectionModes.HudVisible = false;
             HideAndSeek.HudVisible = false;
             GodImpostor.HudVisible = false;
@@ -312,65 +94,6 @@ namespace Peasmod
             ReportBodys.MenuVisible = value;
             Sabotaging.MenuVisible = value;
             CrewVenting.MenuVisible = value;
-        }
-
-        public static void SectionNeutralRolesListener(bool value)
-        {
-            //AssassinAmount.MenuVisible = value;
-            BountyHunterAmount.MenuVisible = value;
-            ChangelingAmount.MenuVisible = value;
-            GangsterAmount.MenuVisible = value;
-            JesterAmount.MenuVisible = value;
-            JinxAmount.MenuVisible = value;
-            TraitorAmount.MenuVisible = value;
-            TrollAmount.MenuVisible = value;
-        }
-
-        public static void SectionCrewmateRolesListener(bool value)
-        {
-            CaptainAmount.MenuVisible = value;
-            CaptainCooldown.MenuVisible = value;
-            CloakAmount.MenuVisible = value;
-            CloakCooldown.MenuVisible = value;
-            CloakDuration.MenuVisible = value;
-            DemonAmount.MenuVisible = value;
-            DemonCooldown.MenuVisible = value;
-            DemonDuration.MenuVisible = value;
-            DoctorAmount.MenuVisible = value;
-            DoctorCooldown.MenuVisible = value;
-            ForesightAmount.MenuVisible = value;
-            ForesightCooldown.MenuVisible = value;
-            ForesightReveals.MenuVisible = value;
-            ForesightTarget.MenuVisible = value;
-            ForesightVariant.MenuVisible = value;
-            MayorAmount.MenuVisible = value;
-            InspectorAmount.MenuVisible = value;
-            OfficerAmount.MenuVisible = value;
-            OfficerCooldown.MenuVisible = value;
-            OfficerDuration.MenuVisible = value;
-            OfficerArrestPeriod.MenuVisible = value;
-            OfficerKills.MenuVisible = value;
-            SheriffAmount.MenuVisible = value;
-            SheriffCanKillNeutrals.MenuVisible = value;
-        }
-
-        public static void SectionImpostorRolesListener(bool value)
-        {
-            JanitorAmount.MenuVisible = value;
-            JanitorCooldown.MenuVisible = value;
-            JanitorCanKill.MenuVisible = value;
-            EvilBuilderAmount.MenuVisible = value;
-            VentBuildingCooldown.MenuVisible = value;
-            NinjaAmount.MenuVisible = value;
-            InvisibilityCooldown.MenuVisible = value;
-            InvisibilityDuration.MenuVisible = value;
-            UndertakerAmount.MenuVisible = value;
-            GlaciaterAmount.MenuVisible = value;
-            FreezeCooldown.MenuVisible = value;
-            FreezeDuration.MenuVisible = value;
-            MentalistAmount.MenuVisible = value;
-            ControlCooldown.MenuVisible = value;
-            ControlDuration.MenuVisible = value;
         }
 
         public static void SectionModesListener(bool value)
@@ -396,12 +119,6 @@ namespace Peasmod
                 __instance.HideForOnline = new Il2CppReferenceArray<Transform>(0);
 
                 SectionGeneral.OnValueChanged += args => { SectionGeneralListener(args.NewValue); };
-
-                SectionNeutralRoles.OnValueChanged += args => { SectionNeutralRolesListener(args.NewValue); };
-
-                SectionCrewmateRoles.OnValueChanged += args => { SectionCrewmateRolesListener(args.NewValue); };
-
-                SectionImpostorRoles.OnValueChanged += args => { SectionImpostorRolesListener(args.NewValue); };
 
                 SectionModes.OnValueChanged += args => { SectionModesListener(args.NewValue); };
             }

@@ -4,6 +4,7 @@ using Il2CppSystem;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
+using PeasAPI.Options;
 using PeasAPI.Roles;
 using Reactor.Networking.MethodRpc;
 using UnityEngine;
@@ -20,13 +21,28 @@ namespace Peasmod.Roles.Crewmate
 
         public override string Name => "Officer";
         public override string Description => "Arrest the impostor";
+        public override string LongDescription => "";
         public override string TaskText => "Arrest an kill the impostor";
         public override Color Color => ModdedPalette.OfficerColor;
         public override Visibility Visibility => Visibility.NoOne;
         public override Team Team => Team.Crewmate;
         public override bool HasToDoTasks => true;
-        public override int Limit => (int) Settings.OfficerAmount.Value;
-        public override bool CanKill(PlayerControl victim = null) => AlreadyKilled < Settings.OfficerKills.Value;
+        public override Dictionary<string, CustomOption> AdvancedOptions => new Dictionary<string, CustomOption>()
+        {
+            {
+                "ArrestCooldown", new CustomNumberOption("officercooldown", "Arrest-Cooldown", 10, 60, 1, 20, NumberSuffixes.Seconds)
+            },
+            {
+                "ArrestPeriod", new CustomStringOption("officerarrestperiod", "Arrest-Period", "Seconds", "Until Meeting")
+            },
+            {
+                "ArrestDuration", new CustomNumberOption("officerduration", $"Arrest-Duration", 10, 120, 1, 30, NumberSuffixes.Seconds)
+            },
+            {
+                "PossibleKills", new CustomNumberOption("officerkills", $"Number of Kills", 0, 10, 1, 10, NumberSuffixes.None)
+            }
+        };
+        public override bool CanKill(PlayerControl victim = null) => AlreadyKilled < ((CustomNumberOption) AdvancedOptions["PossibleKills"]).Value;
 
         public static Officer Instance;
 
@@ -41,11 +57,11 @@ namespace Peasmod.Roles.Crewmate
             Arrested = new Dictionary<byte, List<byte>>();
             Button = CustomButton.AddButton(
                 () => { RpcFreeze(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer.FindClosestTarget(true), true); },
-                Settings.OfficerCooldown.Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), p => p.IsRole(this) && !p.Data.IsDead, _ => true,
+                ((CustomNumberOption) AdvancedOptions["ArrestCooldown"]).Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), p => p.IsRole(this) && !p.Data.IsDead, _ => true,
                 text: "<size=40%>Arrest", textOffset: new Vector2(0f, 0.5f));
-            if (Settings.OfficerArrestPeriod.Value == 0)
+            if (((CustomStringOption) AdvancedOptions["ArrestPeriod"]).Value == 0)
             {
-                Button.EffectDuration = Settings.OfficerDuration.Value;
+                Button.EffectDuration = ((CustomNumberOption) AdvancedOptions["ArrestDuration"]).Value;
                 Button.OnEffectEnd = () => { RpcFreeze(PlayerControl.LocalPlayer, Arrested[PlayerControl.LocalPlayer.PlayerId][0].GetPlayer(), false); };
             }
         }

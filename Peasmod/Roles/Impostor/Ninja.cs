@@ -4,6 +4,7 @@ using HarmonyLib;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
+using PeasAPI.Options;
 using PeasAPI.Roles;
 using Reactor.Networking;
 using Reactor.Networking.MethodRpc;
@@ -20,13 +21,27 @@ namespace Peasmod.Roles.Impostor
         }
 
         public override string Name => "Ninja";
+        public override Sprite Icon => Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png");
         public override string Description => "Kill players without being seen";
+        public override string LongDescription => "";
         public override string TaskText => "Kill players without being seen by using your ability";
         public override Color Color => Palette.ImpostorRed;
         public override Visibility Visibility => Visibility.Impostor;
         public override Team Team => Team.Impostor;
         public override bool HasToDoTasks => true;
-        public override int Limit => (int)Settings.NinjaAmount.Value;
+        public override int MaxCount => 3;
+
+        public override Dictionary<string, CustomOption> AdvancedOptions => new Dictionary<string, CustomOption>()
+        {
+            {
+                "InvisibilityCooldown", new CustomNumberOption("invisibilitycooldown", $"Invisibility-Cooldown", 20, 60, 1, 20,
+                    NumberSuffixes.Seconds)
+            },
+            {
+                "InvisibilityDuration", new CustomNumberOption("invisibilityduration", $"Invisibility-Duration", 10, 30, 1, 10,
+                    NumberSuffixes.Seconds)
+            }
+        };
         public override bool CanVent => true;
         public override bool CanKill(PlayerControl victim = null) => !victim || victim.Data.Role.IsImpostor;
         public override bool CanSabotage(SystemTypes? sabotage) => true;
@@ -41,7 +56,7 @@ namespace Peasmod.Roles.Impostor
             _invisiblePlayers.Clear();
             Button = CustomButton.AddButton(
                 () => { RpcGoInvisible(PlayerControl.LocalPlayer, true); },
-                Settings.InvisibilityCooldown.Value, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png", 794f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, effectDuration: Settings.InvisibilityDuration.Value,
+                ((CustomNumberOption) AdvancedOptions["InvisibilityCooldown"]).Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png", 794f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, effectDuration: ((CustomNumberOption) AdvancedOptions["InvisibilityDuration"]).Value,
                 onEffectEnd: () => { RpcGoInvisible(PlayerControl.LocalPlayer, false); }, text: "<size=40%>Hide");
         }
 
@@ -120,7 +135,8 @@ namespace Peasmod.Roles.Impostor
                     __instance.Skin.SetIdle(__instance.rend.flipX);
                     __instance.Animator.Play(__instance.IdleAnim, 1f);
                     __instance.myPlayer.Visible = true;
-                    //__instance.myPlayer.SetHatAndVisorAlpha(1f); - Disabled so the invisibility effect works local
+                    if (!Instance._invisiblePlayers.Contains(__instance.myPlayer.PlayerId))
+                        __instance.myPlayer.SetHatAndVisorAlpha(1f);
                     return false;
                 }
 

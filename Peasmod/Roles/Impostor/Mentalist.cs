@@ -6,6 +6,7 @@ using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Managers;
+using PeasAPI.Options;
 using PeasAPI.Roles;
 using Reactor;
 using Reactor.Networking;
@@ -23,12 +24,23 @@ namespace Peasmod.Roles.Impostor
 		}
 		public override string Name => "Mentalist";
 		public override string Description => "Control the minds of others";
+		public override string LongDescription => "";
 		public override string TaskText => "Control the minds of other players";
 		public override Color Color => Palette.ImpostorRed;
 		public override Visibility Visibility => Visibility.Impostor;
 		public override Team Team => Team.Impostor;
 		public override bool HasToDoTasks => true;
-		public override int Limit => (int)Settings.MentalistAmount.Value;
+		public override int MaxCount => 3;
+		public override bool CreateRoleOption => false;
+		public override Dictionary<string, CustomOption> AdvancedOptions => new Dictionary<string, CustomOption>()
+		{
+			{
+				"ControlCooldown", new CustomNumberOption("controlcooldown", "Controlling-Cooldown", 20f, 60f, 1f, 20f, NumberSuffixes.Seconds) {AdvancedRoleOption = true}
+			},
+			{
+				"ControlDuration", new CustomNumberOption("controlduration", "Controlling-Duration", 10f, 30f, 1f, 10f, NumberSuffixes.Seconds) {AdvancedRoleOption = true}
+			}
+		};
 		public override bool CanVent => true;
 		public override bool CanKill(PlayerControl victim = null) => !victim || victim.Data.Role.IsImpostor;
 		public override bool CanSabotage(SystemTypes? sabotage) => true;
@@ -53,7 +65,7 @@ namespace Peasmod.Roles.Impostor
 					Button.IsEffectActive = false;
 					Button.SetCoolDown(0);
 				});
-			}, Settings.ControlCooldown.Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), p => p.IsRole(this) && !p.Data.IsDead, _ => true, effectDuration: Settings.ControlDuration.Value, onEffectEnd: () =>
+			}, ((CustomNumberOption) AdvancedOptions["ControlCooldown"]).Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), p => p.IsRole(this) && !p.Data.IsDead, _ => true, effectDuration: ((CustomNumberOption) AdvancedOptions["ControlDuration"]).Value, onEffectEnd: () =>
 			{
 				RpcMindControl(PlayerControl.LocalPlayer, ControlledPlayers[PlayerControl.LocalPlayer.PlayerId].GetPlayer(), false);
 			}, text: "<size=40%>Control", textOffset: new Vector2(0f, 0.5f));

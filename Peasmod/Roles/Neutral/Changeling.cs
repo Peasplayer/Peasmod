@@ -18,12 +18,12 @@ namespace Peasmod.Roles.Neutral
 
         public override string Name => "Changeling";
         public override string Description => "Take the role of another player";
+        public override string LongDescription => "";
         public override string TaskText => "Take the role of another player";
         public override Color Color => ModdedPalette.ChangelingColor;
         public override Visibility Visibility => Visibility.NoOne;
         public override Team Team => Team.Alone;
         public override bool HasToDoTasks => true;
-        public override int Limit => (int) Settings.ChangelingAmount.Value;
 
         public CustomButton Button;
 

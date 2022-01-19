@@ -4,6 +4,7 @@ using BepInEx.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
+using PeasAPI.Options;
 using PeasAPI.Roles;
 using Reactor.Extensions;
 using Reactor.Networking.MethodRpc;
@@ -17,13 +18,20 @@ namespace Peasmod.Roles.Crewmate
         public Doctor(BasePlugin plugin) : base(plugin) { }
 
         public override string Name => "Doctor";
+        public override Sprite Icon => Utility.CreateSprite("Peasmod.Resources.Buttons.Revive.png");
         public override string Description => "Revive dead crewmates";
+        public override string LongDescription => "";
         public override string TaskText => "Revive dead crewmates";
         public override Color Color => ModdedPalette.DoctorColor;
         public override Visibility Visibility => Visibility.NoOne;
         public override Team Team => Team.Crewmate;
         public override bool HasToDoTasks => true;
-        public override int Limit => (int)Settings.DoctorAmount.Value;
+        public override Dictionary<string, CustomOption> AdvancedOptions => new Dictionary<string, CustomOption>()
+        {
+            {
+                "ReviveCooldown", new CustomNumberOption("doctorcooldown", "Revive-Cooldown", 10, 60, 1, 20, NumberSuffixes.Seconds)
+            }
+        };
 
         public CustomButton Button;
 
@@ -46,7 +54,7 @@ namespace Peasmod.Roles.Crewmate
                         player.transform.position = _bodys[0].transform.position;
                         _bodys[0].gameObject.Destroy();
                     }
-                }, Settings.DoctorCooldown.Value,
+                }, ((CustomNumberOption) AdvancedOptions["ReviveCooldown"]).Value,
                 Utility.CreateSprite("Peasmod.Resources.Buttons.Revive.png", 803f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Revive");
         }
 

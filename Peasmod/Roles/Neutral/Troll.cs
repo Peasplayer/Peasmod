@@ -14,12 +14,12 @@ namespace Peasmod.Roles.Neutral
 
         public override string Name => "Troll";
         public override string Description => "Get killed by an impostor";
+        public override string LongDescription => "";
         public override string TaskText => "Get killed by an impostor";
         public override Color Color => ModdedPalette.TrollColor;
         public override Visibility Visibility => Visibility.NoOne;
         public override Team Team => Team.Alone;
         public override bool HasToDoTasks => false;
-        public override int Limit => (int) Settings.TrollAmount.Value;
 
         public override void OnKill(PlayerControl killer, PlayerControl victim)
         {

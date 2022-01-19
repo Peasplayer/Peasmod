@@ -25,8 +25,8 @@ namespace Peasmod.GameModes
 
         public override Type[] RoleWhitelist { get; } =
         {
-            typeof(Roles.GameModes.GodImpostor), typeof(Captain), typeof(Demon), typeof(Doctor), typeof(Inspector),
-            typeof(Jester), typeof(Mayor), typeof(Sheriff), typeof(Troll)
+            typeof(Roles.GameModes.GodImpostor), typeof(Captain), typeof(Cloak), typeof(Demon), typeof(Doctor), typeof(Foresight), typeof(Inspector), typeof(Mayor), typeof(Officer), typeof(Sheriff),
+            typeof(BountyHunter), typeof(Changeling), typeof(Gangster), typeof(Jester), typeof(Jinx), typeof(Traitor), typeof(Troll)
         };
 
         public override bool AllowSabotage(SystemTypes? sabotage) => true;

@@ -1,7 +1,9 @@
-﻿using BepInEx.IL2CPP;
+﻿using System.Collections.Generic;
+using BepInEx.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
+using PeasAPI.Options;
 using PeasAPI.Roles;
 using UnityEngine;
 
@@ -15,13 +17,23 @@ namespace Peasmod.Roles.Crewmate
         }
 
         public override string Name => "Cloak";
+        public override Sprite Icon => Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png");
         public override string Description => "You can go invisible";
+        public override string LongDescription => "";
         public override string TaskText => "Go invisible and try to catch the impostor";
         public override Color Color => ModdedPalette.CloakColor;
         public override Visibility Visibility => Visibility.NoOne;
         public override Team Team => Team.Crewmate;
         public override bool HasToDoTasks => true;
-        public override int Limit => (int) Settings.CloakAmount.Value;
+        public override Dictionary<string, CustomOption> AdvancedOptions => new Dictionary<string, CustomOption>()
+        {
+            {
+                "InvisibilityCooldown", new CustomNumberOption("cloakcooldown", "nvisibility-Cooldown", 20, 60, 1, 20, NumberSuffixes.Seconds)
+            },
+            {
+                "InvisibilityDuration", new CustomNumberOption("cloakduration", "Invisibility-Duration", 10, 60, 1, 10, NumberSuffixes.Seconds)
+            }
+        };
 
         public CustomButton Button;
 
@@ -29,7 +41,7 @@ namespace Peasmod.Roles.Crewmate
         {
             Button = CustomButton.AddButton(
                 () => { PlayerControl.LocalPlayer.RpcGoInvisible(true); },
-                Settings.CloakCooldown.Value, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png", 794f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, effectDuration: Settings.CloakDuration.Value,
+                ((CustomNumberOption) AdvancedOptions["InvisibilityCooldown"]).Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png", 794f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, effectDuration: ((CustomNumberOption) AdvancedOptions["InvisibilityDuration"]).Value,
                 onEffectEnd: () => { PlayerControl.LocalPlayer.RpcGoInvisible(false); }, text: "<size=40%>Hide");
         }
     }

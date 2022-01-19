@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using BepInEx.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
+using PeasAPI.Options;
 using PeasAPI.Roles;
 using Reactor.Networking.MethodRpc;
 using UnityEngine;
@@ -10,20 +12,28 @@ using UnityEngine;
 namespace Peasmod.Roles.Impostor
 {
     [RegisterCustomRole]
-    public class Builder : BaseRole
+    public class EvilBuilder : BaseRole
     {
-        public Builder(BasePlugin plugin) : base(plugin)
+        public EvilBuilder(BasePlugin plugin) : base(plugin)
         {
         }
 
         public override string Name => "EvilBuilder";
+        public override Sprite Icon => Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png");
         public override string Description => "Build new vents";
+        public override string LongDescription => "";
         public override string TaskText => "Add new vents to the map";
         public override Color Color => Palette.ImpostorRed;
         public override Visibility Visibility => Visibility.Impostor;
         public override Team Team => Team.Impostor;
         public override bool HasToDoTasks => true;
-        public override int Limit => (int) Settings.EvilBuilderAmount.Value;
+        public override int MaxCount => 3;
+        public override Dictionary<string, CustomOption> AdvancedOptions => new Dictionary<string, CustomOption>()
+        {
+            {
+                "VentBuildingCooldown", new CustomNumberOption("ventbuildingcooldown", $"Vent-Building-Cooldown", 10, 30, 1, 10, NumberSuffixes.Seconds)
+            }
+        };
         public override bool CanVent => true;
         public override bool CanKill(PlayerControl victim = null) => !victim || victim.Data.Role.IsImpostor;
         public override bool CanSabotage(SystemTypes? sabotage) => false;
@@ -37,7 +47,7 @@ namespace Peasmod.Roles.Impostor
             {
                 var pos = PlayerControl.LocalPlayer.transform.position;
                 RpcCreateVent(PlayerControl.LocalPlayer, pos.x, pos.y, pos.z);
-            }, Settings.VentBuildingCooldown.Value, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png", 552f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Build");
+            }, ((CustomNumberOption) AdvancedOptions["VentBuildingCooldown"]).Value, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png", 552f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Build");
         }
 
         public override void OnUpdate()

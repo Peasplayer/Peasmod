@@ -1,6 +1,4 @@
-﻿using Peasmod.Roles;
-using Peasmod.Roles.Impostor;
-using UnityEngine;
+﻿using Peasmod.Roles.Impostor;
 
 namespace Peasmod
 {
@@ -19,7 +17,7 @@ namespace Peasmod
         public static void RpcCreateVent(this PlayerControl player)
         {
             var pos = PlayerControl.LocalPlayer.transform.position;
-            Builder.RpcCreateVent(player, pos.x, pos.y, pos.z);
+            EvilBuilder.RpcCreateVent(player, pos.x, pos.y, pos.z);
         }
 
         public static void RpcDragBody(this PlayerControl player, byte bodyId)

@@ -17,12 +17,12 @@ namespace Peasmod.Roles.Neutral
 
         public override string Name => "Jinx";
         public override string Description => "Be one of the last survivors";
+        public override string LongDescription => "";
         public override string TaskText => "Be one of the last three survivors to win";
         public override Color Color => ModdedPalette.JinxColor;
         public override Visibility Visibility => Visibility.NoOne;
         public override Team Team => Team.Alone;
         public override bool HasToDoTasks => false;
-        public override int Limit => (int)Settings.JinxAmount.Value;
 
         public override void OnUpdate()
         {

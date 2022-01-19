@@ -15,12 +15,12 @@ namespace Peasmod.Roles.Crewmate
 
         public override string Name => "Inspector";
         public override string Description => "Find the Impostor";
+        public override string LongDescription => "";
         public override string TaskText => "Find the Impostor by his footprints";
         public override Color Color => ModdedPalette.InspectorColor;
         public override Visibility Visibility => Visibility.NoOne;
         public override Team Team => Team.Crewmate;
         public override bool HasToDoTasks => true;
-        public override int Limit => (int) Settings.InspectorAmount.Value;
 
         private float _timer;
         private readonly float MaxTimer = 0.125f;
