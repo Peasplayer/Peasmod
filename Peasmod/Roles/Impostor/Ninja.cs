@@ -21,7 +21,7 @@ namespace Peasmod.Roles.Impostor
         }
 
         public override string Name => "Ninja";
-        public override Sprite Icon => Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png");
+        public override Sprite Icon => Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png", 794f);
         public override string Description => "Kill players without being seen";
         public override string LongDescription => "";
         public override string TaskText => "Kill players without being seen by using your ability";
@@ -43,7 +43,7 @@ namespace Peasmod.Roles.Impostor
             }
         };
         public override bool CanVent => true;
-        public override bool CanKill(PlayerControl victim = null) => !victim || victim.Data.Role.IsImpostor;
+        public override bool CanKill(PlayerControl victim = null) => !victim || !victim.Data.Role.IsImpostor;
         public override bool CanSabotage(SystemTypes? sabotage) => true;
 
         public static Ninja Instance;

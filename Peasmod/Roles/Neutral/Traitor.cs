@@ -21,7 +21,7 @@ namespace Peasmod.Roles.Neutral
         public override Visibility Visibility => HasBetrayed ? Visibility.Impostor : Visibility.NoOne;
         public override Team Team => HasBetrayed ? Team.Impostor : Team.Role;
         public override bool HasToDoTasks => true;
-        public override bool CanKill(PlayerControl victim = null) => HasBetrayed;
+        public override bool CanKill(PlayerControl victim = null) => HasBetrayed && (!victim ||! victim.Data.Role.IsImpostor);
         public override bool CanVent => HasBetrayed;
         public override bool CanSabotage(SystemTypes? sabotage) => HasBetrayed;
 

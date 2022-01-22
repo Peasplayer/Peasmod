@@ -61,6 +61,12 @@ namespace Peasmod.Roles.Neutral
         {
             if (Targets.ContainsKey(PlayerControl.LocalPlayer.PlayerId) && PlayerControl.LocalPlayer.IsRole(this))
             {
+                if (Targets[PlayerControl.LocalPlayer.PlayerId].GetPlayer().Data.Role.IsImpostor)
+                {
+                    PlayerControl.LocalPlayer.RpcSetRole(null);
+                    Targets.Remove(PlayerControl.LocalPlayer.PlayerId);
+                }
+                
                 if (PlayerControl.LocalPlayer.Data.IsDead)
                     Targets.Remove(PlayerControl.LocalPlayer.PlayerId);
                 else

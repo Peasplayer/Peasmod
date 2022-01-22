@@ -18,8 +18,8 @@ namespace Peasmod.Roles.Impostor
         {
         }
 
-        public override string Name => "EvilBuilder";
-        public override Sprite Icon => Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png");
+        public override string Name => "Evil Builder";
+        public override Sprite Icon => Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png", 552f);
         public override string Description => "Build new vents";
         public override string LongDescription => "";
         public override string TaskText => "Add new vents to the map";
@@ -35,8 +35,8 @@ namespace Peasmod.Roles.Impostor
             }
         };
         public override bool CanVent => true;
-        public override bool CanKill(PlayerControl victim = null) => !victim || victim.Data.Role.IsImpostor;
-        public override bool CanSabotage(SystemTypes? sabotage) => false;
+        public override bool CanKill(PlayerControl victim = null) => !victim || !victim.Data.Role.IsImpostor;
+        public override bool CanSabotage(SystemTypes? sabotage) => true;
 
         public CustomButton Button;
         public Vector2 VentSize;

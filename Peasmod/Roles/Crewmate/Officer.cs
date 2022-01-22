@@ -42,7 +42,7 @@ namespace Peasmod.Roles.Crewmate
                 "PossibleKills", new CustomNumberOption("officerkills", $"Number of Kills", 0, 10, 1, 10, NumberSuffixes.None)
             }
         };
-        public override bool CanKill(PlayerControl victim = null) => AlreadyKilled < ((CustomNumberOption) AdvancedOptions["PossibleKills"]).Value;
+        public override bool CanKill(PlayerControl victim = null) => AlreadyKilled < ((CustomNumberOption) AdvancedOptions["PossibleKills"]).Value && (victim == null || Arrested.ContainsKey(PlayerControl.LocalPlayer.PlayerId) && Arrested[PlayerControl.LocalPlayer.PlayerId].Contains(victim.PlayerId));
 
         public static Officer Instance;
 
@@ -73,10 +73,13 @@ namespace Peasmod.Roles.Crewmate
             
             foreach (var item in Arrested)
             {
-                foreach (var arrested in item.Value)
+                for (int i = 0; i < item.Value.Count; i++ )
                 {
-                    if (!arrested.GetPlayer().Data.IsDead)
-                        arrested.GetPlayer().moveable = false;
+                    var arrested = item.Value[i].GetPlayer();
+                    if (!arrested.Data.IsDead)
+                        arrested.moveable = false;
+                    if (item.Key.GetPlayer().IsLocal() && item.Key.GetPlayer().Data.IsDead)
+                        Button.OnEffectEnd.Invoke();
                 }
             }
         }

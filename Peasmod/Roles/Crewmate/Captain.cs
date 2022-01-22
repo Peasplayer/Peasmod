@@ -15,7 +15,7 @@ namespace Peasmod.Roles.Crewmate
         public Captain(BasePlugin plugin) : base(plugin) { }
 
         public override string Name => "Captain";
-        public override Sprite Icon => Utility.CreateSprite("Peasmod.Resources.Buttons.CallMeeting.png");
+        public override Sprite Icon => Utility.CreateSprite("Peasmod.Resources.Buttons.CallMeeting.png", 650f);
         public override string Description => "Keep your crew safe";
         public override string LongDescription => "";
         public override string TaskText => "Keep your crew safe";

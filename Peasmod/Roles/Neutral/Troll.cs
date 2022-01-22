@@ -21,10 +21,11 @@ namespace Peasmod.Roles.Neutral
         public override Team Team => Team.Alone;
         public override bool HasToDoTasks => false;
 
-        public override void OnKill(PlayerControl killer, PlayerControl victim)
+        public override bool PreKill(PlayerControl killer, PlayerControl victim)
         {
             if (victim.IsRole<Troll>() && victim.IsLocal())
                 new CustomEndReason(victim);
+            return true;
         }
     }
 }

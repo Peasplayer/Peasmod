@@ -21,7 +21,7 @@ namespace Peasmod.Roles.Impostor
         }
 
         public override string Name => "Glaciater";
-        public override Sprite Icon => Utility.CreateSprite("Peasmod.Resources.Buttons.Freezing.png");
+        public override Sprite Icon => Utility.CreateSprite("Peasmod.Resources.Buttons.Freezing.png", 851f);
         public override string Description => "Stop the players from moving";
         public override string LongDescription => "";
         public override string TaskText => "Stop the players from moving";
@@ -40,7 +40,7 @@ namespace Peasmod.Roles.Impostor
             }
         };
         public override bool CanVent => true;
-        public override bool CanKill(PlayerControl victim = null) => !victim || victim.Data.Role.IsImpostor;
+        public override bool CanKill(PlayerControl victim = null) => !victim || !victim.Data.Role.IsImpostor;
         public override bool CanSabotage(SystemTypes? sabotage) => true;
 
         public static Glaciater Instance;

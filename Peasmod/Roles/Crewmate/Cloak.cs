@@ -17,7 +17,7 @@ namespace Peasmod.Roles.Crewmate
         }
 
         public override string Name => "Cloak";
-        public override Sprite Icon => Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png");
+        public override Sprite Icon => Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png", 794f);
         public override string Description => "You can go invisible";
         public override string LongDescription => "";
         public override string TaskText => "Go invisible and try to catch the impostor";

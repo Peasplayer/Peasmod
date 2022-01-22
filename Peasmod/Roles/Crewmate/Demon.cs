@@ -23,7 +23,7 @@ namespace Peasmod.Roles.Crewmate
         }
 
         public override string Name => "Demon";
-        public override Sprite Icon => Utility.CreateSprite("Peasmod.Resources.Buttons.SwapAfterlife.png");
+        public override Sprite Icon => Utility.CreateSprite("Peasmod.Resources.Buttons.SwapAfterlife.png", 650f);
         public override string Description => "Swap into the afterlife";
         public override string LongDescription => "";
         public override string TaskText => "Swap into the afterlife";

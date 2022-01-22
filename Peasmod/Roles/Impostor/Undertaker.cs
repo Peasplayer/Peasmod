@@ -20,7 +20,7 @@ namespace Peasmod.Roles.Impostor
         }
 
         public override string Name => "Undertaker";
-        public override Sprite Icon => Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png");
+        public override Sprite Icon => Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f);
         public override string Description => "Take dead bodies away";
         public override string LongDescription => "";
         public override string TaskText => "Take dead bodies away";
@@ -30,7 +30,7 @@ namespace Peasmod.Roles.Impostor
         public override bool HasToDoTasks => true;
         public override int MaxCount => 3;
         public override bool CanVent => true;
-        public override bool CanKill(PlayerControl victim = null) => !victim || victim.Data.Role.IsImpostor;
+        public override bool CanKill(PlayerControl victim = null) => !victim || !victim.Data.Role.IsImpostor;
         public override bool CanSabotage(SystemTypes? sabotage) => true;
 
         public static Undertaker Instance;

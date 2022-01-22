@@ -39,7 +39,7 @@ namespace Peasmod.Roles.Impostor
             }
         };
         public override bool CanVent => true;
-        public override bool CanKill(PlayerControl victim = null) => (!victim || victim.Data.Role.IsImpostor) && ((CustomToggleOption) AdvancedOptions["CanKill"]).Value;
+        public override bool CanKill(PlayerControl victim = null) => (!victim || !victim.Data.Role.IsImpostor) && ((CustomToggleOption)AdvancedOptions["CanKill"]).Value;
         public override bool CanSabotage(SystemTypes? sabotage) => true;
 
         public static Janitor Instance;

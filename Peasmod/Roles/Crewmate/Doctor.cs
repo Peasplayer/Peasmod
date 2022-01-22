@@ -18,7 +18,7 @@ namespace Peasmod.Roles.Crewmate
         public Doctor(BasePlugin plugin) : base(plugin) { }
 
         public override string Name => "Doctor";
-        public override Sprite Icon => Utility.CreateSprite("Peasmod.Resources.Buttons.Revive.png");
+        public override Sprite Icon => Utility.CreateSprite("Peasmod.Resources.Buttons.Revive.png", 803f);
         public override string Description => "Revive dead crewmates";
         public override string LongDescription => "";
         public override string TaskText => "Revive dead crewmates";
