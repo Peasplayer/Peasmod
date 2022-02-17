@@ -37,7 +37,6 @@ namespace Peasmod.Roles.Impostor
         
         public CustomButton Button;
         public bool CarryingBody;
-        public GameObject TargetBody;
         public Dictionary<byte, byte> CarriedBodys = new ();
 
         public override void OnGameStart()
@@ -48,18 +47,19 @@ namespace Peasmod.Roles.Impostor
                 if (CarryingBody)
                 {
                     CarryingBody = false;
-                    Button.SetImage(PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f));
+                    Button.SetImage(Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f));
                     Button.Text = "<size=40%>Drag";
                     RpcDragBody(PlayerControl.LocalPlayer, false, byte.MaxValue);
                 }
                 else
                 {
                     CarryingBody = true;
-                    Button.SetImage(PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.DropBody.png", 803f));
+                    Button.SetImage(Utility.CreateSprite("Peasmod.Resources.Buttons.DropBody.png", 803f));
                     Button.Text = "<size=40%>Drop";
-                    RpcDragBody(PlayerControl.LocalPlayer, true, TargetBody.GetComponent<DeadBody>().ParentId);
+                    RpcDragBody(PlayerControl.LocalPlayer, true, Button.ObjectTarget.GetComponent<DeadBody>().ParentId);
                 }
-            }, 0f, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Drag");
+            }, 0f, Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Drag",
+                target: CustomButton.TargetType.Object, targetColor: Color, chooseObjectTarget: o => o.GetComponent<DeadBody>() != null);
         }
         
         public override void OnUpdate()
@@ -87,26 +87,6 @@ namespace Peasmod.Roles.Impostor
                     }
                 
                     MoveBody(player, body);
-                }
-            }
-            
-            if (CarryingBody)
-            {
-                Button.Usable = true;
-            }
-            else
-            {
-                TargetBody = null;
-                Button.Usable = false;
-            
-                var bodys = Physics2D
-                    .OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(),
-                        PlayerControl.LocalPlayer.MaxReportDistance - 2f, Constants.PlayersOnlyMask)
-                    .Where(collider => collider.CompareTag("DeadBody")).ToList();
-                if (bodys.Count != 0)
-                {
-                    TargetBody = bodys[0].gameObject;
-                    Button.Usable = true;
                 }
             }
         }

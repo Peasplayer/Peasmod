@@ -51,10 +51,9 @@ namespace Peasmod.Roles.Crewmate
             Button = CustomButton.AddButton(() =>
                 {
                     IsSwaped = true;
-                    PlayerControl.LocalPlayer.Die(DeathReason.Disconnect);
-                    PlayerControl.LocalPlayer.gameObject.layer = LayerMask.NameToLayer("Players");
-                    HudManager.Instance.ShadowQuad.gameObject.SetActive(false);
                     RpcDemonAbility(PlayerControl.LocalPlayer, true);
+                    HudManager.Instance.ShadowQuad.gameObject.SetActive(false);
+                    PlayerControl.LocalPlayer.gameObject.layer = LayerMask.NameToLayer("Players");
                     Coroutines.Start(CoStartDemonAbility(((CustomNumberOption) AdvancedOptions["AbilityDuration"]).Value));
                 }, ((CustomNumberOption) AdvancedOptions["AbilityCooldown"]).Value,
                 Utility.CreateSprite("Peasmod.Resources.Buttons.SwapAfterlife.png", 650f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Swap");
@@ -66,7 +65,6 @@ namespace Peasmod.Roles.Crewmate
 
             if (PeasAPI.PeasAPI.GameStarted)
             {
-                PlayerControl.LocalPlayer.Revive();
                 HudManager.Instance.ShadowQuad.gameObject.SetActive(true);
                 RpcDemonAbility(PlayerControl.LocalPlayer, false);
                 IsSwaped = false;

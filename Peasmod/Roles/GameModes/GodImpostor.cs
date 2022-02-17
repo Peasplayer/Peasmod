@@ -78,10 +78,13 @@ namespace Peasmod.Roles.GameModes
                         Undertaker.Instance.CarryingBody = true;
                         DragBodyButton.SetImage(Utility.CreateSprite("Peasmod.Resources.Buttons.DropBody.png", 803f));
                         DragBodyButton.Text = "<size=40%>Drop";
-                        PlayerControl.LocalPlayer.RpcDragBody(Undertaker.Instance.TargetBody.GetComponent<DeadBody>().ParentId);
+                        PlayerControl.LocalPlayer.RpcDragBody(DragBodyButton.ObjectTarget.GetComponent<DeadBody>()
+                            .ParentId);
                     }
-                }, 0f, Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f), p => p.IsRole(this) && !p.Data.IsDead, _ => true,
-                text: "<size=40%>Drag");
+                }, 0f, Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f),
+                p => p.IsRole(this) && !p.Data.IsDead, _ => true,
+                text: "<size=40%>Drag", target: CustomButton.TargetType.Object, targetColor: Color,
+                chooseObjectTarget: o => o.GetComponent<DeadBody>() != null);
             DragBodyButton.Enabled = DragBodyButton.Visible = Settings.BodyDragging.Value;
 
             InvisibilityButton = CustomButton.AddButton(
@@ -133,26 +136,6 @@ namespace Peasmod.Roles.GameModes
                         }
 
                         Undertaker.MoveBody(player, body);
-                    }
-                }
-                
-                if (Undertaker.Instance.CarryingBody)
-                {
-                    DragBodyButton.Usable = true;
-                }
-                else
-                {
-                    Undertaker.Instance.TargetBody = null;
-                    DragBodyButton.Usable = false;
-
-                    var bodys = Physics2D
-                        .OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(),
-                            PlayerControl.LocalPlayer.MaxReportDistance - 2f, Constants.PlayersOnlyMask)
-                        .Where(collider => collider.CompareTag("DeadBody")).ToList();
-                    if (bodys.Count != 0)
-                    {
-                        Undertaker.Instance.TargetBody = bodys[0].gameObject;
-                        DragBodyButton.Usable = true;
                     }
                 }
             }

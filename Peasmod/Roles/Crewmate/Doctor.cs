@@ -39,49 +39,11 @@ namespace Peasmod.Roles.Crewmate
         {
             Button = CustomButton.AddButton(() =>
                 {
-                    List<DeadBody> _bodys = Physics2D
-                        .OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(),
-                            PlayerControl.LocalPlayer.MaxReportDistance - 2f, Constants.PlayersOnlyMask)
-                        .Where(collider => collider.CompareTag("DeadBody")).ToList().ConvertAll(
-                            collider => collider.GetComponent<DeadBody>());
-
-                    if (_bodys.Count != 0)
-                    {
-                        RpcRevive(_bodys[0].ParentId.GetPlayer());
-
-                        var player = _bodys[0].ParentId.GetPlayer();
-                        player.Revive();
-                        player.transform.position = _bodys[0].transform.position;
-                        _bodys[0].gameObject.Destroy();
-                    }
+                    var body = Button.ObjectTarget.GetComponent<DeadBody>();
+                    RpcRevive(body.ParentId.GetPlayer());
                 }, ((CustomNumberOption) AdvancedOptions["ReviveCooldown"]).Value,
-                Utility.CreateSprite("Peasmod.Resources.Buttons.Revive.png", 803f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Revive");
-        }
-
-        public override void OnUpdate()
-        {
-            if (Button != null)
-            {
-                if (Button.KillButtonManager.graphic != null)
-                {
-                    List<DeadBody> bodys = Physics2D
-                        .OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(),
-                            PlayerControl.LocalPlayer.MaxReportDistance - 2f, Constants.PlayersOnlyMask)
-                        .Where(collider => collider.CompareTag("DeadBody")).ToList().ConvertAll(
-                            collider => collider.GetComponent<DeadBody>());
-
-                    if (bodys.Count == 0)
-                    {
-                        Button.KillButtonManager.graphic.color = Palette.DisabledClear;
-                        Button.Usable = false;
-                    }
-                    else
-                    {
-                        Button.KillButtonManager.graphic.color = Palette.EnabledColor;
-                        Button.Usable = true;
-                    }
-                }
-            }
+                Utility.CreateSprite("Peasmod.Resources.Buttons.Revive.png", 803f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Revive", 
+                target: CustomButton.TargetType.Object, targetColor: Color, chooseObjectTarget: o => o.GetComponent<DeadBody>() != null);
         }
 
         [MethodRpc((uint) CustomRpcCalls.DoctorAbility)]

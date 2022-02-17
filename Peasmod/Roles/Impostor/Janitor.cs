@@ -31,10 +31,10 @@ namespace Peasmod.Roles.Impostor
         public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
         {
             {
-                "CleanBodyCooldown", new CustomNumberOption("janitorcooldown", "Clean-Body-Cooldown SUS", 10, 120, 1, 40, NumberSuffixes.Seconds)
+                "CleanBodyCooldown", new CustomNumberOption("janitorcooldown", "Clean-Body-Cooldown", 10, 120, 1, 40, NumberSuffixes.Seconds)
             },
             {
-                "CanKill", new CustomToggleOption("janitorcankill", "Can Kill SUS", true)
+                "CanKill", new CustomToggleOption("janitorcankill", "Can Kill", true)
             }
         };
         public override bool CanVent => true;
@@ -42,32 +42,12 @@ namespace Peasmod.Roles.Impostor
         public override bool CanSabotage(SystemTypes? sabotage) => true;
         
         public CustomButton Button;
-        public GameObject TargetBody;
         
         public override void OnGameStart()
         {
-            Button = CustomButton.AddButton(() =>
-                {
-                    if (TargetBody != null)
-                        RpcCleanBody(PlayerControl.LocalPlayer, TargetBody.GetComponent<DeadBody>().ParentId);
-                    TargetBody = null;
-                }, ((CustomNumberOption) AdvancedOptions["CleanBodyCooldown"]).Value,
-                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Clear", textOffset: new Vector2(0f, 0.5f));
-        }
-
-        public override void OnUpdate()
-        {
-            if (Button == null)
-                return;
-            TargetBody = null;
-            Button.Usable = false;
-            
-            var bodys = Object.FindObjectsOfType<DeadBody>().ToList();
-            if (bodys.Count != 0)
-            {
-                TargetBody = bodys[0].gameObject;
-                Button.Usable = true;
-            }
+            Button = CustomButton.AddButton(() => RpcCleanBody(PlayerControl.LocalPlayer, Button.ObjectTarget.GetComponent<DeadBody>().ParentId), ((CustomNumberOption) AdvancedOptions["CleanBodyCooldown"]).Value,
+                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Clear", textOffset: new Vector2(0f, 0.5f),
+                target: CustomButton.TargetType.Object, targetColor: Color);
         }
 
         [MethodRpc((uint) CustomRpcCalls.CleanBody)]
