@@ -17,7 +17,6 @@ namespace Peasmod.Roles.Impostor
     {
         public Janitor(BasePlugin plugin) : base(plugin)
         {
-            Instance = this;
         }
 
         public override string Name => "Janitor";
@@ -29,20 +28,19 @@ namespace Peasmod.Roles.Impostor
         public override Team Team => Team.Impostor;
         public override bool HasToDoTasks => true;
         public override int MaxCount => 3;
-        public override Dictionary<string, CustomOption> AdvancedOptions => new Dictionary<string, CustomOption>()
+        public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
         {
             {
-                "CleanBodyCooldown", new CustomNumberOption("janitorcooldown", "Clean-Body-Cooldown", 10, 120, 1, 40, NumberSuffixes.Seconds)
+                "CleanBodyCooldown", new CustomNumberOption("janitorcooldown", "Clean-Body-Cooldown SUS", 10, 120, 1, 40, NumberSuffixes.Seconds)
             },
             {
-                "CanKill", new CustomToggleOption("janitorcankill", "Can Kill", true)
+                "CanKill", new CustomToggleOption("janitorcankill", "Can Kill SUS", true)
             }
         };
         public override bool CanVent => true;
         public override bool CanKill(PlayerControl victim = null) => (!victim || !victim.Data.Role.IsImpostor) && ((CustomToggleOption)AdvancedOptions["CanKill"]).Value;
         public override bool CanSabotage(SystemTypes? sabotage) => true;
-
-        public static Janitor Instance;
+        
         public CustomButton Button;
         public GameObject TargetBody;
         

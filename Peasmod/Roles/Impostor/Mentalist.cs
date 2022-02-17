@@ -32,7 +32,7 @@ namespace Peasmod.Roles.Impostor
 		public override bool HasToDoTasks => true;
 		public override int MaxCount => 3;
 		public override bool CreateRoleOption => false;
-		public override Dictionary<string, CustomOption> AdvancedOptions => new Dictionary<string, CustomOption>()
+		public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
 		{
 			{
 				"ControlCooldown", new CustomNumberOption("controlcooldown", "Controlling-Cooldown", 20f, 60f, 1f, 20f, NumberSuffixes.Seconds) {AdvancedRoleOption = true}

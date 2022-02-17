@@ -23,7 +23,7 @@ namespace Peasmod.Roles.Crewmate
         public override Team Team => Team.Crewmate;
         public override Visibility Visibility => Visibility.NoOne;
         public override bool HasToDoTasks => true;
-        public override Dictionary<string, CustomOption> AdvancedOptions => new Dictionary<string, CustomOption>()
+        public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
         {
             {
                 "CanKillNeutrals", new CustomToggleOption("sheriffkillneutrals", "Can Kill Neutrals", false)

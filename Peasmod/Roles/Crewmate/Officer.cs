@@ -27,7 +27,7 @@ namespace Peasmod.Roles.Crewmate
         public override Visibility Visibility => Visibility.NoOne;
         public override Team Team => Team.Crewmate;
         public override bool HasToDoTasks => true;
-        public override Dictionary<string, CustomOption> AdvancedOptions => new Dictionary<string, CustomOption>()
+        public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
         {
             {
                 "ArrestCooldown", new CustomNumberOption("officercooldown", "Arrest-Cooldown", 10, 60, 1, 20, NumberSuffixes.Seconds)

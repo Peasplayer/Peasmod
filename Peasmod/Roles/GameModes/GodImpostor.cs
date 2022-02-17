@@ -34,7 +34,7 @@ namespace Peasmod.Roles.GameModes
         public override int Count => 1;
         public override int MaxCount => 1;
         public override bool CanVent => true;
-        public override bool CanKill(PlayerControl victim = null) => !victim || victim.Data.Role.IsImpostor;
+        public override bool CanKill(PlayerControl victim = null) => !victim || !victim.Data.Role.IsImpostor;
         public override bool CanSabotage(SystemTypes? sabotage) => true;
 
         public static GodImpostor Instance;

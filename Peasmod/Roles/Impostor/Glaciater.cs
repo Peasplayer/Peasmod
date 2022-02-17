@@ -30,7 +30,7 @@ namespace Peasmod.Roles.Impostor
         public override Team Team => Team.Impostor;
         public override bool HasToDoTasks => true;
         public override int MaxCount => 3;
-        public override Dictionary<string, CustomOption> AdvancedOptions => new Dictionary<string, CustomOption>()
+        public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
         {
             {
                 "FreezeCooldown", new CustomNumberOption("freezecooldown", "Freezing-Cooldown", 20, 60, 1, 20, NumberSuffixes.Seconds)

@@ -28,7 +28,7 @@ namespace Peasmod.Roles.Impostor
         public override Team Team => Team.Impostor;
         public override bool HasToDoTasks => true;
         public override int MaxCount => 3;
-        public override Dictionary<string, CustomOption> AdvancedOptions => new Dictionary<string, CustomOption>()
+        public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
         {
             {
                 "VentBuildingCooldown", new CustomNumberOption("ventbuildingcooldown", $"Vent-Building-Cooldown", 10, 30, 1, 10, NumberSuffixes.Seconds)
