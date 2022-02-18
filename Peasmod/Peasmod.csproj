@@ -16,7 +16,7 @@
         <!--<Reference Include="$(AmongUs)\BepInEx\plugins\PeasAPI.dll" />-->
         <PackageReference Include="Reactor" Version="1.1.0" />
         <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="1.0.2" PrivateAssets="all" />
-        <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-be.538" />
+        <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-be.549" />
         <PackageReference Include="AmongUs.GameLibs.$(GamePlatform)" Version="$(GameVersion)" PrivateAssets="all" />
     </ItemGroup>
 
