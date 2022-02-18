@@ -46,22 +46,25 @@ namespace Peasmod
             new CustomOptionHeader($"Hide and Seek");
 
         public static readonly CustomNumberOption HideAndSeekSeekerCooldown =
-            new CustomNumberOption("hideandseekseekercooldown", "• Seeker-Cooldown", 10, 60, 1, 10, NumberSuffixes.Seconds);
+            new CustomNumberOption("hideandseekseekercooldown", "• Seeker-Cooldown", 20, 60, 1, 20, NumberSuffixes.Seconds);
 
         public static readonly CustomNumberOption HideAndSeekSeekerDuration =
-            new CustomNumberOption("hideandseekseekerduration", "└ Seeking-Duration", 30, 300, 10, 120, NumberSuffixes.Seconds);
+            new CustomNumberOption("hideandseekseekerduration", "• Seeking-Duration", 30, 300, 10, 120, NumberSuffixes.Seconds);
 
         public static readonly CustomToggleOption HideAndSeekSeekerVenting =
-            new CustomToggleOption("hideandseekseekerventing", "└ Can Seeker Vent", false);
+            new CustomToggleOption("hideandseekseekerventing", "• Can Seeker Vent", false);
         
         public static CustomOptionHeader PropHunt =
             new CustomOptionHeader($"PropHunt");
 
         public static readonly CustomNumberOption PropHuntSeekerCooldown =
-            new CustomNumberOption("prophuntseekercooldown", "• Seeker-Cooldown", 10, 60, 1, 10, NumberSuffixes.Seconds);
+            new CustomNumberOption("prophuntseekercooldown", "• Seeker-Cooldown", 20, 60, 1, 20, NumberSuffixes.Seconds);
 
         public static readonly CustomNumberOption PropHuntSeekerDuration =
-            new CustomNumberOption("prophuntseekerduration", "└ Seeking-Duration", 30, 300, 10, 120, NumberSuffixes.Seconds);
+            new CustomNumberOption("prophuntseekerduration", "• Seeking-Duration", 30, 300, 10, 120, NumberSuffixes.Seconds);
+        
+        public static readonly CustomNumberOption PropHuntSeekerClickCooldown =
+            new CustomNumberOption("prophuntseekerclickcooldown", "• Seeker-Click-Cooldown", 1, 60, 1, 5, NumberSuffixes.Seconds);
 
         public static CustomOptionHeader GodImpostor =
             new CustomOptionHeader($"God Impostor");

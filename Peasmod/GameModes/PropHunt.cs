@@ -12,6 +12,7 @@ using PeasAPI.CustomEndReason;
 using PeasAPI.GameModes;
 using PeasAPI.Managers;
 using Peasmod.Roles.GameModes;
+using Reactor;
 using Reactor.Extensions;
 using Reactor.Networking;
 using Reactor.Networking.MethodRpc;
@@ -48,6 +49,7 @@ namespace Peasmod.GameModes
 
         private TextMeshPro _timeLeftText;
         public float TimeLeft = float.MaxValue;
+        public float ClickCooldown;
         public bool SeekingStarted = false;
         public List<int> Objects = new List<int>();
         public CustomButton UnmorphButton;
@@ -83,6 +85,9 @@ namespace Peasmod.GameModes
 
         public override void OnUpdate()
         {
+            if (PlayerControl.LocalPlayer.Data.Role.IsImpostor && ClickCooldown > 0)
+                ClickCooldown -= Time.deltaTime;
+            
             HudManager.Instance.ReportButton.Hide();
             if (HudManager.Instance.KillButton.currentTarget != null && HudManager.Instance.KillButton.currentTarget.transform.FindChild("PropInUse") != null)
                 HudManager.Instance.KillButton.SetDisabled();
@@ -128,7 +133,8 @@ namespace Peasmod.GameModes
 
         public override void OnKill(PlayerControl killer, PlayerControl victim)
         {
-            RpcRemoveProp(PlayerControl.LocalPlayer, victim);
+            if (victim.IsLocal())
+                RpcRemoveProp(PlayerControl.LocalPlayer, victim);
             ShipStatus.RpcEndGame(GameOverReason.ImpostorByKill, false);
         }
 
@@ -359,6 +365,10 @@ namespace Peasmod.GameModes
                     {
                         if (PlayerControl.LocalPlayer.Data.Role.IsImpostor)
                         {
+                            if (Instance.ClickCooldown > 0)
+                                return;
+                            Instance.ClickCooldown = Settings.PropHuntSeekerClickCooldown.Value;
+                            
                             if (gameObject.name == "PropInUse")
                             {
                                 var target = gameObject.transform.parent.gameObject.GetComponent<PlayerControl>();
