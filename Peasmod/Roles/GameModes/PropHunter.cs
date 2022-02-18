@@ -8,9 +8,9 @@ using UnityEngine;
 namespace Peasmod.Roles.GameModes
 {
     [RegisterCustomRole]
-    public class Seeker : BaseRole
+    public class PropHunter : BaseRole
     {
-        public Seeker(BasePlugin plugin) : base(plugin)
+        public PropHunter(BasePlugin plugin) : base(plugin)
         {
         }
 
@@ -26,9 +26,9 @@ namespace Peasmod.Roles.GameModes
         public override int MaxCount => 3;
         public override bool CreateRoleOption => false;
         public override Type[] GameModeWhitelist { get; } = {
-            typeof(HideAndSeek)
+            typeof(PropHunt)
         };
         public override bool CanKill(PlayerControl victim = null) => true;
-        public override bool CanVent => Settings.SeekerVenting.Value;
+        public override bool CanSabotage(SystemTypes? sabotage) => false;
     }
 }

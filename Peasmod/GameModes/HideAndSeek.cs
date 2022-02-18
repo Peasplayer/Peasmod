@@ -35,7 +35,7 @@ namespace Peasmod.GameModes
         public override bool AllowVanillaRoles => false;
 
         public override Type[] RoleWhitelist { get; } = {
-            typeof(Seeker)
+            typeof(HideAndSeeker)
         };
         
         public override bool AllowSabotage(SystemTypes? sabotage) => false;
@@ -50,7 +50,7 @@ namespace Peasmod.GameModes
         public override void OnGameStart()
         {
             SeekingStarted = false;
-            TimeLeft = Settings.SeekerDuration.Value;
+            TimeLeft = Settings.HideAndSeekSeekerDuration.Value;
             Reactor.Coroutines.Start(CoStartGame());
         }
 
@@ -160,18 +160,18 @@ namespace Peasmod.GameModes
                 PlayerControl.LocalPlayer.MyPhysics.ResetMoveState();
                 PlayerControl.LocalPlayer.MyPhysics.body.velocity = Vector2.zero;
                 
-                yield return new WaitForSeconds(Settings.SeekerCooldown.Value);
+                yield return new WaitForSeconds(Settings.HideAndSeekSeekerCooldown.Value);
 
-                RpcStartSeeking(PlayerControl.LocalPlayer, true);
+                RpcStartSeeking(PlayerControl.LocalPlayer);
                 
                 IsFroozen = false;
                 PlayerControl.LocalPlayer.moveable = true;
-                TextMessageManager.RpcShowMessage("The seeker can\nseek now!", 1f, PlayerControl.AllPlayerControls.ToArray().ToList());
+                TextMessageManager.RpcShowMessage("The seekers can\nseek now!", 1f, PlayerControl.AllPlayerControls.ToArray().ToList());
             }
         }
 
         [MethodRpc((uint) CustomRpcCalls.StartHideAndSeek, LocalHandling = RpcLocalHandling.After)]
-        public static void RpcStartSeeking(PlayerControl sender, bool dummy)
+        public static void RpcStartSeeking(PlayerControl sender)
         {
             Instance.SeekingStarted = true;
         }

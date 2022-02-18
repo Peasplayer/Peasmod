@@ -45,14 +45,23 @@ namespace Peasmod
         public static CustomOptionHeader HideAndSeek =
             new CustomOptionHeader($"Hide and Seek");
 
-        public static readonly CustomNumberOption SeekerCooldown =
-            new CustomNumberOption("seekercooldown", "• Seeker-Cooldown", 10, 60, 1, 10, NumberSuffixes.Seconds);
+        public static readonly CustomNumberOption HideAndSeekSeekerCooldown =
+            new CustomNumberOption("hideandseekseekercooldown", "• Seeker-Cooldown", 10, 60, 1, 10, NumberSuffixes.Seconds);
 
-        public static readonly CustomNumberOption SeekerDuration =
-            new CustomNumberOption("seekerduration", "└ Seeking-Duration", 30, 300, 1, 120, NumberSuffixes.Seconds);
+        public static readonly CustomNumberOption HideAndSeekSeekerDuration =
+            new CustomNumberOption("hideandseekseekerduration", "└ Seeking-Duration", 30, 300, 10, 120, NumberSuffixes.Seconds);
 
-        public static readonly CustomToggleOption SeekerVenting =
-            new CustomToggleOption("seekerventing", "└ Can Seeker Vent", false);
+        public static readonly CustomToggleOption HideAndSeekSeekerVenting =
+            new CustomToggleOption("hideandseekseekerventing", "└ Can Seeker Vent", false);
+        
+        public static CustomOptionHeader PropHunt =
+            new CustomOptionHeader($"PropHunt");
+
+        public static readonly CustomNumberOption PropHuntSeekerCooldown =
+            new CustomNumberOption("prophuntseekercooldown", "• Seeker-Cooldown", 10, 60, 1, 10, NumberSuffixes.Seconds);
+
+        public static readonly CustomNumberOption PropHuntSeekerDuration =
+            new CustomNumberOption("prophuntseekerduration", "└ Seeking-Duration", 30, 300, 10, 120, NumberSuffixes.Seconds);
 
         public static CustomOptionHeader GodImpostor =
             new CustomOptionHeader($"God Impostor");
@@ -99,9 +108,12 @@ namespace Peasmod
         public static void SectionModesListener(bool value)
         {
             HideAndSeek.MenuVisible = value;
-            SeekerCooldown.MenuVisible = value;
-            SeekerDuration.MenuVisible = value;
-            SeekerVenting.MenuVisible = value;
+            HideAndSeekSeekerCooldown.MenuVisible = value;
+            HideAndSeekSeekerDuration.MenuVisible = value;
+            HideAndSeekSeekerVenting.MenuVisible = value;
+            PropHunt.MenuVisible = value;
+            PropHuntSeekerCooldown.MenuVisible = value;
+            PropHuntSeekerDuration.MenuVisible = value;
             GodImpostor.MenuVisible = value;
             VentBuilding.MenuVisible = value;
             BodyDragging.MenuVisible = value;

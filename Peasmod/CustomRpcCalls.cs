@@ -11,6 +11,10 @@
         CleanBody,
         MindControl,
         FreezePlayer,
-        StartHideAndSeek
+        StartHideAndSeek,
+        StartPropHunt,
+        MoveProp,
+        RemoveProp,
+        ChangeProp
     }
 }
