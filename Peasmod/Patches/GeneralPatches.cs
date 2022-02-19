@@ -1,8 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
+using PeasAPI;
+using PeasAPI.Managers;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Peasmod.Patches
 {
@@ -44,6 +46,49 @@ namespace Peasmod.Patches
             }
         }
 
+        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Die))]
+        [HarmonyPostfix]
+        public static void AddSpectatorButtonPatch(PlayerControl __instance)
+        {
+            if (HudManager.Instance.transform.FindChild("Buttons").FindChild("TopRight").FindChild("SpectatorButton") ==
+                null)
+            {
+                var spectatorButton = Object.Instantiate(HudManager.Instance.transform.FindChild("Buttons")
+                    .FindChild("TopRight").FindChild("MapButton").gameObject, HudManager.Instance.transform.FindChild("Buttons")
+                    .FindChild("TopRight"));
+                spectatorButton.name = "SpectatorButton";
+                var aspect = spectatorButton.GetComponent<AspectPosition>();
+                aspect.DistanceFromEdge = new Vector3(0.4f, 1.7f);
+                aspect.AdjustPosition();
+                var button = spectatorButton.GetComponent<ButtonBehavior>();
+                button.OnClick.RemoveAllListeners();
+                button.OnClick.AddListener((UnityEngine.Events.UnityAction) Listener);
+                void Listener()
+                {
+                    PlayerMenuManager.OpenPlayerMenu(
+                        Utility.GetAllPlayers().Where(player => !player.IsLocal()).ToList()
+                            .ConvertAll(player => player.PlayerId), player => PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(player.transform.position), () => { });
+                }
+                spectatorButton.GetComponent<SpriteRenderer>().sprite =
+                    Utility.CreateSprite("Peasmod.Resources.Buttons.SpectatorButton.png", 100f);
+            }
+            else
+            {
+                HudManager.Instance.transform.FindChild("Buttons").FindChild("TopRight").FindChild("SpectatorButton").gameObject.SetActive(true);
+            }
+        }
+        
+        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Revive))]
+        [HarmonyPostfix]
+        public static void HideSpectatorButtonPatch(PlayerControl __instance)
+        {
+            if (HudManager.Instance.transform.FindChild("Buttons").FindChild("TopRight").FindChild("SpectatorButton") !=
+                null)
+            {
+                HudManager.Instance.transform.FindChild("Buttons").FindChild("TopRight").FindChild("SpectatorButton").gameObject.SetActive(false);
+            }
+        }
+        
         [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.ShowSabotageMap))]
         [HarmonyPrefix]
         public static bool DisableSabotagesPatch(MapBehaviour __instance)
