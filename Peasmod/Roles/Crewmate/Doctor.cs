@@ -49,6 +49,8 @@ namespace Peasmod.Roles.Crewmate
         [MethodRpc((uint) CustomRpcCalls.DoctorAbility)]
         public static void RpcRevive(PlayerControl sender)
         {
+            if (sender.Data.Disconnected)
+                return;
             sender.Revive();
             sender.transform.position = Object.FindObjectsOfType<DeadBody>().Where(body => body.ParentId == sender.PlayerId).ToList()[0].transform.position;
             Object.FindObjectsOfType<DeadBody>().Where(body => body.ParentId == sender.PlayerId).ToList()[0].gameObject.Destroy();

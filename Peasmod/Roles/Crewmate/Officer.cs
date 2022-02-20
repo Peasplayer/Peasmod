@@ -99,6 +99,7 @@ namespace Peasmod.Roles.Crewmate
             if (killer.IsLocal() && killer.IsRole(this))
             {
                 AlreadyKilled++;
+                //ToDo: Remove role when killing innocent
             }
         }
 

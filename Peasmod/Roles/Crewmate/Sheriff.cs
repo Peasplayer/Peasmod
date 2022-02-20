@@ -19,7 +19,7 @@ namespace Peasmod.Roles.Crewmate
         public override string Description => "Execute the impostor";
         public override string LongDescription => "";
         public override string TaskText => "Execute the impostor";
-        public override Color Color => new Color(255f / 255f, 114f / 255f, 0f / 255f);
+        public override Color Color => ModdedPalette.SheriffColor;
         public override Team Team => Team.Crewmate;
         public override Visibility Visibility => Visibility.NoOne;
         public override bool HasToDoTasks => true;

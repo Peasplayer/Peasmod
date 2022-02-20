@@ -11,6 +11,7 @@
         CleanBody,
         MindControl,
         FreezePlayer,
+        PardonAbility,
         StartHideAndSeek,
         StartPropHunt,
         MoveProp,

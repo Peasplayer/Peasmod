@@ -20,7 +20,7 @@ namespace Peasmod
 
         public const string PluginName = "Peasmod";
         public const string PluginAuthor = "Peasplayer#2541";
-        public const string PluginVersion = "3.0.0-pre2";
+        public const string PluginVersion = "3.0.0-pre2.1";
 
         public Harmony Harmony { get; } = new Harmony(Id);
         
