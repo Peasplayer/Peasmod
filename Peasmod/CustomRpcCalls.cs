@@ -12,6 +12,7 @@
         MindControl,
         FreezePlayer,
         PardonAbility,
+        RepairSabotage,
         StartHideAndSeek,
         StartPropHunt,
         MoveProp,

@@ -117,6 +117,7 @@ namespace Peasmod
             PropHunt.MenuVisible = value;
             PropHuntSeekerCooldown.MenuVisible = value;
             PropHuntSeekerDuration.MenuVisible = value;
+            PropHuntSeekerClickCooldown.MenuVisible = value;
             GodImpostor.MenuVisible = value;
             VentBuilding.MenuVisible = value;
             BodyDragging.MenuVisible = value;

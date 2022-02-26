@@ -36,7 +36,7 @@ namespace Peasmod.Patches
                 void openPopUp()
                 {
                     var stringBuilder = new StringBuilder();
-                    stringBuilder.AppendLine($"{Utility.StringColor.Green}Peasmod{Utility.StringColor.Reset}");
+                    stringBuilder.AppendLine($"{Utility.StringColor.Green}Peasmod{Utility.StringColor.Reset} powered by @Grüni");
                     stringBuilder.AppendLine("Developed by:");
                     stringBuilder.AppendLine("@Peasplayer#2541");
                     stringBuilder.AppendLine("Art by:");

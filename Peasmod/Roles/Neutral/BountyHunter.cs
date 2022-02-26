@@ -59,19 +59,26 @@ namespace Peasmod.Roles.Neutral
 
         public override void OnUpdate()
         {
-            if (Targets.ContainsKey(PlayerControl.LocalPlayer.PlayerId) && PlayerControl.LocalPlayer.IsRole(this))
+            try
             {
-                if (Targets[PlayerControl.LocalPlayer.PlayerId].GetPlayer().Data.Role.IsImpostor)
+                if (Targets.ContainsKey(PlayerControl.LocalPlayer.PlayerId) && PlayerControl.LocalPlayer.IsRole(this))
                 {
-                    PlayerControl.LocalPlayer.RpcSetRole(null);
-                    Targets.Remove(PlayerControl.LocalPlayer.PlayerId);
-                }
+                    if (Targets[PlayerControl.LocalPlayer.PlayerId].GetPlayer().Data.Role.IsImpostor)
+                    {
+                        PlayerControl.LocalPlayer.RpcSetRole(null);
+                        Targets.Remove(PlayerControl.LocalPlayer.PlayerId);
+                    }
                 
-                if (PlayerControl.LocalPlayer.Data.IsDead)
-                    Targets.Remove(PlayerControl.LocalPlayer.PlayerId);
-                else
-                    Targets[PlayerControl.LocalPlayer.PlayerId].GetPlayer().nameText.text = Color.black.ToTextColor() +
-                        Targets[PlayerControl.LocalPlayer.PlayerId].GetPlayer().name + "\nTarget";
+                    if (PlayerControl.LocalPlayer.Data.IsDead)
+                        Targets.Remove(PlayerControl.LocalPlayer.PlayerId);
+                    else
+                        Targets[PlayerControl.LocalPlayer.PlayerId].GetPlayer().nameText.text = Color.black.ToTextColor() +
+                            Targets[PlayerControl.LocalPlayer.PlayerId].GetPlayer().name + "\nTarget";
+                }
+            }
+            catch
+            {
+                // ignored
             }
         }
 
