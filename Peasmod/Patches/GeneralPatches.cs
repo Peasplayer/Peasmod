@@ -50,7 +50,7 @@ namespace Peasmod.Patches
         [HarmonyPostfix]
         public static void AddSpectatorButtonPatch(PlayerControl __instance)
         {
-            if (HudManager.Instance.transform.FindChild("Buttons").FindChild("TopRight").FindChild("SpectatorButton") ==
+            if (__instance.IsLocal() && HudManager.Instance.transform.FindChild("Buttons").FindChild("TopRight").FindChild("SpectatorButton") ==
                 null)
             {
                 var spectatorButton = Object.Instantiate(HudManager.Instance.transform.FindChild("Buttons")
@@ -82,7 +82,7 @@ namespace Peasmod.Patches
         [HarmonyPostfix]
         public static void HideSpectatorButtonPatch(PlayerControl __instance)
         {
-            if (HudManager.Instance.transform.FindChild("Buttons").FindChild("TopRight").FindChild("SpectatorButton") !=
+            if (__instance.IsLocal() && HudManager.Instance.transform.FindChild("Buttons").FindChild("TopRight").FindChild("SpectatorButton") !=
                 null)
             {
                 HudManager.Instance.transform.FindChild("Buttons").FindChild("TopRight").FindChild("SpectatorButton").gameObject.SetActive(false);
