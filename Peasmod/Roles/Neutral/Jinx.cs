@@ -24,12 +24,23 @@ namespace Peasmod.Roles.Neutral
         public override Team Team => Team.Alone;
         public override bool HasToDoTasks => false;
 
+        public bool HasWon;
+
+        public override void OnGameStart()
+        {
+            HasWon = false;
+        }
+
         public override void OnUpdate()
         {
-            if (Utility.GetAllPlayers().Count(p => !p.Data.IsDead && !p.Data.Disconnected) == 3 && 
-                Utility.GetAllPlayers().Count(p => !p.Data.IsDead && !p.Data.Disconnected && p.Data.Role.IsImpostor) >= 1 &&
-                PlayerControl.LocalPlayer.IsRole(this) && !PlayerControl.LocalPlayer.Data.IsDead)
-                new CustomEndReason(PlayerControl.LocalPlayer);
+            if (Utility.GetAllPlayers().Count(p => !p.Data.IsDead && !p.Data.Disconnected) == 3 &&
+                Utility.GetAllPlayers().Count(p => !p.Data.IsDead && !p.Data.Disconnected && p.Data.Role.IsImpostor) >=
+                1 &&
+                PlayerControl.LocalPlayer.IsRole(this) && !PlayerControl.LocalPlayer.Data.IsDead && !HasWon)
+            {
+                HasWon = true;
+                new CustomEndReason(PlayerControl.LocalPlayer); 
+            }
         }
     }
 }

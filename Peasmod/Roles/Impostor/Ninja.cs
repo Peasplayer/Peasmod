@@ -67,8 +67,8 @@ namespace Peasmod.Roles.Impostor
                 var player = _player.GetPlayer();
                 if (player.IsLocal())
                 {
-                    player.myRend.color =
-                        player.myRend.color.SetAlpha(0.5f);
+                    player.MyRend.color =
+                        player.MyRend.color.SetAlpha(0.5f);
                     player.SetHatAndVisorAlpha(0.5f);
                     player.MyPhysics.Skin.layer.color =
                         player.MyPhysics.Skin.layer.color.SetAlpha(0.5f);
@@ -90,8 +90,8 @@ namespace Peasmod.Roles.Impostor
             
             if (sender.IsLocal())
             {
-                sender.myRend.color =
-                    sender.myRend.color.SetAlpha(enable ? 0.5f : 1f);
+                sender.MyRend.color =
+                    sender.MyRend.color.SetAlpha(enable ? 0.5f : 1f);
                 sender.SetHatAndVisorAlpha(enable ? 0.5f : 1f);
                 sender.MyPhysics.Skin.layer.color =
                     sender.MyPhysics.Skin.layer.color.SetAlpha(enable ? 0.5f : 1f);
@@ -133,9 +133,9 @@ namespace Peasmod.Roles.Impostor
                 if (data == null || !data.IsDead)
                 {
                     __instance.Skin.SetIdle(__instance.rend.flipX);
-                    __instance.Animator.Play(__instance.IdleAnim, 1f);
+                    __instance.Animator.Play(__instance.CurrentAnimationGroup.IdleAnim, 1f);
                     __instance.myPlayer.Visible = true;
-                    if (!Instance._invisiblePlayers.Contains(__instance.myPlayer.PlayerId))
+                    if (!Instance._invisiblePlayers.Contains(__instance.myPlayer.PlayerId)) // Don't do that
                         __instance.myPlayer.SetHatAndVisorAlpha(1f);
                     return false;
                 }
@@ -143,10 +143,7 @@ namespace Peasmod.Roles.Impostor
                 __instance.Skin.SetGhost();
                 if (data != null && data.Role != null)
                 {
-                    __instance.Animator.Play(
-                        (data.Role.Role == RoleTypes.GuardianAngel)
-                            ? __instance.GhostGuardianAngelAnim
-                            : __instance.GhostIdleAnim, 1f);
+                    __instance.Animator.Play((data.Role.Role == RoleTypes.GuardianAngel) ? __instance.CurrentAnimationGroup.GhostGuardianAngelAnim : __instance.CurrentAnimationGroup.GhostIdleAnim, 1f);
                 }
 
                 PlayerControl playerControl = __instance.myPlayer;
@@ -164,15 +161,15 @@ namespace Peasmod.Roles.Impostor
             private static bool PlayerPhysicsHandleAnimationPatch(PlayerPhysics __instance,
                 [HarmonyArgument(0)] bool amDead)
             {
-                if (__instance.Animator.IsPlaying(__instance.SpawnAnim))
+                if (__instance.Animator.IsPlaying(__instance.CurrentAnimationGroup.SpawnAnim))
                     return false;
-
+                
                 if (!GameData.Instance)
                     return false;
 
                 Vector2 velocity = __instance.body.velocity;
                 AnimationClip currentAnimation = __instance.Animator.GetCurrentAnimation();
-                if (currentAnimation == __instance.ClimbAnim || currentAnimation == __instance.ClimbDownAnim)
+                if (currentAnimation == __instance.CurrentAnimationGroup.ClimbAnim || currentAnimation == __instance.CurrentAnimationGroup.ClimbDownAnim)
                     return false;
 
                 if (!amDead)
@@ -188,20 +185,22 @@ namespace Peasmod.Roles.Impostor
                         {
                             __instance.rend.flipX = false;
                         }
-
-                        if (currentAnimation != __instance.RunAnim || flipX != __instance.rend.flipX)
+                        if (currentAnimation != __instance.CurrentAnimationGroup.RunAnim || flipX != __instance.rend.flipX)
                         {
-                            __instance.Animator.Play(__instance.RunAnim, 1f);
-                            __instance.Animator.Time = 0.45833334f;
+                            __instance.Animator.Play(__instance.CurrentAnimationGroup.RunAnim, 1f);
+                            if (!Constants.ShouldHorseAround())
+                            {
+                                __instance.Animator.Time = 0.45833334f;
+                            }
                             __instance.Skin.SetRun(__instance.rend.flipX);
                         }
                     }
-                    else if (currentAnimation == __instance.RunAnim || currentAnimation == __instance.SpawnAnim ||
-                             !currentAnimation)
+                    else if (currentAnimation == __instance.CurrentAnimationGroup.RunAnim || currentAnimation == __instance.CurrentAnimationGroup.SpawnAnim || !currentAnimation)
                     {
                         __instance.Skin.SetIdle(__instance.rend.flipX);
-                        __instance.Animator.Play(__instance.IdleAnim, 1f);
-                        //__instance.myPlayer.SetHatAndVisorAlpha(1f); - Disabled so the invisibility effect works local
+                        __instance.Animator.Play(__instance.CurrentAnimationGroup.IdleAnim, 1f);
+                        if (!Instance._invisiblePlayers.Contains(__instance.myPlayer.PlayerId)) //Don't do that
+                            __instance.myPlayer.SetHatAndVisorAlpha(1f);
                     }
                 }
                 else
@@ -209,15 +208,15 @@ namespace Peasmod.Roles.Impostor
                     __instance.Skin.SetGhost();
                     if (__instance.myPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
                     {
-                        if (currentAnimation != __instance.GhostGuardianAngelAnim)
+                        if (currentAnimation != __instance.CurrentAnimationGroup.GhostGuardianAngelAnim)
                         {
-                            __instance.Animator.Play(__instance.GhostGuardianAngelAnim, 1f);
+                            __instance.Animator.Play(__instance.CurrentAnimationGroup.GhostGuardianAngelAnim, 1f);
                             __instance.myPlayer.SetHatAndVisorAlpha(0.5f);
                         }
                     }
-                    else if (currentAnimation != __instance.GhostIdleAnim)
+                    else if (currentAnimation != __instance.CurrentAnimationGroup.GhostIdleAnim)
                     {
-                        __instance.Animator.Play(__instance.GhostIdleAnim, 1f);
+                        __instance.Animator.Play(__instance.CurrentAnimationGroup.GhostIdleAnim, 1f);
                         __instance.myPlayer.SetHatAndVisorAlpha(0.5f);
                     }
 

@@ -134,6 +134,29 @@ namespace Peasmod.Patches
             }
         }
 
+        [HarmonyPatch]
+        public static class CustomAnnouncementServerPatch
+        {
+            [HarmonyPatch(typeof(AnnouncementPopUp), nameof(AnnouncementPopUp.Init))]
+            [HarmonyPrefix]
+            static void ChangeAnnouncementServerToCustomPatch(AnnouncementPopUp __instance)
+            {
+                //Replaces the URL with your own so it requests the announcement from your server
+                Constants.BaseEndpoint = "https://api.peasplayer.tk/amongus/";
+            }
+            
+            [HarmonyPatch(typeof(AnnouncementPopUp), nameof(AnnouncementPopUp.Init))]
+            [HarmonyPostfix]
+            static void ChangeAnnouncementServerBackPatch(AnnouncementPopUp __instance)
+            {
+                //Show the announcement
+                __instance.Show();
+                
+                //Resets it back to the default URL
+                Constants.BaseEndpoint = "https://backend.innersloth.com/api/";
+            }
+        }
+
         [HarmonyPatch(typeof(StatsManager), nameof(StatsManager.AmBanned), MethodType.Getter)]
         [HarmonyPostfix]
         public static void UnbanPatch(out bool __result)
