@@ -65,11 +65,11 @@ namespace Peasmod.Roles.Crewmate
                             !p.Data.IsDead && !p.IsLocal() && !AlreadyRevealed.Contains(p.PlayerId)).Random();
                         if (player != null)
                         {
-                            TextMessageManager.ShowMessage($"You see that {player.Data.PlayerName} is a crewmate", 1f);
+                            TextMessageManager.ShowMessage($"You see that {player.Data.PlayerName} is a crewmate", 3f);
                             AlreadyRevealed.Add(player.PlayerId);
                         }
                         else
-                            TextMessageManager.ShowMessage("You are not able to see any crewmates", 1f);
+                            TextMessageManager.ShowMessage("You are not able to see any crewmates", 3f);
 
                         UsedAbility++;
                     }
@@ -84,11 +84,11 @@ namespace Peasmod.Roles.Crewmate
                                 var team = player.GetRole() == null ? player.Data.Role.IsImpostor ? "evil" : "good" :
                                     player.GetRole().Team == Team.Crewmate ? "good" :
                                     player.GetRole().Team == Team.Impostor ? "evil" : "neutral";
-                                TextMessageManager.ShowMessage($"You see that {player.Data.PlayerName} is {team}", 1f);
+                                TextMessageManager.ShowMessage($"You see that {player.Data.PlayerName} is {team}", 3f);
                                 AlreadyRevealed.Add(player.PlayerId);
                             }
                             else
-                                TextMessageManager.ShowMessage("You are not able to see anyone new", 1f);
+                                TextMessageManager.ShowMessage("You are not able to see anyone new", 3f);
 
                             UsedAbility++;
                         }
@@ -101,7 +101,7 @@ namespace Peasmod.Roles.Crewmate
                                 var team = p.GetRole() == null ? p.Data.Role.IsImpostor ? "evil" : "good" :
                                     p.GetRole().Team == Team.Crewmate ? "good" :
                                     p.GetRole().Team == Team.Impostor ? "evil" : "neutral";
-                                TextMessageManager.ShowMessage($"You see that {p.Data.PlayerName} is {team}", 1f);
+                                TextMessageManager.ShowMessage($"You see that {p.Data.PlayerName} is {team}", 3f);
 
                                 UsedAbility++;
                             }, () => Button.SetCoolDown(0));
@@ -112,7 +112,7 @@ namespace Peasmod.Roles.Crewmate
                             var team = p.GetRole() == null ? p.Data.Role.IsImpostor ? "evil" : "good" :
                                 p.GetRole().Team == Team.Crewmate ? "good" :
                                 p.GetRole().Team == Team.Impostor ? "evil" : "neutral";
-                            TextMessageManager.ShowMessage($"You see that {p.Data.PlayerName} is {team}", 1f);
+                            TextMessageManager.ShowMessage($"You see that {p.Data.PlayerName} is {team}", 3f);
 
                             UsedAbility++;
                         }
