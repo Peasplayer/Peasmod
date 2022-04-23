@@ -20,5 +20,6 @@ namespace Peasmod
         public static Color ForesightColor = new Color(1, 247 / 255f, 114 / 255f);
         public static Color PardonColor = new Color(96 / 255f, 54 / 255f, 74 / 255f);
         public static Color FirefighterColor = new Color(225 / 255f, 81 / 255f, 33 / 255f);
+        public static Color ForensicColor = new Color(222 / 255f, 59 / 255f, 191 / 255f);
     }
 }
