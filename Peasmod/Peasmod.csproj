@@ -12,7 +12,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="PeasAPI" Version="1.8.2-release" />
+        <PackageReference Include="PeasAPI" Version="1.8.3-release" />
         <!--<Reference Include="$(AmongUs)\BepInEx\plugins\PeasAPI.dll" />-->
         <PackageReference Include="Reactor" Version="1.1.0" />
         <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="1.0.2" PrivateAssets="all" />
