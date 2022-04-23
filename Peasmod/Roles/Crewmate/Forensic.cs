@@ -27,10 +27,10 @@ public class Forensic : BaseRole
     public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
     {
         {
-            "AnalyseCooldown", new CustomNumberOption("analysecooldown", "Analyse-Cooldown", 30, 180, 1, 20, NumberSuffixes.Seconds) {AdvancedRoleOption = true}
+            "AnalyseCooldown", new CustomNumberOption("analysecooldown", "Analyse-Cooldown", 30, 180, 1, 30, NumberSuffixes.Seconds) {AdvancedRoleOption = true}
         },
         {
-            "AnalyseDuration", new CustomNumberOption("analyseduration", "Analyse-Duration", 30, 180, 1, 20, NumberSuffixes.Seconds) {AdvancedRoleOption = true}
+            "AnalyseDuration", new CustomNumberOption("analyseduration", "Analyse-Duration", 30, 180, 1, 30, NumberSuffixes.Seconds) {AdvancedRoleOption = true}
         }/*,
         {
             "AnalyseCount", new CustomNumberOption("analysecount", "Analyses", 1, 15, 1, 2, NumberSuffixes.None) {AdvancedRoleOption = true}

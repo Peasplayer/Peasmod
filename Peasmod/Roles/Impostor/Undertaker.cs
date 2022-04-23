@@ -27,7 +27,7 @@ namespace Peasmod.Roles.Impostor
         public override Color Color => Palette.ImpostorRed;
         public override Visibility Visibility => Visibility.Impostor;
         public override Team Team => Team.Impostor;
-        public override bool HasToDoTasks => true;
+        public override bool HasToDoTasks => false;
         public override int MaxCount => 3;
         public override bool CanVent => true;
         public override bool CanKill(PlayerControl victim = null) => !victim || !victim.Data.Role.IsImpostor;
