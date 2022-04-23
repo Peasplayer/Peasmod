@@ -3,7 +3,10 @@ using System.Linq;
 using HarmonyLib;
 using PeasAPI;
 using PeasAPI.Managers;
+using Reactor.Extensions;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace Peasmod.Patches
@@ -133,7 +136,47 @@ namespace Peasmod.Patches
                 __result = distance;
             }
         }
+        
+        public static bool UseHorseMode;
+        
+        [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
+        [HarmonyPostfix]
+        public static void HorseModeButtonPatch()
+        {
+            if (GameObject.Find("CreditsButton") != null)
+            {
+                var horseModeButton = Object.Instantiate(GameObject.Find("CreditsButton"), GameObject.Find("CreditsButton").transform.parent);
+                horseModeButton.name = "HorseModeButton";
+                horseModeButton.GetComponent<SpriteRenderer>().sprite = Utility.CreateSprite("Peasmod.Resources.Buttons.HorseModeButton.png", 95f);
+                horseModeButton.GetComponent<ButtonRolloverHandler>().Destroy();
+                var button = horseModeButton.GetComponent<PassiveButton>();
+                button.OnClick = new Button.ButtonClickedEvent();
+                button.OnClick.AddListener((UnityAction) OnClick);
 
+                void OnClick()
+                {
+                    UseHorseMode = !UseHorseMode;
+                    horseModeButton.GetComponent<SpriteRenderer>().material.SetColor("_Color", UseHorseMode ? Color.green : Color.white);
+                }
+            }
+            
+            if (GameObject.Find("HorseModeButton") != null)
+            {
+                var horseModeButton = GameObject.Find("HorseModeButton");
+                horseModeButton.name = "HorseModeButton";
+                horseModeButton.GetComponent<SpriteRenderer>().material
+                    .SetColor("_Color", UseHorseMode ? Color.green : Color.white);
+            }
+        }
+
+        [HarmonyPatch(typeof(Constants), nameof(Constants.ShouldHorseAround))]
+        [HarmonyPrefix]
+        public static bool UseHorseModePatch(out bool __result)
+        {
+            __result = UseHorseMode;
+            return false;
+        }
+        
         [HarmonyPatch]
         public static class CustomAnnouncementServerPatch
         {
