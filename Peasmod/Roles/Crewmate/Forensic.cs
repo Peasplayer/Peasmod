@@ -27,10 +27,10 @@ public class Forensic : BaseRole
     public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
     {
         {
-            "AnalyseCooldown", new CustomNumberOption("analysecooldown", "Analyse-Cooldown", 30, 180, 1, 30, NumberSuffixes.Seconds) {AdvancedRoleOption = true}
+            "AnalyseCooldown", new CustomNumberOption("analysecooldown", "Analyse-Cooldown", 30, 180, 5, 30, NumberSuffixes.Seconds) {AdvancedRoleOption = true}
         },
         {
-            "AnalyseDuration", new CustomNumberOption("analyseduration", "Analyse-Duration", 30, 180, 1, 30, NumberSuffixes.Seconds) {AdvancedRoleOption = true}
+            "AnalyseDuration", new CustomNumberOption("analyseduration", "Analyse-Duration", 30, 180, 5, 30, NumberSuffixes.Seconds) {AdvancedRoleOption = true}
         }/*,
         {
             "AnalyseCount", new CustomNumberOption("analysecount", "Analyses", 1, 15, 1, 2, NumberSuffixes.None) {AdvancedRoleOption = true}
@@ -45,7 +45,7 @@ public class Forensic : BaseRole
         BloodSample = Byte.MaxValue;
         Button = CustomButton.AddButton(() =>
             {
-                BloodSample = PlayerControl.LocalPlayer.FindClosestTarget(true).PlayerId;
+                BloodSample = Button.PlayerTarget.PlayerId;
             }, ((CustomNumberOption) AdvancedOptions["AnalyseCooldown"]).Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"),
             p => p.IsRole(this) && !p.Data.IsDead, p => PlayerControl.LocalPlayer.FindClosestTarget(true) != null, text: "<size=40%>Analyse\nBlood", textOffset: new Vector2(0f, 0.5f),
             onEffectEnd: () =>

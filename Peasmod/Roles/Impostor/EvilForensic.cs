@@ -28,7 +28,7 @@ public class EvilForensic : BaseRole
     public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
     {
         {
-            "PoisonCooldown", new CustomNumberOption("poisoncooldown", "Poison-Cooldown", 30, 180, 1, 30, NumberSuffixes.Seconds)
+            "PoisonCooldown", new CustomNumberOption("poisoncooldown", "Poison-Cooldown", 30, 180, 5, 30, NumberSuffixes.Seconds)
         },
         {
             "PoisonDuration", new CustomNumberOption("poisonduration", "Poison-Duration", 20, 60, 1, 20, NumberSuffixes.Seconds)
