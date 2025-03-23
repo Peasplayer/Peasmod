@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
+using Reactor.Utilities.Extensions;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomEndReason;
 using PeasAPI.Managers;
 using PeasAPI.Roles;
-using Reactor.Extensions;
 using UnityEngine;
 
 namespace Peasmod.Roles.Neutral
@@ -72,7 +72,7 @@ namespace Peasmod.Roles.Neutral
                     if (PlayerControl.LocalPlayer.Data.IsDead)
                         Targets.Remove(PlayerControl.LocalPlayer.PlayerId);
                     else
-                        Targets[PlayerControl.LocalPlayer.PlayerId].GetPlayer().nameText.text = Color.black.ToTextColor() +
+                        Targets[PlayerControl.LocalPlayer.PlayerId].GetPlayer().cosmetics.nameText.text = Color.black.ToTextColor() +
                             Targets[PlayerControl.LocalPlayer.PlayerId].GetPlayer().name + "\nTarget";
                 }
             }

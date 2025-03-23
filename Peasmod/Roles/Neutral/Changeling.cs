@@ -1,5 +1,6 @@
 ﻿using System.Linq;
-using BepInEx.IL2CPP;
+using AmongUs.GameOptions;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;

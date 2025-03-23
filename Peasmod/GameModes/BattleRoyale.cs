@@ -1,10 +1,11 @@
 ﻿using System.Linq;
-using BepInEx.IL2CPP;
+using AmongUs.GameOptions;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomEndReason;
 using PeasAPI.GameModes;
-using Reactor.Extensions;
+using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace Peasmod.GameModes

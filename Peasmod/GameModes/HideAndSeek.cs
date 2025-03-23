@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using PeasAPI;
 using PeasAPI.Components;
@@ -9,12 +9,12 @@ using PeasAPI.CustomEndReason;
 using PeasAPI.GameModes;
 using PeasAPI.Managers;
 using Peasmod.Roles.GameModes;
-using Reactor.Extensions;
-using Reactor.Networking;
-using Reactor.Networking.MethodRpc;
+using Reactor.Networking.Attributes;
+using Reactor.Networking.Rpc;
+using Reactor.Utilities;
+using Reactor.Utilities.Extensions;
 using TMPro;
 using UnityEngine;
-using Object = Il2CppSystem.Object;
 
 namespace Peasmod.GameModes
 {
@@ -26,7 +26,7 @@ namespace Peasmod.GameModes
             Instance = this;
         }
 
-        public override string Name => $"{PeasAPI.Utility.StringColor.Orange}Hide and Seek";
+        public override string Name => $"{Utility.StringColor.Orange}Hide and Seek";
 
         public override bool Enabled => GameModeManager.IsGameModeActive(this);
 
@@ -40,18 +40,18 @@ namespace Peasmod.GameModes
         
         public override bool AllowSabotage(SystemTypes? sabotage) => false;
 
-        private static bool IsFroozen = false;
+        private static bool IsFroozen;
         public static HideAndSeek Instance;
 
         private TextMeshPro _timeLeftText;
         public float TimeLeft = float.MaxValue;
-        public bool SeekingStarted = false;
+        public bool SeekingStarted;
 
         public override void OnGameStart()
         {
             SeekingStarted = false;
             TimeLeft = Settings.HideAndSeekSeekerDuration.Value;
-            Reactor.Coroutines.Start(CoStartGame());
+            Coroutines.Start(CoStartGame());
         }
 
         public override Data.CustomIntroScreen? GetIntroScreen(PlayerControl player)
@@ -105,7 +105,7 @@ namespace Peasmod.GameModes
 
         public override void OnKill(PlayerControl killer, PlayerControl victim)
         {
-            ShipStatus.RpcEndGame(GameOverReason.ImpostorByKill, false);
+            GameManager.Instance.RpcEndGame(GameOverReason.ImpostorByKill, false);
         }
 
         public override bool OnMeetingCall(PlayerControl caller, GameData.PlayerInfo target)

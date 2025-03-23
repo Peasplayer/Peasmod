@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.Roles;
@@ -54,7 +54,7 @@ namespace Peasmod.Roles.Crewmate
                         {
                             var dot = new GameObject();
                             var renderer = dot.AddComponent<SpriteRenderer>();
-                            renderer.sprite = PeasAPI.Utility.CreateSprite("Peasmod.Resources.Dot.png");
+                            renderer.sprite = Utility.CreateSprite("Peasmod.Resources.Dot.png");
                             dot.transform.localPosition = new Vector3(player.GetTruePosition().x, player.GetTruePosition().y, player.transform.position.z);
                             dot.GetComponent<SpriteRenderer>().material.color = Palette.PlayerColors[player.Data.DefaultOutfit.ColorId];
                             dots.Add(dot, Time.time);

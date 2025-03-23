@@ -1,8 +1,7 @@
 ﻿using System;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI.Components;
 using PeasAPI.GameModes;
-using Peasmod.Roles;
 using Peasmod.Roles.Crewmate;
 using Peasmod.Roles.Neutral;
 

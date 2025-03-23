@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Roles;
-using Reactor.Networking;
-using Reactor.Networking.MethodRpc;
+using Reactor.Networking.Attributes;
+using Reactor.Networking.Rpc;
 using UnityEngine;
 
 namespace Peasmod.Roles.Impostor
@@ -80,7 +80,7 @@ namespace Peasmod.Roles.Impostor
                         if (player.IsLocal())
                         {
                             CarryingBody = false;
-                            Button.SetImage(PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png"));
+                            Button.SetImage(Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png"));
                             RpcDragBody(PlayerControl.LocalPlayer, false, byte.MaxValue);
                         }
                         continue;

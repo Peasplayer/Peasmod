@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Managers;
 using PeasAPI.Options;
 using PeasAPI.Roles;
-using Reactor.Networking;
-using Reactor.Networking.MethodRpc;
+using Reactor.Networking.Attributes;
+
+using Reactor.Networking.Rpc;
 using UnityEngine;
 
 namespace Peasmod.Roles.Impostor
@@ -30,7 +31,7 @@ namespace Peasmod.Roles.Impostor
         public override Team Team => Team.Impostor;
         public override bool HasToDoTasks => false;
         public override int MaxCount => 3;
-        public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
+        public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>
         {
             {
                 "FreezeCooldown", new CustomNumberOption("freezecooldown", "Freezing-Cooldown", 20, 60, 1, 20, NumberSuffixes.Seconds)

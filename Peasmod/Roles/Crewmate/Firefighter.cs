@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Options;
 using PeasAPI.Roles;
-using Reactor.Networking.MethodRpc;
+using Reactor.Networking.Attributes;
 using UnityEngine;
 
 namespace Peasmod.Roles.Crewmate
@@ -25,7 +25,7 @@ namespace Peasmod.Roles.Crewmate
         public override Visibility Visibility => Visibility.NoOne;
         public override Team Team => Team.Crewmate;
         public override bool HasToDoTasks => true;
-        public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
+        public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>
         {
             {
                 "FixCooldown", new CustomNumberOption("FirefighterFixCooldown", "Fix-Cooldown", 20, 60, 1, 20, NumberSuffixes.Seconds)
@@ -54,7 +54,7 @@ namespace Peasmod.Roles.Crewmate
         {
             try
             {
-                var systems = new SystemTypes[]
+                var systems = new[]
                 {
                     SystemTypes.Electrical,
                     SystemTypes.Comms,

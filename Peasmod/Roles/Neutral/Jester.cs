@@ -1,4 +1,4 @@
-﻿using BepInEx.IL2CPP;
+﻿using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using PeasAPI;
 using PeasAPI.Components;

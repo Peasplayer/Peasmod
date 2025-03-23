@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Text;
 using HarmonyLib;
 using PeasAPI;
-using Reactor.Extensions;
+using Reactor.Utilities.Extensions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;

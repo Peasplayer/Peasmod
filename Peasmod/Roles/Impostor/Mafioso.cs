@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using BepInEx.IL2CPP;
+using AmongUs.GameOptions;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
@@ -26,7 +27,7 @@ namespace Peasmod.Roles.Impostor
         public override bool HasToDoTasks => false;
 
         public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } =
-            new Dictionary<string, CustomOption>()
+            new Dictionary<string, CustomOption>
             {
                 {
                     "RecruitCooldown", new CustomNumberOption("MafiosoRecruitCooldown", "Recruit Cooldown", 20f, 120f, 1f, 30f, NumberSuffixes.Seconds)

@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Options;
 using PeasAPI.Roles;
-using Reactor.Networking.MethodRpc;
+using Reactor.Networking.Attributes;
 using UnityEngine;
 
 namespace Peasmod.Roles.Impostor
@@ -28,10 +28,10 @@ namespace Peasmod.Roles.Impostor
         public override Team Team => Team.Impostor;
         public override bool HasToDoTasks => false;
         public override int MaxCount => 3;
-        public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
+        public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>
         {
             {
-                "VentBuildingCooldown", new CustomNumberOption("ventbuildingcooldown", $"Vent-Building-Cooldown", 10, 30, 1, 10, NumberSuffixes.Seconds)
+                "VentBuildingCooldown", new CustomNumberOption("ventbuildingcooldown", "Vent-Building-Cooldown", 10, 30, 1, 10, NumberSuffixes.Seconds)
             }
         };
         public override bool CanVent => true;
@@ -47,7 +47,7 @@ namespace Peasmod.Roles.Impostor
             {
                 var pos = PlayerControl.LocalPlayer.transform.position;
                 RpcCreateVent(PlayerControl.LocalPlayer, pos.x, pos.y, pos.z);
-            }, ((CustomNumberOption) AdvancedOptions["VentBuildingCooldown"]).Value, PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png", 552f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Build");
+            }, ((CustomNumberOption) AdvancedOptions["VentBuildingCooldown"]).Value, Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png", 552f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Build");
         }
 
         public override void OnUpdate()

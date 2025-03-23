@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
@@ -25,7 +25,7 @@ public class EvilForensic : BaseRole
     public override Team Team => Team.Impostor;
     public override bool HasToDoTasks => false;
     public override int MaxCount => 3;
-    public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
+    public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>
     {
         {
             "PoisonCooldown", new CustomNumberOption("poisoncooldown", "Poison-Cooldown", 30, 180, 1, 30, NumberSuffixes.Seconds)

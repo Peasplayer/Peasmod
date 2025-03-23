@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Options;
 using PeasAPI.Roles;
-using Reactor.Networking.MethodRpc;
+using Reactor.Networking.Attributes;
 using UnityEngine;
 
 namespace Peasmod.Roles.Crewmate
@@ -26,7 +26,7 @@ namespace Peasmod.Roles.Crewmate
         public override Visibility Visibility => Visibility.NoOne;
         public override Team Team => Team.Crewmate;
         public override bool HasToDoTasks => true;
-        public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
+        public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>
         {
             {
                 "ArrestCooldown", new CustomNumberOption("officercooldown", "Arrest-Cooldown", 10, 60, 1, 20, NumberSuffixes.Seconds)
@@ -35,10 +35,10 @@ namespace Peasmod.Roles.Crewmate
                 "ArrestPeriod", new CustomStringOption("officerarrestperiod", "Arrest-Period", "Seconds", "Until Meeting")
             },
             {
-                "ArrestDuration", new CustomNumberOption("officerduration", $"Arrest-Duration", 10, 120, 1, 30, NumberSuffixes.Seconds)
+                "ArrestDuration", new CustomNumberOption("officerduration", "Arrest-Duration", 10, 120, 1, 30, NumberSuffixes.Seconds)
             },
             {
-                "PossibleKills", new CustomNumberOption("officerkills", $"Number of Kills", 0, 10, 1, 10, NumberSuffixes.None)
+                "PossibleKills", new CustomNumberOption("officerkills", "Number of Kills", 0, 10, 1, 10, NumberSuffixes.None)
             }
         };
 

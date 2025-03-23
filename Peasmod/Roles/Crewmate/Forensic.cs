@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
@@ -24,7 +24,7 @@ public class Forensic : BaseRole
     public override Visibility Visibility => Visibility.NoOne;
     public override Team Team => Team.Crewmate;
     public override bool HasToDoTasks => true;
-    public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
+    public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>
     {
         {
             "AnalyseCooldown", new CustomNumberOption("analysecooldown", "Analyse-Cooldown", 30, 180, 1, 30, NumberSuffixes.Seconds) {AdvancedRoleOption = true}

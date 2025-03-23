@@ -1,10 +1,9 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
-using BepInEx.IL2CPP;
 using HarmonyLib;
 using Reactor;
 using BepInEx.Logging;
-using PeasAPI;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI.Managers;
 using UnityEngine;
 
@@ -20,7 +19,7 @@ namespace Peasmod
 
         public const string PluginName = "Peasmod";
         public const string PluginAuthor = "Peasplayer#2541";
-        public const string PluginVersion = "3.0.0-pre2.1";
+        public const string PluginVersion = "3.0.0-pre2.3";
 
         public Harmony Harmony { get; } = new Harmony(Id);
         
@@ -33,12 +32,15 @@ namespace Peasmod
             Logger = Log;
             ConfigFile = Config;
 
-            WatermarkManager.AddWatermark($" | {PluginName} v{PluginVersion} {PeasAPI.Utility.StringColor.Green} by {PluginAuthor}", $" | {PluginName} v{PluginVersion}\n{PeasAPI.Utility.StringColor.Green} by {PluginAuthor}", 
+            WatermarkManager.AddWatermark($" | {PluginName} v{PluginVersion} {PeasAPI.Utility.StringColor.Green} by {PluginAuthor}", $"\n{PluginName} v{PluginVersion}\n{PeasAPI.Utility.StringColor.Green} by {PluginAuthor}", 
                 new Vector3(0f, -0.3f),  new Vector3(-0.9f, 0f));
             
-            CustomServerManager.RegisterServer("Peaspowered", "au.peasplayer.tk", 22023);
-            CustomServerManager.RegisterServer("matux.fr", "152.228.160.91", 22023);
-            CustomServerManager.RegisterServer("Miniduikboot's Server", "impostor.duikbo.at", 22023);
+            //CustomServerManager.RegisterServer("Peaspowered", "au.peasplayer.tk", 22023);
+            CustomServerManager.RegisterServer("Fungle.ICU (HK)", "https://auhk.fungle.icu", 443);
+            CustomServerManager.RegisterServer("Fungle.ICU (SQ)", "https://player.fungle.icu", 443);
+            CustomServerManager.RegisterServer("Modded EU (MEU)", "https://au-eu.duikbo.at", 443);
+            CustomServerManager.RegisterServer("Modded NA (MNA)", "https://www.aumods.org", 443);
+            CustomServerManager.RegisterServer("Modded Asia (MAS)", "https://au-as.duikbo.at", 443);
             
             UpdateManager.RegisterGitHubUpdateListener("Peasplayer", "Peasmod");
             

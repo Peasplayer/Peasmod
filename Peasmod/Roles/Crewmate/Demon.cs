@@ -1,15 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Options;
 using PeasAPI.Roles;
-using Reactor;
-using Reactor.Extensions;
-using Reactor.Networking.MethodRpc;
+using Reactor.Networking.Attributes;
+using Reactor.Utilities;
+using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace Peasmod.Roles.Crewmate
@@ -31,7 +31,7 @@ namespace Peasmod.Roles.Crewmate
         public override Visibility Visibility => Visibility.NoOne;
         public override Team Team => Team.Crewmate;
         public override bool HasToDoTasks => true;
-        public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
+        public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>
         {
             {
                 "AbilityCooldown", new CustomNumberOption("demoncooldown", "Demon-Ability-Cooldown", 10, 60, 1, 20, NumberSuffixes.Seconds)
@@ -89,7 +89,7 @@ namespace Peasmod.Roles.Crewmate
         {
             if (deathOrRevive)
             {
-                sender.Die(DeathReason.Kill);
+                sender.Die(DeathReason.Kill, false);
             }
             else
             {

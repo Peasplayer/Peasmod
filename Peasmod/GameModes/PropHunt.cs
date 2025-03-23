@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using PeasAPI;
 using PeasAPI.Components;
@@ -12,10 +12,10 @@ using PeasAPI.CustomEndReason;
 using PeasAPI.GameModes;
 using PeasAPI.Managers;
 using Peasmod.Roles.GameModes;
-using Reactor;
-using Reactor.Extensions;
-using Reactor.Networking;
-using Reactor.Networking.MethodRpc;
+using Reactor.Networking.Attributes;
+using Reactor.Networking.Rpc;
+using Reactor.Utilities;
+using Reactor.Utilities.Extensions;
 using TMPro;
 using UnityEngine;
 
@@ -45,12 +45,12 @@ namespace Peasmod.GameModes
         public override bool AllowSabotage(SystemTypes? sabotage) => false;
 
         private static PropHunt Instance;
-        private static bool IsFroozen = false;
+        private static bool IsFroozen;
 
         private TextMeshPro _timeLeftText;
         public float TimeLeft = float.MaxValue;
         public float ClickCooldown;
-        public bool SeekingStarted = false;
+        public bool SeekingStarted;
         public List<int> Objects = new List<int>();
         public CustomButton UnmorphButton;
         
@@ -72,7 +72,7 @@ namespace Peasmod.GameModes
             
             SeekingStarted = false;
             TimeLeft = Settings.PropHuntSeekerDuration.Value;
-            Reactor.Coroutines.Start(CoStartGame());
+            Coroutines.Start(CoStartGame());
         }
 
         public override Data.CustomIntroScreen? GetIntroScreen(PlayerControl player)
@@ -135,7 +135,7 @@ namespace Peasmod.GameModes
         {
             if (victim.IsLocal())
                 RpcRemoveProp(PlayerControl.LocalPlayer, victim);
-            ShipStatus.RpcEndGame(GameOverReason.ImpostorByKill, false);
+            GameManager.Instance.RpcEndGame(GameOverReason.ImpostorByKill, false);
         }
 
         public override bool OnMeetingCall(PlayerControl caller, GameData.PlayerInfo target)

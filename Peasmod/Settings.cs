@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using PeasAPI;
 using PeasAPI.Options;
-using UnhollowerBaseLib;
 using UnityEngine;
 
 namespace Peasmod
@@ -40,10 +40,10 @@ namespace Peasmod
             new CustomOptionButton("ModeSettings", "˅ GameModes", false);
 
         public static CustomOptionHeader ModesHeader =
-            new CustomOptionHeader($"GameModes");
+            new CustomOptionHeader("GameModes");
 
         public static CustomOptionHeader HideAndSeek =
-            new CustomOptionHeader($"Hide and Seek");
+            new CustomOptionHeader("Hide and Seek");
 
         public static readonly CustomNumberOption HideAndSeekSeekerCooldown =
             new CustomNumberOption("hideandseekseekercooldown", "• Seeker-Cooldown", 20, 60, 1, 20, NumberSuffixes.Seconds);
@@ -55,7 +55,7 @@ namespace Peasmod
             new CustomToggleOption("hideandseekseekerventing", "• Can Seeker Vent", false);
         
         public static CustomOptionHeader PropHunt =
-            new CustomOptionHeader($"PropHunt");
+            new CustomOptionHeader("PropHunt");
 
         public static readonly CustomNumberOption PropHuntSeekerCooldown =
             new CustomNumberOption("prophuntseekercooldown", "• Seeker-Cooldown", 20, 60, 1, 20, NumberSuffixes.Seconds);
@@ -67,25 +67,25 @@ namespace Peasmod
             new CustomNumberOption("prophuntseekerclickcooldown", "• Seeker-Click-Cooldown", 1, 60, 1, 5, NumberSuffixes.Seconds);
 
         public static CustomOptionHeader GodImpostor =
-            new CustomOptionHeader($"God Impostor");
+            new CustomOptionHeader("God Impostor");
 
         public static readonly CustomToggleOption VentBuilding =
-            new CustomToggleOption("ventbuilding", $"• Vent-Building", false);
+            new CustomToggleOption("ventbuilding", "• Vent-Building", false);
 
         public static readonly CustomToggleOption BodyDragging =
-            new CustomToggleOption("bodydragging", $"• Body-Dragging", false);
+            new CustomToggleOption("bodydragging", "• Body-Dragging", false);
 
         public static readonly CustomToggleOption Invisibility =
-            new CustomToggleOption("invisibility", $"• Invisibility", false);
+            new CustomToggleOption("invisibility", "• Invisibility", false);
 
         public static readonly CustomToggleOption Freeze =
-            new CustomToggleOption("freeze", $"• Freezing", false);
+            new CustomToggleOption("freeze", "• Freezing", false);
 
         public static readonly CustomToggleOption Morphing =
-            new CustomToggleOption("morphing", $"• Morphing", false);
+            new CustomToggleOption("morphing", "• Morphing", false);
 
         public static readonly CustomNumberOption MorphingCooldown =
-            new CustomNumberOption("morphingcooldown", $"└ Morphing-Cooldown", 20, 60, 1, 20, NumberSuffixes.Seconds);
+            new CustomNumberOption("morphingcooldown", "\u2514 Morphing-Cooldown", 20, 60, 1, 20, NumberSuffixes.Seconds);
 
         public static void Load()
         {

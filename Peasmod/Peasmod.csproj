@@ -1,23 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <VersionPrefix>3.0.0</VersionPrefix>
-        <VersionSuffix>pre2.1</VersionSuffix>
+        <VersionSuffix>pre2.3</VersionSuffix>
         <Description>Peasmod</Description>
         <Authors>Peasplayer</Authors>
         <LangVersion>preview</LangVersion>
-
-        <GameVersion Condition="'$(GamePlatform)' == 'Steam'">2022.3.29</GameVersion>
-        <GameVersion Condition="'$(GamePlatform)' == 'Itch'">2022.3.29</GameVersion>
+        <DebugType>embedded</DebugType>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="PeasAPI" Version="1.8.3-release" />
-        <!--<Reference Include="$(AmongUs)\BepInEx\plugins\PeasAPI.dll" />-->
-        <PackageReference Include="Reactor" Version="1.1.0" />
-        <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="1.0.2" PrivateAssets="all" />
-        <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-be.553" />
-        <PackageReference Include="AmongUs.GameLibs.$(GamePlatform)" Version="$(GameVersion)" PrivateAssets="all" />
+        <!--<PackageReference Include="PeasAPI" Version="1.8.3-release" />-->
+        <Reference Include="E:\Desktop\Peasplayer\PeasAPI-R\PeasAPI\bin\Debug\net6.0\PeasAPI.dll" />
+        <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.664" />
+        <PackageReference Include="Reactor" Version="2.1.0" />
+        <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="2.1.0-rc.1" PrivateAssets="all" />
+        <PackageReference Include="AmongUs.GameLibs.Steam" Version="2023.3.28" PrivateAssets="all" />
     </ItemGroup>
 
     <Target Name="Copy" AfterTargets="Build">

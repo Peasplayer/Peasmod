@@ -2,7 +2,7 @@
 using Il2CppSystem.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
-using Reactor.Extensions;
+using Reactor.Utilities.Extensions;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 

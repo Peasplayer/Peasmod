@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
@@ -25,7 +25,7 @@ namespace Peasmod.Roles.Crewmate
         public override Visibility Visibility => Visibility.NoOne;
         public override Team Team => Team.Crewmate;
         public override bool HasToDoTasks => true;
-        public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
+        public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>
         {
             {
                 "InvisibilityCooldown", new CustomNumberOption("cloakcooldown", "Invisibility-Cooldown", 20, 60, 1, 20, NumberSuffixes.Seconds)

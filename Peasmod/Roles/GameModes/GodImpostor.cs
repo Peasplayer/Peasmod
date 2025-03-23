@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
@@ -53,7 +53,7 @@ namespace Peasmod.Roles.GameModes
                     PlayerMenuManager.OpenPlayerMenu(PlayerControl.AllPlayerControls.ToArray().ToList().ConvertAll(p => p.PlayerId),
                         player => PlayerControl.LocalPlayer.RpcShapeshift(player, false), () => MorphButton.SetCoolDown(0));
                 }, Settings.MorphingCooldown.Value,
-                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Morph.png", 737f), p => p.IsRole(this) && !p.Data.IsDead, _ => true,
+                Utility.CreateSprite("Peasmod.Resources.Buttons.Morph.png", 737f), p => p.IsRole(this) && !p.Data.IsDead, _ => true,
                 text: "<size=40%>Morph");
             MorphButton.Enabled = MorphButton.Visible = Settings.Morphing.Value;
 
@@ -61,7 +61,7 @@ namespace Peasmod.Roles.GameModes
                 () =>
                 { PlayerControl.LocalPlayer.RpcCreateVent(); },
                 ((CustomNumberOption) PeasAPI.Roles.RoleManager.GetRole<EvilBuilder>().AdvancedOptions["VentBuildingCooldown"]).Value,
-                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png", 552f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Build");
+                Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png", 552f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Build");
             VentBuildButton.Enabled = VentBuildButton.Visible = Settings.VentBuilding.Value;
 
             DragBodyButton = CustomButton.AddButton(() =>
@@ -121,7 +121,7 @@ namespace Peasmod.Roles.GameModes
                         var player = Undertaker.Instance.CarriedBodys.Keys.ToArray()[i].GetPlayer();
                         var body = Undertaker.Instance.CarriedBodys.Values.ToArray()[i];
 
-                        var bodyObject = UnityEngine.Object.FindObjectsOfType<DeadBody>()
+                        var bodyObject = Object.FindObjectsOfType<DeadBody>()
                             .Where(_body => _body.ParentId == body).ToList();
                         if (bodyObject.Count == 0)
                         {
