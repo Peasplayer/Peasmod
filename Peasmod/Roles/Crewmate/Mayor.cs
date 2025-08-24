@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using Il2CppSystem.Collections.Generic;
 using PeasAPI;
@@ -36,14 +36,14 @@ namespace Peasmod.Roles.Crewmate
                         int num = results[playerVoteArea.VotedFor];
                         results[playerVoteArea.VotedFor] = num + 1;
 
-                        if (playerVoteArea.TargetPlayerId.GetPlayer().IsRole<Mayor>())
+                        if (playerVoteArea.TargetPlayerId.GetPlayer().IsCustomRole<Mayor>())
                             results[playerVoteArea.VotedFor] = num + 2;
                     }
                     else
                     {
                         results[playerVoteArea.VotedFor] = 1;
 
-                        if (playerVoteArea.TargetPlayerId.GetPlayer().IsRole<Mayor>())
+                        if (playerVoteArea.TargetPlayerId.GetPlayer().IsCustomRole<Mayor>())
                             results[playerVoteArea.VotedFor] = 2;
                     }
                 }
@@ -62,7 +62,7 @@ namespace Peasmod.Roles.Crewmate
                     Dictionary<byte, int> self = CalculateVotes(__instance);
                     bool tie;
                     KeyValuePair<byte, int> max = global::Extensions.MaxPair(self, out tie);
-                    GameData.PlayerInfo exiled = GameData.Instance.AllPlayers.ToArray()
+                    NetworkedPlayerInfo exiled = GameData.Instance.AllPlayers.ToArray()
                         .FirstOrDefault(v => !tie && v.PlayerId == max.Key);
                     MeetingHud.VoterState[] array = new MeetingHud.VoterState[__instance.playerStates.Length];
                     for (int i = 0; i < __instance.playerStates.Length; i++)

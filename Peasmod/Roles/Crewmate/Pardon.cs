@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Options;
 using PeasAPI.Roles;
-using Reactor.Networking.MethodRpc;
+using Reactor.Networking.Attributes;
 using UnityEngine;
 
 namespace Peasmod.Roles.Crewmate
@@ -28,10 +28,10 @@ namespace Peasmod.Roles.Crewmate
         public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
         {
             {
-                "PardonCooldown", new CustomNumberOption("PardonCooldown", "Pardon-Cooldown", 20, 60, 1, 20, NumberSuffixes.Seconds)
+                "PardonCooldown", new CustomNumberOption(MultiMenu.Crewmate, "Pardon-Cooldown", 20, 60, 1, 20, CustomOption.Seconds)
             },
             {
-                "PardonMaxUses", new CustomNumberOption("PardonMaxUses", "Maximum of Pardons", 1, 10, 1, 2, NumberSuffixes.None)
+                "PardonMaxUses", new CustomNumberOption(MultiMenu.Crewmate, "Maximum of Pardons", 1, 10, 1, 2)
             }
         };
 
@@ -49,7 +49,7 @@ namespace Peasmod.Roles.Crewmate
                     var player = LastExiled.GetPlayer();
                     RpcRevive(PlayerControl.LocalPlayer, player);
                 },
-                ((CustomNumberOption) AdvancedOptions["PardonCooldown"]).Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), p => p.IsRole(this) && !p.Data.IsDead, 
+                ((CustomNumberOption) AdvancedOptions["PardonCooldown"]).Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), p => p.IsCustomRole(this) && !p.Data.IsDead, 
                 _ => LastExiled != byte.MaxValue && !LastExiled.GetPlayer().Data.Disconnected && TimesExiled < ((CustomNumberOption) AdvancedOptions["PardonMaxUses"]).Value, text: "<size=40%>Pardon");
         }
 

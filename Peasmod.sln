@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31005.135
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36301.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Peasmod", "Peasmod\Peasmod.csproj", "{11FBC798-BAF5-4EE5-9511-BE6DB0592F99}"
 EndProject
@@ -15,14 +15,6 @@ Global
 		{11FBC798-BAF5-4EE5-9511-BE6DB0592F99}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11FBC798-BAF5-4EE5-9511-BE6DB0592F99}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11FBC798-BAF5-4EE5-9511-BE6DB0592F99}.Release|Any CPU.Build.0 = Release|Any CPU
-		{955B6B32-A47A-4CEC-A525-C831B2800417}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{955B6B32-A47A-4CEC-A525-C831B2800417}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{955B6B32-A47A-4CEC-A525-C831B2800417}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{955B6B32-A47A-4CEC-A525-C831B2800417}.Release|Any CPU.Build.0 = Release|Any CPU
-		{25EC76B5-CF94-4950-9FD5-D90B77513066}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{25EC76B5-CF94-4950-9FD5-D90B77513066}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{25EC76B5-CF94-4950-9FD5-D90B77513066}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{25EC76B5-CF94-4950-9FD5-D90B77513066}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

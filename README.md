@@ -9,6 +9,12 @@ Play with the classic roles and gamemodes. Currently it contains 13 roles and 3 
 # Releases
 | Mod Version| Game Version | Link |
 |----------|-------------|-----------------|
+| 16.1.0s & 16.0.5s| 3.1.0| [Download](https://github.com/fangkuaiclub/Peasmod-R/releases/download/3.1.0/Peasmod.zip)
+| 16.1.0s & 16.0.5s| 3.0.0-pre2.3| [Download](https://github.com/fangkuaiclub/Peasmod-R/releases/download/3.0.0-pre2.3/Peasmod.zip)
+| 2022.3.29s| 3.0.0-pre2.2| [Download](https://github.com/Peasplayer/Peasmod/releases/download/3.0.0-pre2.2/Peasmod.zip)
+| 2022.2.24s| 3.0.0-pre2.1| [Download](https://github.com/Peasplayer/Peasmod/releases/download/3.0.0-pre2.1/Peasmod.zip)
+| 2021.12.14s| 3.0.0-pre2| [Download](https://github.com/Peasplayer/Peasmod/releases/download/3.0.0-pre2/Peasmod.zip)
+| 2021.12.14s| 3.0.0-pre1.1| [Download](https://github.com/Peasplayer/Peasmod/releases/download/3.0.0-pre1.1/Peasmod.zip)
 | 2021.11.9.5s| 3.0.0-pre1| [Download](https://github.com/Peasplayer/Peasmod/releases/download/3.0.0-pre1/Peasmod.zip)
 | 2021.6.30s| 2.1.6| [Download](https://github.com/Peasplayer/Peasmod/releases/download/2.1.6/Peasmod.zip)
 | 2021.6.15s| 2.1.4| [Download](https://github.com/Peasplayer/Peasmod/releases/download/2.1.4/Peasmod-2.1.4.zip)
@@ -20,7 +26,7 @@ Play with the classic roles and gamemodes. Currently it contains 13 roles and 3 
 
 > **Note**: All versions below 2.0.0 are buggy and should not be used at all. All versions below 3.0.0 are badly written and buggy. They can be used but it's not recomended.
 # GameModes
-## BattleRoyale
+## Battle Royale
 Everyone against everyone! Your goal is to kill everyone else and be the last one standing.
 ## Hide and Seek
 Hide from the seekers! The hiders get a head start before the seekers have a certain time to find them. The seekers win if they manage to find every player and kill them, the hiders win if the time rans out. For balancing purposes, the seeker is a bit faste so watch out!

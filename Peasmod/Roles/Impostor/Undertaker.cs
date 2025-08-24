@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Roles;
-using Reactor.Networking;
-using Reactor.Networking.MethodRpc;
+using Reactor.Networking.Attributes;
+using Reactor.Networking.Rpc;
 using UnityEngine;
 
 namespace Peasmod.Roles.Impostor
@@ -58,7 +58,7 @@ namespace Peasmod.Roles.Impostor
                     Button.Text = "<size=40%>Drop";
                     RpcDragBody(PlayerControl.LocalPlayer, true, Button.ObjectTarget.GetComponent<DeadBody>().ParentId);
                 }
-            }, 0f, Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Drag",
+            }, 0f, Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f), p => p.IsCustomRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Drag",
                 target: CustomButton.TargetType.Object, targetColor: Color, chooseObjectTarget: o => o.GetComponent<DeadBody>() != null);
         }
         
@@ -93,7 +93,7 @@ namespace Peasmod.Roles.Impostor
 
         public override void OnMeetingStart(MeetingHud meeting)
         {
-            if (PlayerControl.LocalPlayer.IsRole(this) && CarryingBody)
+            if (PlayerControl.LocalPlayer.IsCustomRole(this) && CarryingBody)
             {
                 CarryingBody = false;
                 Button.SetImage(Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png"));

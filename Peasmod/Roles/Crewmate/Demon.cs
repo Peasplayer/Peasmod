@@ -1,15 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Options;
 using PeasAPI.Roles;
-using Reactor;
-using Reactor.Extensions;
-using Reactor.Networking.MethodRpc;
+using Reactor.Networking.Attributes;
+using Reactor.Utilities;
+using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace Peasmod.Roles.Crewmate
@@ -34,10 +34,10 @@ namespace Peasmod.Roles.Crewmate
         public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
         {
             {
-                "AbilityCooldown", new CustomNumberOption("demoncooldown", "Demon-Ability-Cooldown", 10, 60, 1, 20, NumberSuffixes.Seconds)
+                "AbilityCooldown", new CustomNumberOption(MultiMenu.Crewmate, "Demon-Ability-Cooldown", 10, 60, 1, 20, CustomOption.Seconds)
             },
             {
-                "AbilityDuration", new CustomNumberOption("demonduration", "Demon-Ability-Duration", 10, 60, 1, 10, NumberSuffixes.Seconds)
+                "AbilityDuration", new CustomNumberOption(MultiMenu.Crewmate, "Demon-Ability-Duration", 10, 60, 1, 10, CustomOption.Seconds)
             }
         };
 
@@ -56,7 +56,7 @@ namespace Peasmod.Roles.Crewmate
                     PlayerControl.LocalPlayer.gameObject.layer = LayerMask.NameToLayer("Players");
                     Coroutines.Start(CoStartDemonAbility(((CustomNumberOption) AdvancedOptions["AbilityDuration"]).Value));
                 }, ((CustomNumberOption) AdvancedOptions["AbilityCooldown"]).Value,
-                Utility.CreateSprite("Peasmod.Resources.Buttons.SwapAfterlife.png", 650f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Swap");
+                Utility.CreateSprite("Peasmod.Resources.Buttons.SwapAfterlife.png", 650f), p => p.IsCustomRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Swap");
         }
 
         private IEnumerator CoStartDemonAbility(float cooldown)
@@ -76,7 +76,7 @@ namespace Peasmod.Roles.Crewmate
         {
             public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl victim)
             {
-                if (victim.IsRole<Demon>() && victim.IsLocal() && Instance.Button != null)
+                if (victim.IsCustomRole<Demon>() && victim.IsLocal() && Instance.Button != null)
                 {
                     Instance.Button.KillButtonManager.Destroy();
                     Instance.Button = null;
@@ -89,7 +89,7 @@ namespace Peasmod.Roles.Crewmate
         {
             if (deathOrRevive)
             {
-                sender.Die(DeathReason.Kill);
+                sender.Die(DeathReason.Kill, false);
             }
             else
             {
@@ -105,7 +105,7 @@ namespace Peasmod.Roles.Crewmate
             public static void RemoveButtonOnActualDeath(PlayerControl __instance,
                 [HarmonyArgument(0)] PlayerControl victim)
             {
-                if (victim.IsRole<Demon>() && victim.IsLocal() && Instance.Button != null)
+                if (victim.IsCustomRole<Demon>() && victim.IsLocal() && Instance.Button != null)
                 {
                     Instance.Button.KillButtonManager.Destroy();
                     Instance.Button = null;
@@ -116,7 +116,7 @@ namespace Peasmod.Roles.Crewmate
             [HarmonyPrefix]
             public static void ReviveDemonBeforeMeeting(MeetingHud __instance)
             {
-                if (PlayerControl.LocalPlayer.IsRole<Demon>() && Instance.IsSwaped)
+                if (PlayerControl.LocalPlayer.IsCustomRole<Demon>() && Instance.IsSwaped)
                 {
                     Coroutines.Stop(Instance.CoStartDemonAbility(((CustomNumberOption) Instance.AdvancedOptions["AbilityDuration"]).Value));
                     PlayerControl.LocalPlayer.Revive();

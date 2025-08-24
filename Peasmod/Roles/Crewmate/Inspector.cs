@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.Roles;
@@ -29,7 +29,7 @@ namespace Peasmod.Roles.Crewmate
         public override void OnGameStart()
         {
             Dots.Clear();
-            if (PlayerControl.LocalPlayer.IsRole<Inspector>())
+            if (PlayerControl.LocalPlayer.IsCustomRole<Inspector>())
             {
                 foreach (var player in GameData.Instance.AllPlayers)
                     Dots.Add(player.PlayerId, new Dictionary<GameObject, float>());
@@ -50,7 +50,7 @@ namespace Peasmod.Roles.Crewmate
                 {
                     if (!player.Data.IsDead && !player.Data.Disconnected)
                     {
-                        if (PlayerControl.LocalPlayer.IsRole<Inspector>())
+                        if (PlayerControl.LocalPlayer.IsCustomRole<Inspector>())
                         {
                             var dot = new GameObject();
                             var renderer = dot.AddComponent<SpriteRenderer>();

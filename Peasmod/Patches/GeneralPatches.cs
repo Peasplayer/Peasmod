@@ -1,12 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
+using AmongUs.Data.Player;
 using HarmonyLib;
 using PeasAPI;
 using PeasAPI.Managers;
-using Reactor.Extensions;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace Peasmod.Patches
@@ -53,31 +50,37 @@ namespace Peasmod.Patches
         [HarmonyPostfix]
         public static void AddSpectatorButtonPatch(PlayerControl __instance)
         {
-            if (__instance.IsLocal() && HudManager.Instance.transform.FindChild("Buttons").FindChild("TopRight").FindChild("SpectatorButton") ==
-                null)
+            if (AmongUsClient.Instance.IsGameStarted)
             {
-                var spectatorButton = Object.Instantiate(HudManager.Instance.transform.FindChild("Buttons")
-                    .FindChild("TopRight").FindChild("MapButton").gameObject, HudManager.Instance.transform.FindChild("Buttons")
-                    .FindChild("TopRight"));
-                spectatorButton.name = "SpectatorButton";
-                var aspect = spectatorButton.GetComponent<AspectPosition>();
-                aspect.DistanceFromEdge = new Vector3(0.4f, 1.7f);
-                aspect.AdjustPosition();
-                var button = spectatorButton.GetComponent<ButtonBehavior>();
-                button.OnClick.RemoveAllListeners();
-                button.OnClick.AddListener((UnityEngine.Events.UnityAction) Listener);
-                void Listener()
+                if (__instance.IsLocal() && HudManager.Instance.transform.FindChild("Buttons").FindChild("TopRight").FindChild("SpectatorButton") ==
+                    null)
                 {
-                    PlayerMenuManager.OpenPlayerMenu(
-                        Utility.GetAllPlayers().Where(player => !player.IsLocal()).ToList()
-                            .ConvertAll(player => player.PlayerId), player => PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(player.transform.position), () => { });
+                    var spectatorButton = Object.Instantiate(HudManager.Instance.transform.FindChild("Buttons")
+                        .FindChild("TopRight").FindChild("MapButton").gameObject, HudManager.Instance.transform.FindChild("Buttons")
+                        .FindChild("TopRight"));
+                    spectatorButton.name = "SpectatorButton";
+                    var aspect = spectatorButton.GetComponent<AspectPosition>();
+                    aspect.DistanceFromEdge = new Vector3(0.4f, 1.7f);
+                    aspect.AdjustPosition();
+                    var button = spectatorButton.GetComponent<PassiveButton>();
+                    button.OnClick.RemoveAllListeners();
+                    button.OnClick.AddListener((UnityEngine.Events.UnityAction)Listener);
+                    void Listener()
+                    {
+                        PlayerMenuManager.OpenPlayerMenu(
+                            Utility.GetAllPlayers().Where(player => !player.IsLocal()).ToList()
+                                .ConvertAll(player => player.PlayerId), player => PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(player.transform.position), () => { });
+                    }
+                    SpriteRenderer renderer = spectatorButton.transform.Find("Inactive").GetComponent<SpriteRenderer>();
+                    SpriteRenderer rendererActive = spectatorButton.transform.Find("Active").GetComponent<SpriteRenderer>();
+                    spectatorButton.transform.Find("Background").localPosition = Vector3.zero;
+                    renderer.sprite = Utility.CreateSprite("Peasmod.Resources.Buttons.SpectatorButton.png", 100f);
+                    rendererActive.sprite = Utility.CreateSprite("Peasmod.Resources.Buttons.SpectatorButtonActive.png", 100);
                 }
-                spectatorButton.GetComponent<SpriteRenderer>().sprite =
-                    Utility.CreateSprite("Peasmod.Resources.Buttons.SpectatorButton.png", 100f);
-            }
-            else
-            {
-                HudManager.Instance.transform.FindChild("Buttons").FindChild("TopRight").FindChild("SpectatorButton").gameObject.SetActive(true);
+                else
+                {
+                    HudManager.Instance.transform.FindChild("Buttons").FindChild("TopRight").FindChild("SpectatorButton").gameObject.SetActive(true);
+                }
             }
         }
         
@@ -98,13 +101,10 @@ namespace Peasmod.Patches
         {
             if (PeasAPI.PeasAPI.GameStarted && !Settings.Sabotaging.Value)
             {
-                HudManager.Instance.ShowMap((Action<MapBehaviour>)(map =>
+                foreach (MapRoom mapRoom in __instance.infectedOverlay.rooms.ToArray())
                 {
-                    foreach (MapRoom mapRoom in map.infectedOverlay.rooms.ToArray())
-                    {
-                        mapRoom.gameObject.SetActive(false);
-                    }
-                }));
+                    mapRoom.gameObject.SetActive(false);
+                }
 
                 //return false;
             }
@@ -137,45 +137,6 @@ namespace Peasmod.Patches
             }
         }
         
-        public static bool UseHorseMode;
-        
-        [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
-        [HarmonyPostfix]
-        public static void HorseModeButtonPatch()
-        {
-            if (GameObject.Find("CreditsButton") != null)
-            {
-                var horseModeButton = Object.Instantiate(GameObject.Find("CreditsButton"), GameObject.Find("CreditsButton").transform.parent);
-                horseModeButton.name = "HorseModeButton";
-                horseModeButton.GetComponent<SpriteRenderer>().sprite = Utility.CreateSprite("Peasmod.Resources.Buttons.HorseModeButton.png", 95f);
-                horseModeButton.GetComponent<ButtonRolloverHandler>().Destroy();
-                var button = horseModeButton.GetComponent<PassiveButton>();
-                button.OnClick = new Button.ButtonClickedEvent();
-                button.OnClick.AddListener((UnityAction) OnClick);
-
-                void OnClick()
-                {
-                    UseHorseMode = !UseHorseMode;
-                    horseModeButton.GetComponent<SpriteRenderer>().material.SetColor("_Color", UseHorseMode ? Color.green : Color.white);
-                }
-            }
-            
-            if (GameObject.Find("HorseModeButton") != null)
-            {
-                var horseModeButton = GameObject.Find("HorseModeButton");
-                horseModeButton.name = "HorseModeButton";
-                horseModeButton.GetComponent<SpriteRenderer>().material
-                    .SetColor("_Color", UseHorseMode ? Color.green : Color.white);
-            }
-        }
-
-        [HarmonyPatch(typeof(Constants), nameof(Constants.ShouldHorseAround))]
-        [HarmonyPrefix]
-        public static bool UseHorseModePatch(out bool __result)
-        {
-            __result = UseHorseMode;
-            return false;
-        }
         
         [HarmonyPatch]
         public static class CustomAnnouncementServerPatch
@@ -185,7 +146,7 @@ namespace Peasmod.Patches
             static void ChangeAnnouncementServerToCustomPatch(AnnouncementPopUp __instance)
             {
                 //Replaces the URL with your own so it requests the announcement from your server
-                Constants.BaseEndpoint = "https://api.peasplayer.tk/amongus/";
+                BackendEndpoints.BaseEndpoint = "https://api.peasplayer.tk/amongus/";
             }
             
             [HarmonyPatch(typeof(AnnouncementPopUp), nameof(AnnouncementPopUp.Init))]
@@ -194,13 +155,13 @@ namespace Peasmod.Patches
             {
                 //Show the announcement
                 __instance.Show();
-                
+
                 //Resets it back to the default URL
-                Constants.BaseEndpoint = "https://backend.innersloth.com/api/";
+                BackendEndpoints.BaseEndpoint = "https://backend.innersloth.com/api/";
             }
         }
 
-        [HarmonyPatch(typeof(StatsManager), nameof(StatsManager.AmBanned), MethodType.Getter)]
+        [HarmonyPatch(typeof(PlayerBanData), nameof(PlayerBanData.IsBanned), MethodType.Getter)]
         [HarmonyPostfix]
         public static void UnbanPatch(out bool __result)
         {

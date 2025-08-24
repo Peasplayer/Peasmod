@@ -1,16 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Managers;
 using PeasAPI.Options;
 using PeasAPI.Roles;
-using Reactor;
-using Reactor.Networking;
-using Reactor.Networking.MethodRpc;
+using Reactor.Networking.Attributes;
+using Reactor.Networking.Rpc;
+using Reactor.Utilities;
 using UnityEngine;
 
 namespace Peasmod.Roles.Impostor
@@ -35,10 +35,10 @@ namespace Peasmod.Roles.Impostor
 		public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
 		{
 			{
-				"ControlCooldown", new CustomNumberOption("controlcooldown", "Controlling-Cooldown", 20f, 60f, 1f, 20f, NumberSuffixes.Seconds) {AdvancedRoleOption = true}
+				"ControlCooldown", new CustomNumberOption(MultiMenu.Impostor, "Controlling-Cooldown", 20f, 60f, 1f, 20f, CustomOption.Seconds)
 			},
 			{
-				"ControlDuration", new CustomNumberOption("controlduration", "Controlling-Duration", 10f, 30f, 1f, 10f, NumberSuffixes.Seconds) {AdvancedRoleOption = true}
+				"ControlDuration", new CustomNumberOption(MultiMenu.Impostor, "Controlling-Duration", 10f, 30f, 1f, 10f, CustomOption.Seconds)
 			}
 		};
 		public override bool CanVent => true;
@@ -65,7 +65,7 @@ namespace Peasmod.Roles.Impostor
 					Button.IsEffectActive = false;
 					Button.SetCoolDown(0);
 				});
-			}, ((CustomNumberOption) AdvancedOptions["ControlCooldown"]).Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), p => p.IsRole(this) && !p.Data.IsDead, _ => true, effectDuration: ((CustomNumberOption) AdvancedOptions["ControlDuration"]).Value, onEffectEnd: () =>
+			}, ((CustomNumberOption) AdvancedOptions["ControlCooldown"]).Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), p => p.IsCustomRole(this) && !p.Data.IsDead, _ => true, effectDuration: ((CustomNumberOption) AdvancedOptions["ControlDuration"]).Value, onEffectEnd: () =>
 			{
 				RpcMindControl(PlayerControl.LocalPlayer, ControlledPlayers[PlayerControl.LocalPlayer.PlayerId].GetPlayer(), false);
 			}, text: "<size=40%>Control", textOffset: new Vector2(0f, 0.5f));
@@ -97,7 +97,7 @@ namespace Peasmod.Roles.Impostor
 				if (enable)
 					sender.RpcShapeshift(target, false);
 				else
-					sender.RpcRevertShapeshift(false);
+					sender.RpcRejectShapeshift();
 			}
 			if (target.IsLocal())
 				HudManager.Instance.PlayerCam.SetTarget(enable ? sender : target);

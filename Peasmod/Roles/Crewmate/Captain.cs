@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
@@ -28,7 +28,7 @@ namespace Peasmod.Roles.Crewmate
         {
             {
                 "CallCooldown",
-                new CustomNumberOption("captaincooldown", "Call-Cooldown", 10, 60, 1, 20, NumberSuffixes.Seconds)
+                new CustomNumberOption(MultiMenu.Crewmate, "Call-Cooldown", 10, 60, 1, 20, CustomOption.Seconds)
             }
         };
 
@@ -40,7 +40,7 @@ namespace Peasmod.Roles.Crewmate
                 {
                     PlayerControl.LocalPlayer.CmdReportDeadBody(null);
                 }, ((CustomNumberOption) AdvancedOptions["CallCooldown"]).Value,
-                Utility.CreateSprite("Peasmod.Resources.Buttons.CallMeeting.png", 650f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Call");
+                Utility.CreateSprite("Peasmod.Resources.Buttons.CallMeeting.png", 650f), p => p.IsCustomRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Call");
         }
     }
 }

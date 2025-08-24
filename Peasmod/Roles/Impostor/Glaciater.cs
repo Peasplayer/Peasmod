@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Managers;
 using PeasAPI.Options;
 using PeasAPI.Roles;
-using Reactor.Networking;
-using Reactor.Networking.MethodRpc;
+using Reactor.Networking.Attributes;
+using Reactor.Networking.Rpc;
 using UnityEngine;
 
 namespace Peasmod.Roles.Impostor
@@ -33,10 +33,10 @@ namespace Peasmod.Roles.Impostor
         public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
         {
             {
-                "FreezeCooldown", new CustomNumberOption("freezecooldown", "Freezing-Cooldown", 20, 60, 1, 20, NumberSuffixes.Seconds)
+                "FreezeCooldown", new CustomNumberOption(MultiMenu.Impostor, "Freezing-Cooldown", 20, 60, 1, 20, CustomOption.Seconds)
             },
             {
-                "FreezeDuration", new CustomNumberOption("freezeduration", "Freezing-Duration", 10, 30, 1, 10, NumberSuffixes.Seconds)
+                "FreezeDuration", new CustomNumberOption(MultiMenu.Impostor, "Freezing-Duration", 10, 30, 1, 10, CustomOption.Seconds)
             }
         };
         public override bool CanVent => true;
@@ -54,7 +54,7 @@ namespace Peasmod.Roles.Impostor
             Button = CustomButton.AddButton(() => {
                     RpcFreeze(PlayerControl.LocalPlayer, true);
                 }, ((CustomNumberOption) AdvancedOptions["FreezeCooldown"]).Value,
-                Utility.CreateSprite("Peasmod.Resources.Buttons.Freezing.png", 851f), p => p.IsRole(this) && !p.Data.IsDead, _ => true,
+                Utility.CreateSprite("Peasmod.Resources.Buttons.Freezing.png", 851f), p => p.IsCustomRole(this) && !p.Data.IsDead, _ => true,
                 effectDuration: ((CustomNumberOption) AdvancedOptions["FreezeDuration"]).Value, onEffectEnd: () => {
                     RpcFreeze(PlayerControl.LocalPlayer, false);
                 }, text: "<size=40%>Freeze");

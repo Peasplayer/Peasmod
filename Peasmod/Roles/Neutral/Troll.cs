@@ -1,4 +1,4 @@
-﻿using BepInEx.IL2CPP;
+﻿using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomEndReason;
@@ -23,7 +23,7 @@ namespace Peasmod.Roles.Neutral
 
         public override bool PreKill(PlayerControl killer, PlayerControl victim)
         {
-            if (victim.IsRole<Troll>() && victim.IsLocal())
+            if (victim.IsCustomRole<Troll>() && victim.IsLocal())
                 new CustomEndReason(victim);
             return true;
         }

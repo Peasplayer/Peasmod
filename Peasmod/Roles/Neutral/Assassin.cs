@@ -1,5 +1,6 @@
 ﻿using System.Linq;
-using BepInEx.IL2CPP;
+using AmongUs.GameOptions;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.CustomEndReason;
 using PeasAPI.Roles;
@@ -25,15 +26,15 @@ namespace Peasmod.Roles.Neutral
         public override bool HasToDoTasks => false;
         //public override int Limit => (int)Settings.AssassinAmount.Value;
         public override int MaxCount => 0;
-        public override float KillDistance => GameOptionsData.KillDistances[Mathf.Clamp(PlayerControl.GameOptions.KillDistance, 0, 2)] + 0.35f;
+        public override float KillDistance => LegacyGameOptions.KillDistances[Mathf.Clamp(GameOptionsManager.Instance.currentNormalGameOptions.KillDistance, 0, 2)] + 0.35f;
         public override bool CanKill(PlayerControl victim = null) => true;
         public override bool CanSabotage(SystemTypes? sabotage) => sabotage == null || sabotage == SystemTypes.Comms;
         public override bool ShouldGameEnd(GameOverReason reason)
         {
             PeasAPI.PeasAPI.Logger.LogInfo(reason.ToString());
-            if (reason == EndReasonManager.CustomGameOverReason || reason == GameOverReason.ImpostorBySabotage)
+            if (reason == EndReasonManager.CustomGameOverReason || reason == GameOverReason.ImpostorsBySabotage)
                 return true;
-            if (Utility.GetAllPlayers().Count(p => !p.Data.IsDead && p.GetRole() != null && p.IsRole(this)) == 0)
+            if (Utility.GetAllPlayers().Count(p => !p.Data.IsDead && p.GetCustomRole() != null && p.IsCustomRole(this)) == 0)
                 return true;
             return false;
         }
@@ -42,14 +43,14 @@ namespace Peasmod.Roles.Neutral
 
         public override void OnKill(PlayerControl killer, PlayerControl victim)
         {
-            if (Utility.GetAllPlayers().Count(p => !p.Data.IsDead && p.GetRole() != null && p.IsRole(this)) != 0)
-                ShipStatus.RpcEndGame(GameOverReason.ImpostorByKill, false);
-            if (PlayerControl.LocalPlayer.IsRole(this) && killer.IsLocal() &&
+            if (Utility.GetAllPlayers().Count(p => !p.Data.IsDead && p.GetCustomRole() != null && p.IsCustomRole(this)) != 0)
+                GameManager.Instance.RpcEndGame(GameOverReason.ImpostorsByKill, false);
+            if (PlayerControl.LocalPlayer.IsCustomRole(this) && killer.IsLocal() &&
                 Utility.GetAllPlayers().Count(p => !p.Data.IsDead && !p.IsLocal()) == 0)
             {
                 new CustomEndReason(PlayerControl.LocalPlayer);
             }
-            if (PlayerControl.LocalPlayer.IsRole(this) && !PlayerControl.LocalPlayer.Data.IsDead && killer.IsLocal() &&
+            if (PlayerControl.LocalPlayer.IsCustomRole(this) && !PlayerControl.LocalPlayer.Data.IsDead && killer.IsLocal() &&
                 Utility.GetAllPlayers().Count(p => !p.Data.IsDead && !p.IsLocal() && !p.Data.Role.IsImpostor) == 1)
             {
                 new CustomEndReason(PlayerControl.LocalPlayer);
@@ -58,14 +59,14 @@ namespace Peasmod.Roles.Neutral
         
         public override void OnExiled(PlayerControl target)
         {
-            if (PlayerControl.LocalPlayer.IsRole(this) && target.IsLocal())
-                ShipStatus.RpcEndGame(GameOverReason.ImpostorByVote, false);
-            if (PlayerControl.LocalPlayer.IsRole(this) && !PlayerControl.LocalPlayer.Data.IsDead && !target.IsLocal() &&
+            if (PlayerControl.LocalPlayer.IsCustomRole(this) && target.IsLocal())
+                GameManager.Instance.RpcEndGame(GameOverReason.ImpostorsByVote, false);
+            if (PlayerControl.LocalPlayer.IsCustomRole(this) && !PlayerControl.LocalPlayer.Data.IsDead && !target.IsLocal() &&
                 Utility.GetAllPlayers().Count(p => !p.Data.IsDead && !p.IsLocal()) == 0)
             {
                 new CustomEndReason(PlayerControl.LocalPlayer);
             }
-            if (PlayerControl.LocalPlayer.IsRole(this) && !PlayerControl.LocalPlayer.Data.IsDead && !target.IsLocal() &&
+            if (PlayerControl.LocalPlayer.IsCustomRole(this) && !PlayerControl.LocalPlayer.Data.IsDead && !target.IsLocal() &&
                 Utility.GetAllPlayers().Count(p => !p.Data.IsDead && !p.IsLocal() && !p.Data.Role.IsImpostor) == 1)
             {
                 new CustomEndReason(PlayerControl.LocalPlayer);

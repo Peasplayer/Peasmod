@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Options;
 using PeasAPI.Roles;
-using Reactor.Networking.MethodRpc;
+using Reactor.Networking.Attributes;
 using UnityEngine;
 
 namespace Peasmod.Roles.Crewmate
@@ -28,10 +28,10 @@ namespace Peasmod.Roles.Crewmate
         public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
         {
             {
-                "FixCooldown", new CustomNumberOption("FirefighterFixCooldown", "Fix-Cooldown", 20, 60, 1, 20, NumberSuffixes.Seconds)
+                "FixCooldown", new CustomNumberOption(MultiMenu.Crewmate, "Fix-Cooldown", 20, 60, 1, 20, CustomOption.Seconds)
             },
             {
-                "FirefighterMaxUses", new CustomNumberOption("FirefighterMaxUses", "Maximum of Pardons", 1, 10, 1, 2, NumberSuffixes.None)
+                "FirefighterMaxUses", new CustomNumberOption(MultiMenu.Crewmate, "Maximum of Pardons", 1, 10, 1, 2)
             }
         };
 
@@ -45,7 +45,7 @@ namespace Peasmod.Roles.Crewmate
                 {
                     RpcRepairSabotage(PlayerControl.LocalPlayer);
                 },
-                ((CustomNumberOption) AdvancedOptions["FixCooldown"]).Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), p => p.IsRole(this) && !p.Data.IsDead, 
+                ((CustomNumberOption) AdvancedOptions["FixCooldown"]).Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), p => p.IsCustomRole(this) && !p.Data.IsDead, 
                 _ => ShipStatus.Instance.Systems[SystemTypes.Sabotage].Cast<SabotageSystemType>().AnyActive && TimesFixed < ((CustomNumberOption)AdvancedOptions["FirefighterMaxUses"]).Value, text: "<size=40%>Fix");
         }
 
@@ -70,9 +70,9 @@ namespace Peasmod.Roles.Crewmate
                         light.ActualSwitches = light.ExpectedSwitches;
                         continue;
                     }
-                    ShipStatus.Instance.RepairSystem(system, PlayerControl.LocalPlayer, 0 | 16);
-                    ShipStatus.Instance.RepairSystem(system, PlayerControl.LocalPlayer, 1 | 16);
-                    ShipStatus.Instance.RepairSystem(system, PlayerControl.LocalPlayer, 16);
+                    ShipStatus.Instance.UpdateSystem(system, PlayerControl.LocalPlayer, 0 | 16);
+                    ShipStatus.Instance.UpdateSystem(system, PlayerControl.LocalPlayer, 1 | 16);
+                    ShipStatus.Instance.UpdateSystem(system, PlayerControl.LocalPlayer, 16);
                 }
             }
             catch

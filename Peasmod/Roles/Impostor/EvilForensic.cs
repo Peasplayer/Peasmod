@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
@@ -28,10 +28,10 @@ public class EvilForensic : BaseRole
     public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
     {
         {
-            "PoisonCooldown", new CustomNumberOption("poisoncooldown", "Poison-Cooldown", 30, 180, 1, 30, NumberSuffixes.Seconds)
+            "PoisonCooldown", new CustomNumberOption(MultiMenu.Impostor, "Poison-Cooldown", 30, 180, 1, 30, CustomOption.Seconds)
         },
         {
-            "PoisonDuration", new CustomNumberOption("poisonduration", "Poison-Duration", 20, 60, 1, 20, NumberSuffixes.Seconds)
+            "PoisonDuration", new CustomNumberOption(MultiMenu.Impostor, "Poison-Duration", 20, 60, 1, 20, CustomOption.Seconds)
         }
     };
     public override bool CanVent => true;
@@ -46,14 +46,14 @@ public class EvilForensic : BaseRole
         PoisonVictim = byte.MaxValue;
         Button = CustomButton.AddButton(() =>
             {
-                PoisonVictim = PlayerControl.LocalPlayer.FindClosestTarget(true).PlayerId;
+                PoisonVictim = PlayerControl.LocalPlayer.Data.Role.FindClosestTarget().PlayerId;
             }, ((CustomNumberOption) AdvancedOptions["PoisonCooldown"]).Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"),
-            p => p.IsRole(this) && !p.Data.IsDead, p => PlayerControl.LocalPlayer.FindClosestTarget(true) != null, text: "<size=40%>Poison", textOffset: new Vector2(0f, 0.5f),
+            p => p.IsCustomRole(this) && !p.Data.IsDead, p => PlayerControl.LocalPlayer.Data.Role.FindClosestTarget() != null, text: "<size=40%>Poison", textOffset: new Vector2(0f, 0.5f),
             onEffectEnd: () =>
             {
                 var target = PoisonVictim.GetPlayer();
                 PoisonVictim = byte.MaxValue;
-                target.RpcMurderPlayer(target);
+                target.RpcMurderPlayer(target, true);
             }, effectDuration: ((CustomNumberOption) AdvancedOptions["PoisonDuration"]).Value, target: CustomButton.TargetType.Player, targetColor: Color);
     }
 }

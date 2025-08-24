@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.Options;
@@ -26,18 +26,18 @@ namespace Peasmod.Roles.Crewmate
         public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
         {
             {
-                "CanKillNeutrals", new CustomToggleOption("sheriffkillneutrals", "Can Kill Neutrals", false)
+                "CanKillNeutrals", new CustomToggleOption(MultiMenu.Crewmate, "Can Kill Neutrals", false)
             }
         };
         public override bool CanKill(PlayerControl victim = null) => true;
 
         public override void OnKill(PlayerControl killer, PlayerControl victim)
         {
-            if (killer.IsRole(this) && killer.IsLocal() && !victim.IsLocal())
-                if (!(victim.Data.Role.IsImpostor || victim.GetRole() != null && (victim.GetRole().Team == Team.Role ||
-                        victim.GetRole().Team == Team.Alone) &&
+            if (killer.IsCustomRole(this) && killer.IsLocal() && !victim.IsLocal())
+                if (!(victim.Data.Role.IsImpostor || victim.GetCustomRole() != null && (victim.GetCustomRole().Team == Team.Role ||
+                        victim.GetCustomRole().Team == Team.Alone) &&
                     ((CustomToggleOption) AdvancedOptions["CanKillNeutrals"]).Value))
-                    PlayerControl.LocalPlayer.RpcMurderPlayer(PlayerControl.LocalPlayer);
+                    PlayerControl.LocalPlayer.RpcMurderPlayer(PlayerControl.LocalPlayer, true);
         }
     }
 }

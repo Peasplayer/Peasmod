@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using BepInEx.IL2CPP;
+using AmongUs.GameOptions;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
@@ -29,10 +30,10 @@ namespace Peasmod.Roles.Impostor
             new Dictionary<string, CustomOption>()
             {
                 {
-                    "RecruitCooldown", new CustomNumberOption("MafiosoRecruitCooldown", "Recruit Cooldown", 20f, 120f, 1f, 30f, NumberSuffixes.Seconds)
+                    "RecruitCooldown", new CustomNumberOption(MultiMenu.Impostor, "Recruit Cooldown", 20f, 120f, 1f, 30f, CustomOption.Seconds)
                 },
                 {
-                    "RecruitAmounts", new CustomNumberOption("MafiosoRecruitAmounts", "Recruit-Amounts", 1f, 3f, 1f, 1f, NumberSuffixes.None)
+                    "RecruitAmounts", new CustomNumberOption(MultiMenu.Impostor, "Recruit-Amounts", 1f, 3f, 1f, 1f)
                 }
             };
         public override bool CanKill(PlayerControl victim = null) => !victim || !victim.Data.Role.IsImpostor;
@@ -50,7 +51,7 @@ namespace Peasmod.Roles.Impostor
                 Button.PlayerTarget.RpcSetVanillaRole(RoleTypes.Impostor);
                 Button.PlayerTarget.RpcSetRole(null);
                 AlreadyRecruited++;
-            }, ((CustomNumberOption) AdvancedOptions["RecruitCooldown"]).Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), control => control.IsRole(this) && !control.Data.IsDead, 
+            }, ((CustomNumberOption) AdvancedOptions["RecruitCooldown"]).Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), control => control.IsCustomRole(this) && !control.Data.IsDead, 
                 _ => AlreadyRecruited < ((CustomNumberOption) AdvancedOptions["RecruitAmounts"]).Value, text: "<size=40%>Recruit", textOffset: new Vector2(0f, 0.5f), target: CustomButton.TargetType.Player, targetColor: Color, choosePlayerTarget: control => !control.Data.Role.IsImpostor);
         }
     }

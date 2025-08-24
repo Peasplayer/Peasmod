@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using PeasAPI;
 using PeasAPI.Components;
@@ -9,12 +9,12 @@ using PeasAPI.CustomEndReason;
 using PeasAPI.GameModes;
 using PeasAPI.Managers;
 using Peasmod.Roles.GameModes;
-using Reactor.Extensions;
-using Reactor.Networking;
-using Reactor.Networking.MethodRpc;
+using Reactor.Networking.Attributes;
+using Reactor.Networking.Rpc;
+using Reactor.Utilities;
+using Reactor.Utilities.Extensions;
 using TMPro;
 using UnityEngine;
-using Object = Il2CppSystem.Object;
 
 namespace Peasmod.GameModes
 {
@@ -51,7 +51,7 @@ namespace Peasmod.GameModes
         {
             SeekingStarted = false;
             TimeLeft = Settings.HideAndSeekSeekerDuration.Value;
-            Reactor.Coroutines.Start(CoStartGame());
+            Coroutines.Start(CoStartGame());
         }
 
         public override Data.CustomIntroScreen? GetIntroScreen(PlayerControl player)
@@ -105,10 +105,10 @@ namespace Peasmod.GameModes
 
         public override void OnKill(PlayerControl killer, PlayerControl victim)
         {
-            ShipStatus.RpcEndGame(GameOverReason.ImpostorByKill, false);
+            GameManager.Instance.RpcEndGame(GameOverReason.ImpostorsByKill, false);
         }
 
-        public override bool OnMeetingCall(PlayerControl caller, GameData.PlayerInfo target)
+        public override bool OnMeetingCall(PlayerControl caller, NetworkedPlayerInfo target)
         {
             return false;
         }
@@ -122,7 +122,7 @@ namespace Peasmod.GameModes
 
         public override bool ShouldGameStop(GameOverReason reason)
         {
-            if (reason == GameOverReason.HumansDisconnect || reason == GameOverReason.ImpostorDisconnect || reason == GameOverReason.HumansByVote || reason == (GameOverReason) 255)
+            if (reason == GameOverReason.CrewmateDisconnect || reason == GameOverReason.ImpostorDisconnect || reason == GameOverReason.CrewmatesByVote || reason == (GameOverReason) 255)
                 return true;
             
             var aliveImpostors = 0;
@@ -180,7 +180,7 @@ namespace Peasmod.GameModes
         class ShipStatusCalculateLightRadiusPatch
         {
             public static bool Prefix(ShipStatus __instance, ref float __result,
-                [HarmonyArgument(0)] GameData.PlayerInfo player)
+                [HarmonyArgument(0)] NetworkedPlayerInfo player)
             {
                 if (GameModeManager.IsGameModeActive(Instance) && player.Role.IsImpostor)
                 {

@@ -1,10 +1,11 @@
 ﻿using System.Linq;
-using BepInEx.IL2CPP;
+using AmongUs.GameOptions;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomEndReason;
 using PeasAPI.GameModes;
-using Reactor.Extensions;
+using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace Peasmod.GameModes
@@ -17,7 +18,7 @@ namespace Peasmod.GameModes
             Instance = this;
         }
 
-        public override string Name => $"{Utility.StringColor.Red}BattleRoyale";
+        public override string Name => $"{Utility.StringColor.Red}Battle Royale";
 
         public override bool HasToDoTasks => false;
 
@@ -49,7 +50,7 @@ namespace Peasmod.GameModes
         {
             if (PlayerControl.AllPlayerControls.ToArray().Count(player => !player.Data.IsDead && player.PlayerId != victim.PlayerId) == 1 && killer.IsLocal())
             {
-                var winners = new System.Collections.Generic.List<GameData.PlayerInfo>();
+                var winners = new System.Collections.Generic.List<NetworkedPlayerInfo>();
                 winners.Add(killer.Data);
                 new CustomEndReason(Palette.ImpostorRed, "Victory Royale", "Defeat", "impostor", winners);
             }
@@ -59,7 +60,7 @@ namespace Peasmod.GameModes
         {
             return new Data.CustomIntroScreen(true, "BattleRoyale", "", Palette.ImpostorRed,
                 new System.Collections.Generic.List<byte> { PlayerControl.LocalPlayer.PlayerId },
-                player.GetRole() == null, "Survivor", "Be the last one to survive", Palette.ImpostorRed);
+                player.GetCustomRole() == null, "Survivor", "Be the last one to survive", Palette.ImpostorRed);
         }
 
         public override RoleTypes? AssignLocalRole(PlayerControl player)
@@ -74,11 +75,11 @@ namespace Peasmod.GameModes
             foreach (var player in PlayerControl.AllPlayerControls)
             {
                 if (!player.IsLocal())
-                    player.SetRole(RoleTypes.Crewmate);
+                    player.CoSetRole(RoleTypes.Crewmate, true);
             }
         }
 
-        public override bool OnMeetingCall(PlayerControl caller, GameData.PlayerInfo target)
+        public override bool OnMeetingCall(PlayerControl caller, NetworkedPlayerInfo target)
         {
             return false;
         }

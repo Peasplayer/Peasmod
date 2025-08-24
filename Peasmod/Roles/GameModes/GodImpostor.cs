@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
@@ -53,7 +53,7 @@ namespace Peasmod.Roles.GameModes
                     PlayerMenuManager.OpenPlayerMenu(PlayerControl.AllPlayerControls.ToArray().ToList().ConvertAll(p => p.PlayerId),
                         player => PlayerControl.LocalPlayer.RpcShapeshift(player, false), () => MorphButton.SetCoolDown(0));
                 }, Settings.MorphingCooldown.Value,
-                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Morph.png", 737f), p => p.IsRole(this) && !p.Data.IsDead, _ => true,
+                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Morph.png", 737f), p => p.IsCustomRole(this) && !p.Data.IsDead, _ => true,
                 text: "<size=40%>Morph");
             MorphButton.Enabled = MorphButton.Visible = Settings.Morphing.Value;
 
@@ -61,7 +61,7 @@ namespace Peasmod.Roles.GameModes
                 () =>
                 { PlayerControl.LocalPlayer.RpcCreateVent(); },
                 ((CustomNumberOption) PeasAPI.Roles.RoleManager.GetRole<EvilBuilder>().AdvancedOptions["VentBuildingCooldown"]).Value,
-                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png", 552f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Build");
+                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.CreateVent.png", 552f), p => p.IsCustomRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Build");
             VentBuildButton.Enabled = VentBuildButton.Visible = Settings.VentBuilding.Value;
 
             DragBodyButton = CustomButton.AddButton(() =>
@@ -82,21 +82,21 @@ namespace Peasmod.Roles.GameModes
                             .ParentId);
                     }
                 }, 0f, Utility.CreateSprite("Peasmod.Resources.Buttons.DragBody.png", 702f),
-                p => p.IsRole(this) && !p.Data.IsDead, _ => true,
+                p => p.IsCustomRole(this) && !p.Data.IsDead, _ => true,
                 text: "<size=40%>Drag", target: CustomButton.TargetType.Object, targetColor: Color,
                 chooseObjectTarget: o => o.GetComponent<DeadBody>() != null);
             DragBodyButton.Enabled = DragBodyButton.Visible = Settings.BodyDragging.Value;
 
             InvisibilityButton = CustomButton.AddButton(
                 () => { PlayerControl.LocalPlayer.RpcGoInvisible(true); }, ((CustomNumberOption) PeasAPI.Roles.RoleManager.GetRole<Ninja>().AdvancedOptions["InvisibilityCooldown"]).Value,
-                Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png", 794f), p => p.IsRole(this) && !p.Data.IsDead, _ => true,
+                Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png", 794f), p => p.IsCustomRole(this) && !p.Data.IsDead, _ => true,
                 effectDuration: ((CustomNumberOption) PeasAPI.Roles.RoleManager.GetRole<Ninja>().AdvancedOptions["InvisibilityDuration"]).Value, onEffectEnd: () => { PlayerControl.LocalPlayer.RpcGoInvisible(false); },
                 text: "<size=40%>Hide");
             InvisibilityButton.Enabled = InvisibilityButton.Visible = Settings.Invisibility.Value;
 
             FreezeTimeButton = CustomButton.AddButton(
                 () => { PlayerControl.LocalPlayer.RpcFreeze(true); }, ((CustomNumberOption) Glaciater.Instance.AdvancedOptions["FreezeCooldown"]).Value,
-                Utility.CreateSprite("Peasmod.Resources.Buttons.Freezing.png", 851f), p => p.IsRole(this) && !p.Data.IsDead, _ => true,
+                Utility.CreateSprite("Peasmod.Resources.Buttons.Freezing.png", 851f), p => p.IsCustomRole(this) && !p.Data.IsDead, _ => true,
                 effectDuration: ((CustomNumberOption) Glaciater.Instance.AdvancedOptions["FreezeDuration"]).Value, onEffectEnd: () => { PlayerControl.LocalPlayer.RpcFreeze(false); },
                 text: "<size=40%>Freeze");
             FreezeTimeButton.Enabled = FreezeTimeButton.Visible = Settings.Freeze.Value;

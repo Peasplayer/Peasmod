@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
@@ -28,10 +28,10 @@ namespace Peasmod.Roles.Crewmate
         public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
         {
             {
-                "InvisibilityCooldown", new CustomNumberOption("cloakcooldown", "Invisibility-Cooldown", 20, 60, 1, 20, NumberSuffixes.Seconds)
+                "InvisibilityCooldown", new CustomNumberOption(MultiMenu.Crewmate, "Invisibility-Cooldown", 20, 60, 1, 20, CustomOption.Seconds)
             },
             {
-                "InvisibilityDuration", new CustomNumberOption("cloakduration", "Invisibility-Duration", 10, 60, 1, 10, NumberSuffixes.Seconds)
+                "InvisibilityDuration", new CustomNumberOption(MultiMenu.Crewmate, "Invisibility-Duration", 10, 60, 1, 10, CustomOption.Seconds)
             }
         };
 
@@ -41,7 +41,7 @@ namespace Peasmod.Roles.Crewmate
         {
             Button = CustomButton.AddButton(
                 () => { PlayerControl.LocalPlayer.RpcGoInvisible(true); },
-                ((CustomNumberOption) AdvancedOptions["InvisibilityCooldown"]).Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png", 794f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, effectDuration: ((CustomNumberOption) AdvancedOptions["InvisibilityDuration"]).Value,
+                ((CustomNumberOption) AdvancedOptions["InvisibilityCooldown"]).Value, Utility.CreateSprite("Peasmod.Resources.Buttons.Hide.png", 794f), p => p.IsCustomRole(this) && !p.Data.IsDead, _ => true, effectDuration: ((CustomNumberOption) AdvancedOptions["InvisibilityDuration"]).Value,
                 onEffectEnd: () => { PlayerControl.LocalPlayer.RpcGoInvisible(false); }, text: "<size=40%>Hide");
         }
     }

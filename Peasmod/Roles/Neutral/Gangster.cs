@@ -1,5 +1,6 @@
 ﻿using System.Linq;
-using BepInEx.IL2CPP;
+using AmongUs.GameOptions;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
@@ -35,17 +36,17 @@ namespace Peasmod.Roles.Neutral
                         Utility.GetAllPlayers().Where(p => p.Data.IsDead && !p.IsLocal()).ToList().ConvertAll(p => p.PlayerId),
                         p =>
                         {
-                            GameObject.Find(PlayerControl.LocalPlayer.GetRole().Name + "Task")
-                                .GetComponent<ImportantTextTask>().Text = p.GetRole() == null
+                            GameObject.Find(PlayerControl.LocalPlayer.GetCustomRole().Name + "Task")
+                                .GetComponent<ImportantTextTask>().Text = p.GetCustomRole() == null
                                 ? ""
-                                : $"</color>Role: {p.GetRole().Color.GetTextColor()}{p.GetRole().Name}\n{p.GetRole().TaskText}</color>";
+                                : $"</color>Role: {p.GetCustomRole().Color.GetTextColor()}{p.GetCustomRole().Name}\n{p.GetCustomRole().TaskText}</color>";
                             PlayerControl.LocalPlayer.RpcSetVanillaRole(p.Data.Role.Role);
-                            PlayerControl.LocalPlayer.RpcSetRole(p.GetRole());
+                            PlayerControl.LocalPlayer.RpcSetRole(p.GetCustomRole());
                             p.RpcSetVanillaRole(RoleTypes.Crewmate);
                             p.RpcSetRole(null);
                         }, () => { Button.SetCoolDown(0); });
                 }, 0f,
-                Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Change\nRole", textOffset: new Vector2(0f, 0.5f));
+                Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), p => p.IsCustomRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Change\nRole", textOffset: new Vector2(0f, 0.5f));
         }
     }
 }

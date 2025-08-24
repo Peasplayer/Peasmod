@@ -1,4 +1,4 @@
-﻿using BepInEx.IL2CPP;
+﻿using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using PeasAPI;
 using PeasAPI.Components;
@@ -27,7 +27,7 @@ namespace Peasmod.Roles.Neutral
         {
             public static void Prefix(PlayerControl __instance)
             {
-                if (__instance.IsRole<Jester>() && __instance.IsLocal())
+                if (__instance.IsCustomRole<Jester>() && __instance.IsLocal())
                     new CustomEndReason(__instance);
             }
         }

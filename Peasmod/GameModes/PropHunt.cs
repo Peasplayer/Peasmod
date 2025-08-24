@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using PeasAPI;
 using PeasAPI.Components;
@@ -12,10 +12,10 @@ using PeasAPI.CustomEndReason;
 using PeasAPI.GameModes;
 using PeasAPI.Managers;
 using Peasmod.Roles.GameModes;
-using Reactor;
-using Reactor.Extensions;
-using Reactor.Networking;
-using Reactor.Networking.MethodRpc;
+using Reactor.Networking.Attributes;
+using Reactor.Networking.Rpc;
+using Reactor.Utilities;
+using Reactor.Utilities.Extensions;
 using TMPro;
 using UnityEngine;
 
@@ -29,8 +29,8 @@ namespace Peasmod.GameModes
         {
             Instance = this;
         }
-        
-        public override string Name => $"{Color.yellow.ToTextColor()}PropHunt";
+
+        public override string Name => $"{Color.yellow.ToTextColor()}Prop Hunt";
 
         public override bool Enabled => GameModeManager.IsGameModeActive(this);
 
@@ -41,7 +41,7 @@ namespace Peasmod.GameModes
         public override Type[] RoleWhitelist { get; } = {
             typeof(PropHunter)
         };
-        
+
         public override bool AllowSabotage(SystemTypes? sabotage) => false;
 
         private static PropHunt Instance;
@@ -53,10 +53,10 @@ namespace Peasmod.GameModes
         public bool SeekingStarted = false;
         public List<int> Objects = new List<int>();
         public CustomButton UnmorphButton;
-        
+
         public override void OnGameStart()
         {
-            UnmorphButton = CustomButton.AddButton(() => RpcRemoveProp(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer), 0f, Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), 
+            UnmorphButton = CustomButton.AddButton(() => RpcRemoveProp(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer), 0f, Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"),
                 _ => PlayerControl.LocalPlayer.transform.FindChild("PropInUse") != null, _ => PlayerControl.LocalPlayer.transform.FindChild("PropInUse") != null, text: "<size=40%>Unmorph", textOffset: new Vector2(0f, 0.5f));
             Objects.Clear();
             foreach (var gameObject in UnityEngine.Object.FindObjectsOfType<GameObject>())
@@ -69,17 +69,17 @@ namespace Peasmod.GameModes
                     continue;
                 Objects.Add(gameObject.GetInstanceID());
             }
-            
+
             SeekingStarted = false;
-            TimeLeft = Settings.PropHuntSeekerDuration.Value;
-            Reactor.Coroutines.Start(CoStartGame());
+            //TimeLeft = Settings.PropHuntSeekerDuration.Value;
+            Coroutines.Start(CoStartGame());
         }
 
         public override Data.CustomIntroScreen? GetIntroScreen(PlayerControl player)
         {
             if (player.Data.Role.IsImpostor)
-                return new Data.CustomIntroScreen(true, "PropHunt", "", Color.yellow);
-            return new Data.CustomIntroScreen(true, "PropHunt", "", Color.yellow, null,
+                return new Data.CustomIntroScreen(true, "Prop Hunt", "", Color.yellow);
+            return new Data.CustomIntroScreen(true, "Prop Hunt", "", Color.yellow, null,
                 true, "Hider", "Stay hidden", Color.yellow);
         }
 
@@ -87,11 +87,11 @@ namespace Peasmod.GameModes
         {
             if (PlayerControl.LocalPlayer.Data.Role.IsImpostor && ClickCooldown > 0)
                 ClickCooldown -= Time.deltaTime;
-            
+
             HudManager.Instance.ReportButton.Hide();
             if (HudManager.Instance.KillButton.currentTarget != null && HudManager.Instance.KillButton.currentTarget.transform.FindChild("PropInUse") != null)
                 HudManager.Instance.KillButton.SetDisabled();
-            
+
             if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.Data != null &&
                 PlayerControl.LocalPlayer.Data.Role.IsImpostor)
                 HudManager.Instance.KillButton.SetCoolDown(0f, 1f);
@@ -103,7 +103,7 @@ namespace Peasmod.GameModes
                 PlayerControl.LocalPlayer.MyPhysics.ResetMoveState();
                 PlayerControl.LocalPlayer.MyPhysics.body.velocity = Vector2.zero;
             }
-            
+
             if (SeekingStarted)
             {
                 TimeLeft -= Time.deltaTime;
@@ -135,10 +135,10 @@ namespace Peasmod.GameModes
         {
             if (victim.IsLocal())
                 RpcRemoveProp(PlayerControl.LocalPlayer, victim);
-            ShipStatus.RpcEndGame(GameOverReason.ImpostorByKill, false);
+            GameManager.Instance.RpcEndGame(GameOverReason.ImpostorsByKill, false);
         }
 
-        public override bool OnMeetingCall(PlayerControl caller, GameData.PlayerInfo target)
+        public override bool OnMeetingCall(PlayerControl caller, NetworkedPlayerInfo target)
         {
             return false;
         }
@@ -152,9 +152,9 @@ namespace Peasmod.GameModes
 
         public override bool ShouldGameStop(GameOverReason reason)
         {
-            if (reason == GameOverReason.HumansDisconnect || reason == GameOverReason.ImpostorDisconnect || reason == GameOverReason.HumansByVote || reason == (GameOverReason) 255)
+            if (reason == GameOverReason.CrewmateDisconnect || reason == GameOverReason.ImpostorDisconnect || reason == GameOverReason.CrewmatesByVote || reason == (GameOverReason)255)
                 return true;
-            
+
             var aliveImpostors = 0;
             var aliveCrewmates = 0;
 
@@ -183,35 +183,35 @@ namespace Peasmod.GameModes
                 HudManager.Instance.TaskStuff.SetActive(true);
 
                 PlayerControl.LocalPlayer.MyPhysics.Speed += 0.2f;
-                
+
                 IsFroozen = true;
                 PlayerControl.LocalPlayer.moveable = false;
                 PlayerControl.LocalPlayer.MyPhysics.ResetAnimState();
                 PlayerControl.LocalPlayer.MyPhysics.ResetMoveState();
                 PlayerControl.LocalPlayer.MyPhysics.body.velocity = Vector2.zero;
-                
-                yield return new WaitForSeconds(Settings.PropHuntSeekerCooldown.Value);
+
+                //yield return new WaitForSeconds(Settings.PropHuntSeekerCooldown.Value);
 
                 RpcStartSeeking(PlayerControl.LocalPlayer);
-                
+
                 IsFroozen = false;
                 PlayerControl.LocalPlayer.moveable = true;
                 TextMessageManager.RpcShowMessage("The seekers can\nseek now!", 1f, PlayerControl.AllPlayerControls.ToArray().ToList());
             }
         }
-        
+
         public static GameObject GetObject(int id)
         {
             return UnityEngine.Object.FindObjectsOfType<GameObject>().First(obj => obj.GetInstanceID() == id);
         }
 
-        [MethodRpc((uint) CustomRpcCalls.StartPropHunt, LocalHandling = RpcLocalHandling.After)]
+        [MethodRpc((uint)CustomRpcCalls.StartPropHunt, LocalHandling = RpcLocalHandling.After)]
         public static void RpcStartSeeking(PlayerControl sender)
         {
             Instance.SeekingStarted = true;
         }
-        
-        [MethodRpc((uint) CustomRpcCalls.MoveProp)]
+
+        [MethodRpc((uint)CustomRpcCalls.MoveProp)]
         public static void RpcMoveProp(PlayerControl sender, string direction, float value)
         {
             var prop = sender.transform.FindChild("PropInUse");
@@ -221,7 +221,7 @@ namespace Peasmod.GameModes
                 prop.position += new Vector3(0f, value);
         }
 
-        [MethodRpc((uint) CustomRpcCalls.RemoveProp)]
+        [MethodRpc((uint)CustomRpcCalls.RemoveProp)]
         public static void RpcRemoveProp(PlayerControl sender, PlayerControl target)
         {
             var oldProp = target.transform.FindChild("PropInUse");
@@ -233,7 +233,7 @@ namespace Peasmod.GameModes
             sender.Visible = true;
         }
 
-        [MethodRpc((uint) CustomRpcCalls.ChangeProp)]
+        [MethodRpc((uint)CustomRpcCalls.ChangeProp)]
         public static void RpcChangeProp(PlayerControl sender, int objId)
         {
             var gameObject = GetObject(Instance.Objects[objId]);
@@ -250,7 +250,7 @@ namespace Peasmod.GameModes
             gameObject.transform.position = sender.transform.position;
             gameObject.GetComponent<Collider2D>().isTrigger = true;
         }
-        
+
         [HarmonyPatch]
         public static class ObjectsCanUsePatch
         {
@@ -263,7 +263,7 @@ namespace Peasmod.GameModes
                         0);
             }
 
-            public static bool Prefix(IUsable __instance, ref float __result, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] ref bool canUse, [HarmonyArgument(2)] ref bool couldUse)
+            public static bool Prefix(IUsable __instance, ref float __result, [HarmonyArgument(0)] NetworkedPlayerInfo pc, [HarmonyArgument(1)] ref bool canUse, [HarmonyArgument(2)] ref bool couldUse)
             {
                 if (PeasAPI.PeasAPI.GameStarted && GameModeManager.IsGameModeActive(Instance))
                 {
@@ -274,7 +274,7 @@ namespace Peasmod.GameModes
                 return true;
             }
         }
-        
+
         [HarmonyPatch]
         public static class ObjectsUsePatch
         {
@@ -294,7 +294,7 @@ namespace Peasmod.GameModes
                 return true;
             }
         }
-        
+
         [HarmonyPatch(typeof(KeyboardJoystick), nameof(KeyboardJoystick.Update))]
         [HarmonyPrefix]
         public static void ButtonPressedPatch(KeyboardJoystick __instance)
@@ -368,30 +368,30 @@ namespace Peasmod.GameModes
                             if (Instance.ClickCooldown > 0)
                                 return;
                             Instance.ClickCooldown = Settings.PropHuntSeekerClickCooldown.Value;
-                            
+
                             if (gameObject.name == "PropInUse")
                             {
                                 var target = gameObject.transform.parent.gameObject.GetComponent<PlayerControl>();
                                 RpcRemoveProp(PlayerControl.LocalPlayer, target);
-                                PlayerControl.LocalPlayer.RpcMurderPlayer(target);
+                                PlayerControl.LocalPlayer.RpcMurderPlayer(target, true);
                             }
                         }
                         else
                         {
                             if (gameObject.name == "PropInUse")
                                 continue;
-                            
+
                             RpcChangeProp(PlayerControl.LocalPlayer, Instance.Objects.FindIndex(obj => obj == gameObject.GetInstanceID()));
                         }
                     }
                 }
             }
         }
-        
+
         [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CalculateLightRadius))]
         [HarmonyPrefix]
         public static bool BlindSeekerPatch(ShipStatus __instance, ref float __result,
-            [HarmonyArgument(0)] GameData.PlayerInfo player)
+            [HarmonyArgument(0)] NetworkedPlayerInfo player)
         {
             if (GameModeManager.IsGameModeActive(Instance) && player.Role.IsImpostor && IsFroozen)
             {

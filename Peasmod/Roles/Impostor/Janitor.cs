@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Options;
 using PeasAPI.Roles;
-using Reactor.Extensions;
-using Reactor.Networking.MethodRpc;
+using Reactor.Networking.Attributes;
+using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace Peasmod.Roles.Impostor
@@ -31,10 +31,10 @@ namespace Peasmod.Roles.Impostor
         public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
         {
             {
-                "CleanBodyCooldown", new CustomNumberOption("janitorcooldown", "Clean-Body-Cooldown", 10, 120, 1, 40, NumberSuffixes.Seconds)
+                "CleanBodyCooldown", new CustomNumberOption(MultiMenu.Impostor, "Clean-Body-Cooldown", 10, 120, 1, 40, CustomOption.Seconds)
             },
             {
-                "CanKill", new CustomToggleOption("janitorcankill", "Can Kill", true)
+                "CanKill", new CustomToggleOption(MultiMenu.Impostor, "Can Kill", true)
             }
         };
         public override bool CanVent => true;
@@ -46,7 +46,7 @@ namespace Peasmod.Roles.Impostor
         public override void OnGameStart()
         {
             Button = CustomButton.AddButton(() => RpcCleanBody(PlayerControl.LocalPlayer, Button.ObjectTarget.GetComponent<DeadBody>().ParentId), ((CustomNumberOption) AdvancedOptions["CleanBodyCooldown"]).Value,
-                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Clear", textOffset: new Vector2(0f, 0.5f),
+                PeasAPI.Utility.CreateSprite("Peasmod.Resources.Buttons.Default.png"), p => p.IsCustomRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Clear", textOffset: new Vector2(0f, 0.5f),
                 target: CustomButton.TargetType.Object, targetColor: Color);
         }
 

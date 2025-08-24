@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomButtons;
 using PeasAPI.Options;
 using PeasAPI.Roles;
-using Reactor.Extensions;
-using Reactor.Networking.MethodRpc;
+using Reactor.Networking.Attributes;
+using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace Peasmod.Roles.Crewmate
@@ -29,7 +29,7 @@ namespace Peasmod.Roles.Crewmate
         public override Dictionary<string, CustomOption> AdvancedOptions { get; set; } = new Dictionary<string, CustomOption>()
         {
             {
-                "ReviveCooldown", new CustomNumberOption("doctorcooldown", "Revive-Cooldown", 10, 60, 1, 20, NumberSuffixes.Seconds)
+                "ReviveCooldown", new CustomNumberOption(MultiMenu.Crewmate, "Revive-Cooldown", 10, 60, 1, 20, CustomOption.Seconds)
             }
         };
 
@@ -42,7 +42,7 @@ namespace Peasmod.Roles.Crewmate
                     var body = Button.ObjectTarget.GetComponent<DeadBody>();
                     RpcRevive(body.ParentId.GetPlayer());
                 }, ((CustomNumberOption) AdvancedOptions["ReviveCooldown"]).Value,
-                Utility.CreateSprite("Peasmod.Resources.Buttons.Revive.png", 803f), p => p.IsRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Revive", 
+                Utility.CreateSprite("Peasmod.Resources.Buttons.Revive.png", 803f), p => p.IsCustomRole(this) && !p.Data.IsDead, _ => true, text: "<size=40%>Revive", 
                 target: CustomButton.TargetType.Object, targetColor: Color, chooseObjectTarget: o => o.GetComponent<DeadBody>() != null);
         }
 

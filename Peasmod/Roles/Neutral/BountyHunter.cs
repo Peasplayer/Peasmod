@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomEndReason;
 using PeasAPI.Managers;
 using PeasAPI.Roles;
-using Reactor.Extensions;
+using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace Peasmod.Roles.Neutral
@@ -32,15 +32,15 @@ namespace Peasmod.Roles.Neutral
 
         public void ChooseTarget()
         {
-            if (Utility.GetAllPlayers().Count(p => !p.Data.Role.IsImpostor && !p.Data.IsDead && !p.IsRole(this) && !Targets.ContainsValue(p.PlayerId)) == 0 && PlayerControl.LocalPlayer.IsRole(this))
+            if (Utility.GetAllPlayers().Count(p => !p.Data.Role.IsImpostor && !p.Data.IsDead && !p.IsCustomRole(this) && !Targets.ContainsValue(p.PlayerId)) == 0 && PlayerControl.LocalPlayer.IsCustomRole(this))
             {
                 PlayerControl.LocalPlayer.RpcSetRole(null);
                 return;
             }
 
-            if (PlayerControl.LocalPlayer.IsRole(this))
+            if (PlayerControl.LocalPlayer.IsCustomRole(this))
             {
-                var target = Utility.GetAllPlayers().Where(p => !p.Data.Role.IsImpostor && !p.Data.IsDead && !p.IsRole(this) && !Targets.ContainsValue(p.PlayerId)).Random();
+                var target = Utility.GetAllPlayers().Where(p => !p.Data.Role.IsImpostor && !p.Data.IsDead && !p.IsCustomRole(this) && !Targets.ContainsValue(p.PlayerId)).Random();
                 if (target != null)
                 {
                     SetBountyTarget(PlayerControl.LocalPlayer, target.PlayerId);
@@ -61,7 +61,7 @@ namespace Peasmod.Roles.Neutral
         {
             try
             {
-                if (Targets.ContainsKey(PlayerControl.LocalPlayer.PlayerId) && PlayerControl.LocalPlayer.IsRole(this))
+                if (Targets.ContainsKey(PlayerControl.LocalPlayer.PlayerId) && PlayerControl.LocalPlayer.IsCustomRole(this))
                 {
                     if (Targets[PlayerControl.LocalPlayer.PlayerId].GetPlayer().Data.Role.IsImpostor)
                     {
@@ -72,7 +72,7 @@ namespace Peasmod.Roles.Neutral
                     if (PlayerControl.LocalPlayer.Data.IsDead)
                         Targets.Remove(PlayerControl.LocalPlayer.PlayerId);
                     else
-                        Targets[PlayerControl.LocalPlayer.PlayerId].GetPlayer().nameText.text = Color.black.ToTextColor() +
+                        Targets[PlayerControl.LocalPlayer.PlayerId].GetPlayer().cosmetics.nameText.text = Color.black.ToTextColor() +
                             Targets[PlayerControl.LocalPlayer.PlayerId].GetPlayer().name + "\nTarget";
                 }
             }
@@ -84,7 +84,7 @@ namespace Peasmod.Roles.Neutral
 
         public override void OnMeetingUpdate(MeetingHud meeting)
         {
-            if (PlayerControl.LocalPlayer.IsRole(this) && !PlayerControl.LocalPlayer.Data.IsDead)
+            if (PlayerControl.LocalPlayer.IsCustomRole(this) && !PlayerControl.LocalPlayer.Data.IsDead)
             {
                 var playerVoteArea = meeting.playerStates.Where(p => p.TargetPlayerId == Targets[PlayerControl.LocalPlayer.PlayerId]).ToList()[0];
                 playerVoteArea.NameText.color = Color.black;
@@ -94,13 +94,13 @@ namespace Peasmod.Roles.Neutral
 
         public override void OnKill(PlayerControl killer, PlayerControl victim)
         {
-            if (PlayerControl.LocalPlayer.IsRole(this) && !PlayerControl.LocalPlayer.Data.IsDead && victim.PlayerId == Targets[PlayerControl.LocalPlayer.PlayerId])
+            if (PlayerControl.LocalPlayer.IsCustomRole(this) && !PlayerControl.LocalPlayer.Data.IsDead && victim.PlayerId == Targets[PlayerControl.LocalPlayer.PlayerId])
                 ChooseTarget();
         }
 
         public override void OnExiled(PlayerControl victim)
         {
-            if (PlayerControl.LocalPlayer.IsRole(this) && !PlayerControl.LocalPlayer.Data.IsDead &&
+            if (PlayerControl.LocalPlayer.IsCustomRole(this) && !PlayerControl.LocalPlayer.Data.IsDead &&
                 victim.PlayerId == Targets[PlayerControl.LocalPlayer.PlayerId])
                 new CustomEndReason(PlayerControl.LocalPlayer);
         }

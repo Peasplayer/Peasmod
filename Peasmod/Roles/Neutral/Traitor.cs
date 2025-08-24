@@ -1,4 +1,5 @@
-﻿using BepInEx.IL2CPP;
+﻿using AmongUs.GameOptions;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.Roles;
@@ -34,7 +35,7 @@ namespace Peasmod.Roles.Neutral
 
         public override void OnTaskComplete(PlayerControl player, PlayerTask task)
         {
-            if (player.IsLocal() && player.IsRole(this) && player.AllTasksCompleted())
+            if (player.IsLocal() && player.IsCustomRole(this) && player.AllTasksCompleted())
             {
                 player.RpcSetVanillaRole(RoleTypes.Impostor);
                 HasBetrayed = true;

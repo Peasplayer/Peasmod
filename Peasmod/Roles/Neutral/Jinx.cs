@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using PeasAPI;
 using PeasAPI.Components;
 using PeasAPI.CustomEndReason;
@@ -36,7 +36,7 @@ namespace Peasmod.Roles.Neutral
             if (Utility.GetAllPlayers().Count(p => !p.Data.IsDead && !p.Data.Disconnected) == 3 &&
                 Utility.GetAllPlayers().Count(p => !p.Data.IsDead && !p.Data.Disconnected && p.Data.Role.IsImpostor) >=
                 1 &&
-                PlayerControl.LocalPlayer.IsRole(this) && !PlayerControl.LocalPlayer.Data.IsDead && !HasWon)
+                PlayerControl.LocalPlayer.IsCustomRole(this) && !PlayerControl.LocalPlayer.Data.IsDead && !HasWon)
             {
                 HasWon = true;
                 new CustomEndReason(PlayerControl.LocalPlayer); 
