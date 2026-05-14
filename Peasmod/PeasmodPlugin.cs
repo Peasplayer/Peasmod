@@ -36,7 +36,8 @@ namespace Peasmod
             WatermarkManager.AddWatermark($" | {PluginName} v{PluginVersion} {PeasAPI.Utility.StringColor.Green} by {PluginAuthor}", $" | {PluginName} v{PluginVersion}\n{PeasAPI.Utility.StringColor.Green} by {PluginAuthor}", 
                 new Vector3(0f, -0.3f),  new Vector3(-0.9f, 0f));
             
-            CustomServerManager.RegisterServer("Peaspowered", "au.peasplayer.tk", 22023);
+            CustomServerManager.RegisterServer("Peaspowered", "http://130.61.243.106", 22022);
+            CustomServerManager.RegisterServer("Local", "http://127.0.0.1", 8080);
             CustomServerManager.RegisterServer("matux.fr", "152.228.160.91", 22023);
             CustomServerManager.RegisterServer("Miniduikboot's Server", "impostor.duikbo.at", 22023);
             

@@ -13,6 +13,7 @@
         FreezePlayer,
         PardonAbility,
         RepairSabotage,
+        Protect,
         StartHideAndSeek,
         StartPropHunt,
         MoveProp,
